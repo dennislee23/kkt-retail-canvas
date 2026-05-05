@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <title>retail.kittykat.tech — Quick Update</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F5F3EF;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #1A1A1A;
+        }
+        .container {
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            padding: 40px;
+            max-width: 520px;
+            width: 100%;
+        }
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 28px;
+            font-weight: 400;
+            font-style: italic;
+            color: #1A1A1A;
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }
+        .subtitle {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #888;
+            margin-bottom: 28px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 24px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        input[type=password] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #DDD;
+            border-radius: 3px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.15s;
+            background: #FAFAF7;
+            font-family: inherit;
+            color: #1A1A1A;
+            margin-bottom: 14px;
+        }
+        input[type=password]:focus { border-color: #B8832A; }
+        .update-btn {
+            background: #1A1A1A;
+            color: #FFFFFF;
+            border: none;
+            padding: 13px 28px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: opacity 0.15s;
+            font-family: inherit;
+        }
+        .update-btn:hover:not(:disabled) { opacity: 0.85; }
+        .update-btn:disabled { background: #CCC; cursor: not-allowed; }
+        .mode-row { display: flex; gap: 8px; margin-bottom: 14px; }
+        .mode-btn {
+            flex: 1;
+            padding: 8px 10px;
+            background: #FAFAF7;
+            border: 1px solid #DDD;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        .mode-btn.active { background: #1A1A1A; color: #FFF; border-color: #1A1A1A; }
+        .status {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 3px;
+            font-size: 13px;
+            display: none;
+            line-height: 1.5;
+        }
+        .status.success { background: #ECF6EE; color: #1F5E2C; display: block; }
+        .status.error   { background: #FBECEC; color: #8B1F1F; display: block; }
+        .status.loading { background: #FAF4E6; color: #6B4D14; display: block; }
+        .output {
+            margin-top: 14px;
+            background: #FAFAF7;
+            border: 1px solid #EEE;
+            padding: 14px;
+            border-radius: 3px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #444;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .output.show { display: block; }
+        .footer-note {
+            margin-top: 20px;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+            letter-spacing: 0.04em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quick Update</h1>
+        <div class="subtitle">retail.kittykat.tech</div>
+        <p>Pulls the latest code from <code>kkt-retail-canvas</code> on GitHub
+        into this folder.</p>
+
+        <div class="mode-row">
+            <button type="button" class="mode-btn active" data-mode="hard">Hard reset + pull</button>
+            <button type="button" class="mode-btn" data-mode="soft">Soft (stash) + pull</button>
+            <button type="button" class="mode-btn" data-mode="status">Status only</button>
+        </div>
+
+        <input type="password" id="deployKey" placeholder="Deploy key" autocomplete="off"
+               onkeydown="if(event.key==='Enter')updateSite()">
+
+        <button class="update-btn" onclick="updateSite()">
+            Update Now
+        </button>
+
+        <div id="status" class="status"></div>
+        <div id="output" class="output"></div>
+
+        <div class="footer-note">No data is sent except the deploy key and mode.</div>
+    </div>
+
+    <script>
+        let selectedMode = 'hard';
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedMode = btn.dataset.mode;
+            });
+        });
+
+        async function updateSite() {
+            const btn = document.querySelector('.update-btn');
+            const status = document.getElementById('status');
+            const output = document.getElementById('output');
+
+            btn.disabled = true;
+            btn.textContent = 'Updating...';
+
+            status.className = 'status loading';
+            status.textContent = '⏳ Running ' + selectedMode + ' deploy…';
+            output.className = 'output';
+            output.textContent = '';
+
+            try {
+                const key = document.getElementById('deployKey').value.trim();
+                if (!key) {
+                    status.className = 'status error';
+                    status.textContent = 'Please enter the deploy key';
+                    btn.disabled = false;
+                    btn.textContent = 'Update Now';
+                    return;
+                }
+                const url = 'deploy.php?key=' + encodeURIComponent(key) + '&mode=' + encodeURIComponent(selectedMode);
+                const response = await fetch(url);
+                const text = await response.text();
+
+                output.className = 'output show';
+                output.textContent = text;
+
+                if (!response.ok || text.includes('Access denied') || text.includes('DEPLOY_KEY not configured')) {
+                    status.className = 'status error';
+                    status.textContent = '✗ ' + (text.includes('Access denied') ? 'Wrong deploy key' : 'Deploy failed');
+                } else {
+                    status.className = 'status success';
+                    status.textContent = '✓ ' + (selectedMode === 'status' ? 'Status fetched' : 'Update completed');
+                }
+
+                btn.disabled = false;
+                btn.textContent = 'Run Again';
+
+            } catch (error) {
+                status.className = 'status error';
+                status.textContent = '✗ Update failed: ' + error.message;
+                output.className = 'output show';
+                output.textContent = error.toString();
+
+                btn.disabled = false;
+                btn.textContent = 'Try Again';
+            }
+        }
+    </script>
+</body>
+</html>

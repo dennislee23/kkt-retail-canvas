@@ -1,0 +1,41 @@
+# retail.kittykat.tech — Apache config
+
+# The site's main HTML file isn't named index.html (kept under its semantic
+# name so it's identifiable in code). Tell Apache to serve it for the root URL.
+DirectoryIndex Retail_AI_Canvas_V3.html index.html
+
+# Block direct access to environment files. Anyone hitting these paths gets a
+# 403, regardless of any other rule. The .env file holds DEPLOY_KEY and any
+# other secrets.
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>
+
+# The .git directory must never be web-accessible. Apache usually denies dot-
+# directories by default but we make it explicit.
+RedirectMatch 403 ^/\.git(/|$)
+
+# update.html is intended for operators only. It's not linked from anywhere
+# public, but we noindex it explicitly to keep it out of search results.
+<Files "update.html">
+    Header always set X-Robots-Tag "noindex, nofollow"
+</Files>
+
+# Cache static assets aggressively. The site changes only on a deploy, so
+# clients can hold them for an hour without seeing stale content for long.
+# When a deploy happens, the html file changes (and revalidates) — that's the
+# fast cache-bust path.
+<IfModule mod_headers.c>
+    <FilesMatch "\.(js|css|woff2?|png|jpg|jpeg|svg|gif)$">
+        Header set Cache-Control "public, max-age=3600"
+    </FilesMatch>
+    <FilesMatch "\.html$">
+        Header set Cache-Control "public, max-age=300, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# Compress text assets. Mostly relevant for canvas-data.js (~110 KB) which
+# gzips well.
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json
+</IfModule>
