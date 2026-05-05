@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retail AI Canvas V3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:            #F5F3EF;
+  --surface:       #FFFFFF;
+  --surface-alt:   #F0EDE8;
+  --card:          #FAFAF8;
+  --border:        rgba(30,24,16,0.10);
+  --border-hover:  rgba(30,24,16,0.20);
+  --text-primary:  #1A1410;
+  --text-secondary:#5C5045;
+  --text-muted:    #9C8E82;
+  --accent:        #B8832A;
+  --accent-dim:    rgba(184,131,42,0.10);
+  --accent-text:   #8A5E18;
+  --blue:          #3B6FD4;
+  --blue-dim:      rgba(59,111,212,0.10);
+  --green:         #2A8A62;
+  --green-dim:     rgba(42,138,98,0.10);
+  --purple:        #7B5EA7;
+  --purple-dim:    rgba(123,94,167,0.10);
+  /* Stage 3 teal */
+  --teal:          #1B9B79;
+  --teal-dim:      rgba(27,155,121,0.10);
+}
+html, body { min-height:100%; background:var(--bg); color:var(--text-primary); font-family:'DM Sans',sans-serif; -webkit-font-smoothing:antialiased; }
+#root { min-height:100vh; }
+button { cursor:pointer; font-family:'DM Sans',sans-serif; }
+ol, ul { list-style-position:outside; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.12); border-radius:2px; }
+
+@keyframes fadeUp  { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideIn { from { transform:translateX(36px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+@keyframes slideUp { from { transform:translateY(16px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+@keyframes blink   { 0%,80%,100% { opacity:.2; transform:scale(.8); } 40% { opacity:1; transform:scale(1); } }
+
+.fade-up  { animation: fadeUp  .38s ease both; }
+.slide-in { animation: slideIn .28s ease both; }
+.slide-up { animation: slideUp .25s ease both; }
+
+.card-lift { transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease; }
+.card-lift:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.09); transform: translateY(-1px); border-color: var(--border-hover) !important; }
+
+.btn-primary {
+  padding:13px 28px; background:var(--text-primary); color:#FFF;
+  border:none; border-radius:3px; font-size:14px; font-weight:600;
+  letter-spacing:.02em; transition:opacity .15s ease; white-space:nowrap;
+}
+.btn-primary:hover { opacity:.85; }
+.btn-ghost {
+  padding:13px 24px; background:transparent; color:var(--text-secondary);
+  border:1px solid var(--border); border-radius:3px; font-size:14px; font-weight:400;
+  transition:border-color .18s ease, color .18s ease; white-space:nowrap;
+}
+.btn-ghost:hover { border-color:var(--border-hover); color:var(--text-primary); }
+
+.dot { width:6px; height:6px; border-radius:50%; background:var(--text-muted); animation:blink 1.2s ease-in-out infinite; }
+
+/* Tag chips */
+.tag { display:inline-flex; align-items:center; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:500; letter-spacing:.03em; white-space:nowrap; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="canvas-data.js"></script>
+<script src="roadmap-data.js"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+/* ─── BRIDGE: pull canvas-data.js window globals into Babel scope ── */
+const _STAGE_META        = window.STAGE_META;
+const _PRESSURES         = window.PRESSURES;
+const _BUSINESS_AREAS    = window.BUSINESS_AREAS;
+const _IMPROVEMENT_TYPES = window.IMPROVEMENT_TYPES;
+const _ALL_DOMAINS       = window.ALL_DOMAINS;
+const _COPILOT_SYSTEM    = window.COPILOT_SYSTEM;
+const _SPEED_OPTIONS     = window.SPEED_OPTIONS;
+const _REQ_OPTIONS       = window.REQ_OPTIONS;
+const _EFFORT_OPTIONS    = window.EFFORT_OPTIONS;
+const _IMPACT_OPTIONS    = window.IMPACT_OPTIONS;
+const _TAG_TOOLTIPS      = window.TAG_TOOLTIPS;
+const _ROADMAP_STEPS     = window.ROADMAP_STEPS;
+const _ROADMAP_PATHWAYS  = window.ROADMAP_PATHWAYS;
+const _ROADMAP_OPTIONS   = window.ROADMAP_READINESS_OPTIONS;
+const _ROADMAP_STATES    = window.ROADMAP_BLOCK_STATES;
+
+function _getRecommendedServices(answers) { return window.getRecommendedServices(answers); }
+function _getRecommendedDomains(answers)  { return window.getRecommendedDomains(answers); }
+function _getRoadmapPathwaySuggestions(answers) { return window.getRoadmapPathwaySuggestions(answers); }
+function _getRoadmapPathwayById(id) { return window.getRoadmapPathwayById(id); }
+function _buildRoadmapRoute(id, readinessAnswers, blockStates) { return window.buildRoadmapRoute(id, readinessAnswers, blockStates); }
+
+function sortPlays(plays, sortBy) {
+  const speedOrder = { 'Quick Start': 0, 'Scoped Project': 1, 'Strategic Build': 2 };
+  const reqOrder   = { 'Light Requirements': 0, 'Moderate Requirements': 1, 'High Requirements': 2 };
+  const costOrder  = { '$': 0, '$$': 1, '$$$': 2, '$$$$': 3 };
+  if (sortBy === 'speed')        return [...plays].sort((a,b) => speedOrder[a.speed] - speedOrder[b.speed]);
+  if (sortBy === 'requirements') return [...plays].sort((a,b) => reqOrder[a.requirements] - reqOrder[b.requirements]);
+  if (sortBy === 'cost')         return [...plays].sort((a,b) => costOrder[a.cost] - costOrder[b.cost]);
+  return [...plays].sort((a,b) => {
+    const s = speedOrder[a.speed] - speedOrder[b.speed];
+    if (s !== 0) return s;
+    return reqOrder[a.requirements] - reqOrder[b.requirements];
+  });
+}
+
+function applyFiltersLocal(plays, filters) {
+  return plays.filter(p => {
+    if (filters.speed?.length        && !filters.speed.includes(p.speed))                return false;
+    if (filters.requirements?.length && !filters.requirements.includes(p.requirements))  return false;
+    if (filters.effort?.length       && !filters.effort.includes(p.cost))                return false;
+    if (filters.impact?.length       && !filters.impact.some(i => (p.impact||[]).includes(i))) return false;
+    if (filters.domain?.length       && !filters.domain.includes(p._domain?.id || p.domainId)) return false;
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      const text = (p.title + ' ' + (p.cardText || p.shortPain || '') + ' ' + (p.whatWeDo || '')).toLowerCase();
+      if (!text.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+/* ─── TAG STYLES ────────────────────────────────────────────────── */
+const TAG_STYLES = {
+  // V3.1 speed tags
+  'Quick Start':            { bg:'#E8F5EE', color:'#1F7A4A' },
+  'Scoped Project':         { bg:'#FFF4E0', color:'#92620A' },
+  'Strategic Build':        { bg:'#F0EDFB', color:'#5E3FA3' },
+  // requirements
+  'Light Requirements':     { bg:'#E6F2FF', color:'#1A5FAD' },
+  'Moderate Requirements':  { bg:'#FFF4E0', color:'#92620A' },
+  'High Requirements':      { bg:'#FDE8E8', color:'#B82A2A' },
+  // indicative effort
+  '$':    { bg:'#EBF5EB', color:'#276227' },
+  '$$':   { bg:'#EBF5EB', color:'#276227' },
+  '$$$':  { bg:'#FFF4E0', color:'#92620A' },
+  '$$$$': { bg:'#FDE8E8', color:'#B82A2A' },
+};
+
+const IMPACT_STYLES = {
+  'Margin & Cash':          { bg:'#FFF4E0', color:'#92620A' },
+  'Control & Visibility':   { bg:'#E6F2FF', color:'#1A5FAD' },
+  'Decision Speed':         { bg:'#F0EDFB', color:'#5E3FA3' },
+  'Customer Growth':        { bg:'#E8F5EE', color:'#1F7A4A' },
+  'Risk & Loss Reduction':  { bg:'#FDE8E8', color:'#B82A2A' },
+  'Productivity':           { bg:'#FEF0E6', color:'#9A4A0A' },
+  'Scalable Foundation':    { bg:'#F0F0F0', color:'#4A4A4A' },
+  /* Stage 3 impact tags — restrained teal-based palette */
+  'New Revenue':            { bg:'#E0F5F0', color:'#1B7A62' },
+  'Supplier Monetization':  { bg:'#E0F5F0', color:'#1B7A62' },
+  'Customer Ownership':     { bg:'#E8F2FB', color:'#1A5FAD' },
+  'Strategic Expansion':    { bg:'#F0EDFB', color:'#5E3FA3' },
+};
+
+/* ─── TOOLTIP ───────────────────────────────────────────────────── */
+const Tooltip = ({ text, children }) => {
+  const [show, setShow] = useState(false);
+  const ref = useRef(null);
+  return (
+    <span ref={ref} style={{ position:'relative', display:'inline-flex' }}
+      onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      {children}
+      {show && text && (
+        <span style={{
+          position:'absolute', bottom:'calc(100% + 6px)', left:'50%', transform:'translateX(-50%)',
+          background:'#1A1410', color:'#F5F3EF', fontSize:'11px', lineHeight:1.55,
+          padding:'7px 10px', borderRadius:'5px', whiteSpace:'pre-wrap', width:'200px',
+          zIndex:100, pointerEvents:'none', boxShadow:'0 4px 12px rgba(0,0,0,0.18)',
+          fontWeight:300, letterSpacing:'.01em',
+        }}>{text}</span>
+      )}
+    </span>
+  );
+};
+
+const Tag = ({ label, size='sm', tooltip }) => {
+  const st = TAG_STYLES[label] || { bg:'#F0F0F0', color:'#555' };
+  const tip = tooltip !== undefined ? tooltip : ((_TAG_TOOLTIPS||{})[label] || '');
+  const chip = (
+    <span className="tag" style={{ background:st.bg, color:st.color,
+      fontSize: size==='sm' ? '11px' : '12px',
+      padding:  size==='sm' ? '3px 9px' : '5px 12px',
+      cursor: tip ? 'default' : undefined }}>{label}</span>
+  );
+  if (!tip) return chip;
+  return <Tooltip text={tip}>{chip}</Tooltip>;
+};
+
+const ImpactTag = ({ label }) => {
+  const st = IMPACT_STYLES[label] || { bg:'#F0F0F0', color:'#555' };
+  return (
+    <span className="tag" style={{ background:st.bg, color:st.color, fontSize:'11px', padding:'3px 9px' }}>{label}</span>
+  );
+};
+
+const SectionLabel = ({ children, style }) => (
+  <div style={{
+    fontSize:'11px',
+    color:'var(--accent-text)',
+    fontWeight:600,
+    letterSpacing:'.16em',
+    textTransform:'uppercase',
+    marginBottom:'7px',
+    ...style,
+  }}>{children}</div>
+);
+
+const firstSentence = text => {
+  const clean = (text || '').replace(/\s+/g, ' ').trim();
+  const match = clean.match(/^(.+?[.!?])(?:\s|$)/);
+  return match ? match[1] : clean;
+};
+
+const findServiceAndDomainById = id => {
+  for (const d of (_ALL_DOMAINS || [])) {
+    const play = (d.plays || []).find(p => p.id === id);
+    if (play) return { play: { ...play, domainId:d.id, domainTitle:d.title, stage:d.stage }, domain:d };
+  }
+  return null;
+};
+
+const StageBadge = ({ stage }) => {
+  const { color } = (_STAGE_META||{})[stage] || {};
+  return (
+    <span style={{ fontSize:'11px', color, fontWeight:600, letterSpacing:'.07em', textTransform:'uppercase', fontFamily:'DM Sans' }}>
+      Stage {stage}
+    </span>
+  );
+};
+
+/* ─── SHARED LAYOUT ─────────────────────────────────────────────── */
+const Page = ({ children, header }) => (
+  <div style={{ minHeight:'100vh', display:'flex', flexDirection:'column', background:'var(--bg)' }}>
+    <header style={{ padding:'0 clamp(20px,5vw,72px)', height:'58px', display:'flex', alignItems:'center', justifyContent:'space-between', background:'var(--surface)', borderBottom:'1px solid var(--border)', flexShrink:0, position:'sticky', top:0, zIndex:20 }}>
+      {header}
+    </header>
+    <main style={{ flex:1, maxWidth:'1080px', margin:'0 auto', width:'100%', padding:'clamp(36px,6vh,64px) clamp(20px,4vw,48px)' }}>
+      {children}
+    </main>
+  </div>
+);
+
+const BackBtn = ({ onClick, label='Back' }) => (
+  <button onClick={onClick} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--text-secondary)', fontSize:'13px', padding:0, display:'flex', alignItems:'center', gap:'5px' }}>
+    ← {label}
+  </button>
+);
+
+const Wordmark = () => (
+  <button onClick={() => window.dispatchEvent(new CustomEvent('retail-canvas:home'))}
+    aria-label="Return to Retail AI Canvas front page"
+    style={{ background:'none', border:'none', padding:0, cursor:'pointer', fontSize:'12px', letterSpacing:'.14em', color:'var(--text-muted)', textTransform:'uppercase', fontFamily:'DM Sans', fontWeight:500 }}>
+    Retail AI Canvas
+  </button>
+);
+
+/* ─── COPILOT NUDGE ─────────────────────────────────────────────── */
+const CopilotNudge = ({ text, onOpen }) => (
+  <button onClick={onOpen} className="btn-ghost" style={{ display:'inline-flex', alignItems:'center', gap:'8px', padding:'13px 24px', fontSize:'14px', borderRadius:'3px' }}>
+    <span style={{ fontSize:'13px', opacity:.7 }}>◎</span>{text}
+  </button>
+);
+
+/* ─── STAGE CARD ─────────────────────────────────────────────────── */
+const StageCard = ({ stage, title, desc, cta, clickable, optional, onStage }) => {
+  const [hov, setHov] = useState(false);
+  const { color } = (_STAGE_META||{})[stage] || {};
+  return (
+    <div onClick={() => clickable && onStage(stage)}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{
+        padding:'24px 20px',
+        background: hov && clickable ? '#FEFCF8' : optional ? 'var(--surface-alt)' : 'var(--surface)',
+        border:`1px solid ${hov && clickable ? 'var(--border-hover)' : 'var(--border)'}`,
+        borderTop:`3px solid ${color}`,
+        borderRadius:'4px',
+        cursor: clickable ? 'pointer' : 'default',
+        transition:'all .18s ease',
+        display:'flex', flexDirection:'column', gap:'10px',
+        boxShadow: hov && clickable ? '0 4px 16px rgba(0,0,0,.07)' : 'none',
+        opacity: optional ? 0.88 : 1,
+      }}>
+      <div style={{ display:'flex', alignItems:'center', gap:'8px', justifyContent:'space-between' }}>
+        <div style={{ fontSize:'10px', color, letterSpacing:'.12em', textTransform:'uppercase', fontWeight:600 }}>Stage {stage}</div>
+        {optional && (
+          <span style={{ fontSize:'10px', background:'var(--teal-dim)', color:'var(--teal)', border:'1px solid rgba(27,155,121,0.20)', borderRadius:'20px', padding:'2px 8px', fontWeight:500, letterSpacing:'.03em' }}>Optional · Strategic</span>
+        )}
+      </div>
+      <div style={{ fontSize:'15px', fontWeight:600, color:'var(--text-primary)' }}>{title}</div>
+      <div style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.65, fontWeight:300, flex:1 }}>{desc}</div>
+      <div style={{ fontSize:'12px', color: hov && clickable ? 'var(--accent)' : 'var(--text-muted)', fontWeight: hov && clickable ? 500 : 400, transition:'color .18s ease', paddingTop:'12px', borderTop:'1px solid var(--border)', marginTop:'4px' }}>
+        {cta}{clickable ? ' →' : ''}
+      </div>
+    </div>
+  );
+};
+
+/* ─── LANDING ────────────────────────────────────────────────────── */
+const LandingScreen = ({ onStart, onBrowse, onStage, onCopilot }) => (
+  <Page header={
+    <>
+      <Wordmark />
+      <button onClick={onBrowse} style={{ fontSize:'13px', color:'var(--text-secondary)', background:'none', border:'none', cursor:'pointer' }}>Browse all solutions →</button>
+    </>
+  }>
+    <div className="fade-up" style={{ maxWidth:'660px', marginBottom:'52px' }}>
+      <div style={{ fontSize:'11px', letterSpacing:'.12em', color:'var(--accent)', textTransform:'uppercase', fontWeight:600, marginBottom:'16px' }}>For mid-sized food retailers</div>
+      <h1 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(32px,4.5vw,54px)', fontWeight:400, lineHeight:1.14, color:'var(--text-primary)', marginBottom:'18px' }}>
+        Where is your business<br /><em>under most pressure</em> right now?
+      </h1>
+      <p style={{ fontSize:'17px', color:'var(--text-secondary)', lineHeight:1.78, marginBottom:'28px', fontWeight:300 }}>
+        This canvas helps retail leaders see where data, analytics, and AI can improve margin, stock, promotions, customer value, store execution, supplier control, and decision speed — starting from business reality, not a technology catalogue.
+      </p>
+      <div style={{ display:'flex', gap:'10px', flexWrap:'wrap', alignItems:'center' }}>
+        <button onClick={onStart} className="btn-primary">Find my starting point →</button>
+        <button onClick={onBrowse} className="btn-ghost">Browse all solutions</button>
+        <CopilotNudge text="Ask the retail advisor" onOpen={onCopilot} />
+      </div>
+    </div>
+
+    <div className="fade-up" style={{ animationDelay:'60ms' }}>
+      <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:'14px', fontWeight:500 }}>Explore by stage</p>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:'14px' }}>
+        <StageCard stage={1}
+          title="Strengthen Core Operations"
+          desc="Improve visibility, execution, stock, margin, supplier control, reporting, loss prevention, and workforce productivity in the current business."
+          cta="Explore core business areas"
+          clickable={true} onStage={onStage} />
+        <StageCard stage={2}
+          title="Optimize and Grow"
+          desc="Use customer intelligence, promotion analytics, and pricing discipline to grow more profitably from the existing base."
+          cta="Explore growth and optimization areas"
+          clickable={true} onStage={onStage} />
+        <StageCard stage={3}
+          title="Expand and Monetize"
+          desc="Optional strategic expansion once the core is ready. New revenue from retail media, supplier activation, paid loyalty, and partner ecosystems."
+          cta="Strategic module — explore when ready"
+          clickable={true} optional={true} onStage={onStage} />
+      </div>
+    </div>
+  </Page>
+);
+
+/* ─── GUIDED QUESTIONS ───────────────────────────────────────────── */
+const QS_DEF = [
+  { id:'pressures',     multi:3, label:'Select up to 3',    text:'What are the biggest pressures in your business right now?',       opts:_PRESSURES },
+  { id:'businessAreas', multi:2, label:'Select one or two', text:'Where is this pressure felt most in the business?',                opts:_BUSINESS_AREAS },
+  { id:'improvement',   multi:1, label:'Select one',        text:'What kind of improvement are you looking for?',                    opts:_IMPROVEMENT_TYPES },
+];
+
+const QuestionsScreen = ({ onDone, onBack, onCopilot }) => {
+  const [step, setStep]       = useState(0);
+  const [answers, setAnswers] = useState({ pressures:[], businessAreas:[], improvement:null });
+  const q = QS_DEF[step];
+
+  const getArr = id => Array.isArray(answers[id]) ? answers[id] : (answers[id] ? [answers[id]] : []);
+  const isSelected = id => q.multi === 1 ? answers[q.id] === id : getArr(q.id).includes(id);
+  const selectedCount = q.multi === 1 ? (answers[q.id] ? 1 : 0) : getArr(q.id).length;
+  const hasAnswer = () => selectedCount > 0;
+
+  const toggle = id => {
+    if (q.multi === 1) { setAnswers(a => ({ ...a, [q.id]: a[q.id] === id ? null : id })); return; }
+    setAnswers(a => {
+      const arr = getArr(q.id);
+      if (arr.includes(id)) return { ...a, [q.id]: arr.filter(x => x !== id) };
+      if (arr.length >= q.multi) return a;
+      return { ...a, [q.id]: [...arr, id] };
+    });
+  };
+
+  const next = () => {
+    if (!hasAnswer()) return;
+    if (step < QS_DEF.length - 1) setStep(s => s + 1);
+    else onDone(answers);
+  };
+
+  return (
+    <Page header={
+      <>
+        <BackBtn onClick={onBack} label="Start over" />
+        <Wordmark />
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:'10px', minWidth:'92px' }}>
+          <div style={{ display:'flex', gap:'5px' }}>
+            {QS_DEF.map((_,i) => (
+              <div key={i} style={{ height:'3px', width: i===step?'22px':'7px', borderRadius:'2px', background: i<=step?'var(--text-primary)':'var(--border)', transition:'all .22s ease' }} />
+            ))}
+          </div>
+          <span style={{ fontSize:'12px', color:'var(--text-muted)', minWidth:'36px', textAlign:'right' }}>{step+1} / {QS_DEF.length}</span>
+        </div>
+      </>
+    }>
+      <div key={step} className="fade-up" style={{ maxWidth:'720px' }}>
+        <p style={{ fontSize:'11px', letterSpacing:'.1em', color:'var(--text-muted)', textTransform:'uppercase', marginBottom:'12px', fontWeight:500 }}>{q.label}</p>
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(26px,4vw,42px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'8px', lineHeight:1.2 }}>{q.text}</h2>
+        {q.multi > 1 && <p style={{ fontSize:'13px', color:'var(--text-muted)', marginBottom:'28px' }}>Choose up to {q.multi}</p>}
+        {q.multi === 1 && <div style={{ marginBottom:'28px' }} />}
+
+        <div style={{ display:'flex', flexWrap:'wrap', gap:'9px', marginBottom:'40px' }}>
+          {q.opts.map(opt => {
+            const sel = isSelected(opt.id);
+            const maxed = !sel && q.multi > 1 && selectedCount >= q.multi;
+            return (
+              <button key={opt.id} onClick={() => toggle(opt.id)} disabled={maxed}
+                style={{ padding:'11px 18px', border:`1.5px solid ${sel ? 'var(--text-primary)' : 'var(--border)'}`, background: sel ? 'var(--text-primary)' : 'var(--surface)', color: sel ? '#FFF' : maxed ? 'var(--text-muted)' : 'var(--text-secondary)', borderRadius:'3px', fontSize:'14px', fontWeight: sel ? 500 : 300, transition:'all .15s ease', cursor: maxed ? 'default' : 'pointer', opacity: maxed ? .4 : 1 }}>
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div style={{ display:'flex', gap:'10px', alignItems:'center', flexWrap:'wrap' }}>
+          <button onClick={next} disabled={!hasAnswer()} className="btn-primary"
+            style={{ opacity: hasAnswer() ? 1 : .35, cursor: hasAnswer() ? 'pointer' : 'default' }}>
+            {step < QS_DEF.length - 1 ? 'Next →' : 'Show my recommended services →'}
+          </button>
+          {step > 0 && (
+            <button onClick={() => setStep(s => s-1)} className="btn-ghost" style={{ padding:'13px 24px', fontSize:'14px' }}>← Previous</button>
+          )}
+          <CopilotNudge text="Prefer to explain in your own words?" onOpen={onCopilot} />
+        </div>
+      </div>
+    </Page>
+  );
+};
+
+/* ─── PLAY CARD (used in Browse and Recommended) ─────────────────── */
+const PlayCard = ({ play, onClick, delay=0 }) => (
+  <div className="card-lift fade-up" onClick={onClick}
+    style={{ padding:'24px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', cursor:'pointer', display:'flex', flexDirection:'column', gap:'14px', animationDelay:`${delay}ms` }}>
+    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:'12px' }}>
+      <h3 style={{ fontSize:'15px', fontWeight:600, color:'var(--text-primary)', lineHeight:1.3, flex:1 }}>{play.title}</h3>
+      <span style={{ fontSize:'16px', color:'var(--text-muted)', flexShrink:0 }}>›</span>
+    </div>
+    <div>
+      <SectionLabel>Business pressure</SectionLabel>
+      <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.62, fontWeight:300, display:'-webkit-box', WebkitLineClamp:3, WebkitBoxOrient:'vertical', overflow:'hidden' }}>
+        {firstSentence(play.shortPain)}
+      </p>
+    </div>
+    <div>
+      <SectionLabel>What we do</SectionLabel>
+      <p style={{ fontSize:'13px', color:'var(--text-primary)', lineHeight:1.62, fontWeight:400 }}>
+        {play.cardText || play.shortPain}
+      </p>
+    </div>
+    <div style={{ display:'flex', flexDirection:'column', gap:'8px', marginTop:'auto', paddingTop:'12px', borderTop:'1px solid var(--border)' }}>
+      <div style={{ display:'flex', gap:'5px', flexWrap:'wrap' }}>
+        <Tag label={play.speed} />
+        <Tag label={play.requirements} />
+        <Tag label={play.cost} />
+      </div>
+    </div>
+  </div>
+);
+
+/* ─── RECOMMENDED SCREEN ─────────────────────────────────────────── */
+const RecommendedScreen = ({ answers, onPlay, onDomain, onBrowse, onRoadmap, onBack, onCopilot }) => {
+  const services = useMemo(() => _getRecommendedServices(answers), [answers]);
+  const pressureLabels = (answers.pressures || [])
+    .map(id => ((_PRESSURES||[]).find(p => p.id === id) || {}).label)
+    .filter(Boolean);
+
+  const totalOperating = (_ALL_DOMAINS||[]).filter(d => d.stage < 3).reduce((n,d) => n + d.plays.length, 0);
+
+  return (
+    <Page header={
+      <>
+        <BackBtn onClick={onBack} label="Change answers" />
+        <Wordmark />
+        <button onClick={onBrowse} style={{ fontSize:'13px', color:'var(--text-secondary)', background:'none', border:'none', cursor:'pointer' }}>Browse all solutions →</button>
+      </>
+    }>
+      <div className="fade-up" style={{ marginBottom:'36px' }}>
+        <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:500, marginBottom:'10px' }}>Based on your answers</p>
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(28px,4vw,44px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'12px', lineHeight:1.18 }}>Recommended services</h2>
+        {pressureLabels.length > 0 && (
+          <p style={{ fontSize:'15px', color:'var(--text-secondary)', lineHeight:1.72, fontWeight:300, maxWidth:'600px' }}>
+            Based on <strong style={{ fontWeight:500, color:'var(--text-primary)' }}>{pressureLabels.map(l => l.toLowerCase()).join(', ')}</strong> — these services are the most relevant practical starting points for your situation.
+          </p>
+        )}
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:'14px', marginBottom:'36px' }}>
+        {services.map((svc, i) => {
+          const domain = (_ALL_DOMAINS||[]).find(d => d.id === svc.domainId);
+          return (
+            <div key={svc.id} className="card-lift fade-up" onClick={() => onPlay && domain && onPlay(svc, domain)}
+              style={{ padding:'24px 22px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', cursor:'pointer', display:'flex', flexDirection:'column', gap:'14px', animationDelay:`${i*45}ms` }}>
+              {/* Domain label above title */}
+              <div style={{ fontSize:'11px', color:'var(--text-muted)', fontWeight:500 }}>{svc.domainTitle}</div>
+              <div>
+                <h3 style={{ fontSize:'16px', fontWeight:600, color:'var(--text-primary)', marginBottom:'12px', lineHeight:1.25 }}>{svc.title}</h3>
+                <SectionLabel>Business pressure</SectionLabel>
+                <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.62, fontWeight:300, display:'-webkit-box', WebkitLineClamp:3, WebkitBoxOrient:'vertical', overflow:'hidden', marginBottom:'12px' }}>
+                  {firstSentence(svc.shortPain)}
+                </p>
+                <SectionLabel>What we do</SectionLabel>
+                <p style={{ fontSize:'13px', color:'var(--text-primary)', lineHeight:1.62, fontWeight:400 }}>
+                  {svc.cardText || svc.shortPain}
+                </p>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:'8px', marginTop:'auto', paddingTop:'12px', borderTop:'1px solid var(--border)' }}>
+                <div style={{ display:'flex', gap:'5px', flexWrap:'wrap' }}>
+                  <Tag label={svc.speed} />
+                  <Tag label={svc.requirements} />
+                  <Tag label={svc.cost} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ paddingTop:'20px', borderTop:'1px solid var(--border)', display:'flex', alignItems:'center', gap:'16px', flexWrap:'wrap' }}>
+        <button onClick={onRoadmap} className="btn-primary" style={{ padding:'13px 24px', fontSize:'14px' }}>Build roadmap</button>
+        <p style={{ fontSize:'13px', color:'var(--text-secondary)', fontWeight:300 }}>Want to see everything?</p>
+        <button onClick={onBrowse} className="btn-ghost" style={{ padding:'13px 24px', fontSize:'14px' }}>Browse all {totalOperating} operating solutions</button>
+        <CopilotNudge text="Ask the retail advisor" onOpen={onCopilot} />
+      </div>
+    </Page>
+  );
+};
+
+/* ─── ROADMAP SCREEN ─────────────────────────────────────────────── */
+const RoadmapScreen = ({ answers, onBack, onPlay }) => {
+  const suggestions = useMemo(() => _getRoadmapPathwaySuggestions(answers), [answers]);
+  const defaultPathway = suggestions[0]?.id || (_ROADMAP_PATHWAYS || [])[0]?.id;
+  const [pathwayId, setPathwayId] = useState(defaultPathway);
+  const [readiness, setReadiness] = useState({});
+  const [showRoute, setShowRoute] = useState(false);
+  const [blockStates, setBlockStates] = useState({});
+
+  useEffect(() => {
+    if (!pathwayId && defaultPathway) setPathwayId(defaultPathway);
+  }, [defaultPathway, pathwayId]);
+
+  const pathway = _getRoadmapPathwayById(pathwayId) || suggestions[0] || (_ROADMAP_PATHWAYS || [])[0];
+  const questions = pathway?.readinessQuestions || [];
+  const answeredCount = questions.filter((_, i) => readiness[`q${i}`]).length;
+  const readyToBuild = questions.length > 0 && answeredCount === questions.length;
+  const route = useMemo(
+    () => pathway ? _buildRoadmapRoute(pathway.id, readiness, blockStates) : null,
+    [pathway?.id, readiness, blockStates]
+  );
+  const visibleSteps = showRoute ? (route?.steps || []) : [];
+  const routeStartStep = route ? (_ROADMAP_STEPS || []).find(s => s.id === route.startStepId) : null;
+  const primarySuggestions = suggestions.length ? suggestions : (_ROADMAP_PATHWAYS || []).slice(0, 1);
+  const otherPathways = (_ROADMAP_PATHWAYS || []).filter(path => !primarySuggestions.some(s => s.id === path.id));
+  const hiddenBlockCount = visibleSteps.reduce((sum, stepGroup) => sum + (stepGroup.nodes || []).filter(n => n.hiddenByUser).length, 0);
+
+  const choosePathway = id => {
+    setPathwayId(id);
+    setReadiness({});
+    setBlockStates({});
+    setShowRoute(false);
+  };
+
+  const openLinkedCard = cardId => {
+    const found = findServiceAndDomainById(cardId);
+    if (found) onPlay(found.play, found.domain);
+  };
+
+  const restoreBlock = nodeId => {
+    setBlockStates(states => {
+      const next = { ...states };
+      delete next[nodeId];
+      return next;
+    });
+  };
+
+  const restoreHiddenBlocks = () => {
+    setBlockStates(states => Object.fromEntries(Object.entries(states).filter(([_, value]) => value !== 'not_relevant')));
+  };
+
+  const stateStyle = state => {
+    if (state === 'already_exists') return { bg:'var(--green-dim)', color:'var(--green)', border:'rgba(42,138,98,0.22)' };
+    if (state === 'not_relevant') return { bg:'var(--surface-alt)', color:'var(--text-muted)', border:'var(--border)' };
+    if (state === 'later') return { bg:'var(--accent-dim)', color:'var(--accent-text)', border:'rgba(184,131,42,0.22)' };
+    return { bg:'var(--blue-dim)', color:'var(--blue)', border:'rgba(59,111,212,0.22)' };
+  };
+
+  const stepColor = step => step?.id === 'expand'
+    ? 'var(--teal)'
+    : step?.id === 'optimize' || step?.id === 'scale'
+      ? 'var(--accent)'
+      : 'var(--blue)';
+
+  const stepStatus = stepGroup => {
+    const step = stepGroup.step || {};
+    if (step.id === route?.startStepId) return 'You start here';
+    if (stepGroup.currentFocus) return 'What comes next';
+    return 'Validate first';
+  };
+
+  return (
+    <Page header={
+      <>
+        <BackBtn onClick={onBack} label="Back to recommendations" />
+        <Wordmark />
+        <span style={{ width:'120px' }} />
+      </>
+    }>
+      <div className="fade-up" style={{ marginBottom:'34px', maxWidth:'820px' }}>
+        <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:500, marginBottom:'10px' }}>Progression roadmap</p>
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(28px,4vw,44px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'12px', lineHeight:1.16 }}>Turn selected interests into a practical route</h2>
+        <p style={{ fontSize:'15px', color:'var(--text-secondary)', lineHeight:1.72, fontWeight:300, maxWidth:'720px' }}>
+          Answer a short readiness check, then review a route through See, Control, Optimize, Scale, and optional Expand. This is not a project timeline; it shows sequencing logic and dependencies.
+        </p>
+      </div>
+
+      <div className="fade-up" style={{ display:'grid', gridTemplateColumns:'minmax(0,1fr)', gap:'18px', marginBottom:'28px' }}>
+        <div style={{ padding:'20px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px' }}>
+          <SectionLabel>Suggested pathway</SectionLabel>
+          <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', marginBottom:'12px' }}>
+            {primarySuggestions.map(path => {
+              const selected = path.id === pathway?.id;
+              return (
+                <button key={path.id} onClick={() => choosePathway(path.id)}
+                  style={{ padding:'9px 12px', border:`1px solid ${selected ? 'var(--text-primary)' : 'var(--border)'}`, background:selected ? 'var(--text-primary)' : 'var(--surface)', color:selected ? '#FFF' : 'var(--text-secondary)', borderRadius:'3px', fontSize:'13px', fontWeight:selected ? 500 : 300 }}>
+                  {path.title}{!selected ? ' · suggested' : ''}
+                </button>
+              );
+            })}
+          </div>
+          {otherPathways.length > 0 && (
+            <details style={{ marginBottom:'12px' }}>
+              <summary style={{ cursor:'pointer', fontSize:'12px', color:'var(--text-muted)', fontWeight:400 }}>Change pathway</summary>
+              <div style={{ display:'flex', gap:'7px', flexWrap:'wrap', marginTop:'10px' }}>
+                {otherPathways.map(path => {
+                  const selected = path.id === pathway?.id;
+                  return (
+                    <button key={path.id} onClick={() => choosePathway(path.id)}
+                      style={{ padding:'7px 10px', border:`1px solid ${selected ? 'var(--text-primary)' : 'var(--border)'}`, background:selected ? 'var(--text-primary)' : 'var(--surface)', color:selected ? '#FFF' : 'var(--text-secondary)', borderRadius:'3px', fontSize:'12px', fontWeight:selected ? 500 : 300 }}>
+                      {path.title}
+                    </button>
+                  );
+                })}
+              </div>
+            </details>
+          )}
+          {pathway && (
+            <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.68, fontWeight:300 }}>
+              {pathway.executiveUseCase}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {!showRoute && pathway && (
+        <div className="fade-up" style={{ padding:'22px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', marginBottom:'28px' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', gap:'12px', alignItems:'flex-start', marginBottom:'22px', flexWrap:'wrap' }}>
+            <div>
+              <SectionLabel>Readiness check</SectionLabel>
+              <h3 style={{ fontSize:'20px', fontWeight:600, color:'var(--text-primary)', marginBottom:'6px' }}>{pathway.title}</h3>
+              <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.65, fontWeight:300 }}>Choose the closest answer. This only shapes the route; it is not a full diagnostic.</p>
+            </div>
+            <span style={{ fontSize:'12px', color:'var(--text-muted)' }}>{answeredCount} / {questions.length}</span>
+          </div>
+
+          <div style={{ display:'flex', flexDirection:'column', gap:'14px' }}>
+            {questions.map((q, i) => (
+              <div key={i} style={{ padding:'14px', background:'var(--card)', border:'1px solid var(--border)', borderRadius:'5px' }}>
+                <p style={{ fontSize:'14px', color:'var(--text-primary)', lineHeight:1.55, fontWeight:500, marginBottom:'10px' }}>{q}</p>
+                <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
+                  {(_ROADMAP_OPTIONS || []).map(opt => {
+                    const selected = readiness[`q${i}`] === opt.id;
+                    return (
+                      <button key={opt.id} onClick={() => setReadiness(a => ({ ...a, [`q${i}`]: opt.id }))}
+                        style={{ padding:'8px 11px', border:`1px solid ${selected ? 'var(--text-primary)' : 'var(--border)'}`, background:selected ? 'var(--text-primary)' : 'var(--surface)', color:selected ? '#FFF' : 'var(--text-secondary)', borderRadius:'3px', fontSize:'12px', fontWeight:selected ? 500 : 300 }}>
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop:'22px', display:'flex', gap:'10px', flexWrap:'wrap', alignItems:'center' }}>
+            <button onClick={() => setShowRoute(true)} disabled={!readyToBuild} className="btn-primary"
+              style={{ opacity: readyToBuild ? 1 : .35, cursor: readyToBuild ? 'pointer' : 'default' }}>Build my route</button>
+            <button onClick={() => { setReadiness({}); setBlockStates({}); }} className="btn-ghost" style={{ padding:'13px 24px', fontSize:'14px' }}>Clear answers</button>
+          </div>
+        </div>
+      )}
+
+      {showRoute && route && (
+        <div className="fade-up">
+          <div style={{ padding:'18px 20px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', marginBottom:'22px', display:'flex', justifyContent:'space-between', gap:'16px', flexWrap:'wrap' }}>
+            <div style={{ maxWidth:'720px' }}>
+              <SectionLabel>Your likely route</SectionLabel>
+              <h3 style={{ fontSize:'20px', fontWeight:600, color:'var(--text-primary)', marginBottom:'8px' }}>{route.pathway.title}</h3>
+              {routeStartStep && (
+                <div style={{ display:'inline-flex', alignItems:'center', gap:'7px', padding:'5px 9px', border:'1px solid rgba(59,111,212,0.22)', background:'var(--blue-dim)', color:'var(--blue)', borderRadius:'20px', fontSize:'12px', fontWeight:500, marginBottom:'10px' }}>
+                  Route starts at {routeStartStep.label}
+                </div>
+              )}
+              <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.68, fontWeight:300 }}>{route.explanation}</p>
+            </div>
+            <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', alignSelf:'flex-start' }}>
+              {hiddenBlockCount > 0 && (
+                <button onClick={restoreHiddenBlocks} className="btn-ghost" style={{ padding:'11px 18px', fontSize:'13px' }}>Restore hidden blocks</button>
+              )}
+              <button onClick={() => setBlockStates({})} className="btn-ghost" style={{ padding:'11px 18px', fontSize:'13px' }}>Clear all statuses</button>
+              <button onClick={() => setShowRoute(false)} className="btn-ghost" style={{ padding:'11px 18px', fontSize:'13px' }}>Edit readiness</button>
+            </div>
+          </div>
+
+          <div style={{ border:'1px solid var(--border)', background:'var(--surface)', borderRadius:'6px', overflow:'hidden' }}>
+            <div style={{ padding:'14px 18px', borderBottom:'1px solid var(--border)', display:'flex', justifyContent:'space-between', alignItems:'center', gap:'14px', flexWrap:'wrap' }}>
+              <div>
+                <SectionLabel>Progression map</SectionLabel>
+                <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.55, fontWeight:300 }}>Read left to right: baseline first, current focus next, then the layers it unlocks.</p>
+              </div>
+              <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
+                <span style={{ fontSize:'11px', color:'var(--text-muted)', border:'1px solid var(--border)', borderRadius:'20px', padding:'5px 8px' }}>Solid = core route</span>
+                <span style={{ fontSize:'11px', color:'var(--text-muted)', border:'1px solid var(--border)', borderRadius:'20px', padding:'5px 8px' }}>Muted = later / optional</span>
+              </div>
+            </div>
+
+            <div style={{ overflowX:'auto', padding:'18px' }}>
+              <div style={{ minWidth:'940px', display:'grid', gridTemplateColumns:`repeat(${visibleSteps.length}, minmax(165px, 1fr))`, gap:'10px', alignItems:'start' }}>
+                {visibleSteps.map((stepGroup, si) => {
+                  const step = stepGroup.step || {};
+                  const color = stepColor(step);
+                  const activeNodes = (stepGroup.nodes || []).filter(n => !n.hiddenByUser);
+                  const hiddenNodes = (stepGroup.nodes || []).filter(n => n.hiddenByUser);
+                  const status = stepStatus(stepGroup);
+                  const isStart = step.id === route.startStepId;
+                  return (
+                    <div key={stepGroup.stepId} style={{ minWidth:0 }}>
+                      <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'14px' }}>
+                        <div style={{ width:'34px', height:'34px', borderRadius:'50%', border:`2px solid ${color}`, background:isStart ? color : 'var(--surface)', color:isStart ? '#FFF' : color, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'13px', fontWeight:700, flexShrink:0 }}>
+                          {si + 1}
+                        </div>
+                        <div style={{ height:'2px', background: si === visibleSteps.length - 1 ? 'transparent' : `linear-gradient(90deg, ${color}, var(--border))`, flex:1 }} />
+                      </div>
+
+                      <div style={{ padding:'13px', minHeight:'138px', border:`1px solid ${isStart ? 'rgba(59,111,212,0.28)' : 'var(--border)'}`, background:isStart ? 'var(--blue-dim)' : 'var(--surface-alt)', borderRadius:'6px', marginBottom:'12px' }}>
+                        <div style={{ fontSize:'11px', color, fontWeight:700, letterSpacing:'.09em', textTransform:'uppercase', marginBottom:'6px' }}>{step.label}</div>
+                        <div style={{ display:'inline-flex', padding:'3px 7px', border:`1px solid ${isStart ? 'rgba(59,111,212,0.22)' : 'var(--border)'}`, borderRadius:'20px', color:isStart ? 'var(--blue)' : 'var(--text-muted)', background:isStart ? 'var(--surface)' : 'transparent', fontSize:'10px', textTransform:'uppercase', letterSpacing:'.08em', marginBottom:'8px' }}>
+                          {status}
+                        </div>
+                        <div style={{ fontSize:'13px', color:'var(--text-primary)', fontWeight:600, lineHeight:1.35, marginBottom:'7px' }}>{step.stageLabel}</div>
+                        <p style={{ fontSize:'12px', color:'var(--text-muted)', lineHeight:1.48 }}>{step.executiveQuestion}</p>
+                      </div>
+
+                      <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
+                        {activeNodes.map((node, ni) => {
+                          const st = stateStyle(node.userState);
+                          const nodeMuted = node.future || !stepGroup.currentFocus;
+                          return (
+                            <div key={node.id} className="card-lift" style={{ position:'relative', padding:'13px', background:nodeMuted ? 'var(--surface-alt)' : 'var(--surface)', border:`1px solid ${node.future ? 'rgba(184,131,42,0.22)' : 'var(--border)'}`, borderRadius:'6px', opacity:nodeMuted ? .82 : 1 }}>
+                              <div style={{ position:'absolute', left:'-7px', top:'20px', width:'10px', height:'10px', borderRadius:'50%', background:node.future ? 'var(--accent)' : color, border:'2px solid var(--surface)' }} />
+                              <div style={{ display:'flex', justifyContent:'space-between', gap:'8px', alignItems:'flex-start', marginBottom:'7px' }}>
+                                <h4 style={{ fontSize:'14px', fontWeight:600, color:'var(--text-primary)', lineHeight:1.3 }}>{node.title}</h4>
+                                <span style={{ fontSize:'10px', color:st.color, background:st.bg, border:`1px solid ${st.border}`, borderRadius:'20px', padding:'3px 7px', whiteSpace:'nowrap' }}>{(_ROADMAP_STATES||[]).find(s=>s.id===node.userState)?.label || 'Interesting'}</span>
+                              </div>
+                              <p style={{ fontSize:'12px', color:'var(--text-secondary)', lineHeight:1.55, fontWeight:300, marginBottom:'10px' }}>{node.shortRole}</p>
+
+                              <div style={{ display:'flex', gap:'5px', flexWrap:'wrap', marginBottom:'10px' }}>
+                                {(_ROADMAP_STATES || []).map(opt => {
+                                  const selected = node.userState === opt.id;
+                                  return (
+                                    <button key={opt.id} onClick={() => setBlockStates(s => ({ ...s, [node.id]: opt.id }))}
+                                      style={{ padding:'5px 7px', border:`1px solid ${selected ? 'var(--text-primary)' : 'var(--border)'}`, background:selected ? 'var(--text-primary)' : 'transparent', color:selected ? '#FFF' : 'var(--text-secondary)', borderRadius:'3px', fontSize:'10px' }}>
+                                      {opt.label}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+
+                              <details>
+                                <summary style={{ cursor:'pointer', color:'var(--text-muted)', fontSize:'11px', fontWeight:500 }}>Details and linked solutions</summary>
+                                <div style={{ marginTop:'9px', display:'grid', gap:'9px' }}>
+                                  <p style={{ fontSize:'12px', color:'var(--text-secondary)', lineHeight:1.55, fontWeight:300 }}>{node.executiveWhy}</p>
+                                  <div style={{ display:'flex', gap:'5px', flexWrap:'wrap' }}>
+                                    {(node.linkedCards || []).slice(0, 5).map(cardId => {
+                                      const found = findServiceAndDomainById(cardId);
+                                      return (
+                                        <button key={cardId} onClick={() => openLinkedCard(cardId)}
+                                          style={{ padding:'5px 7px', border:'1px solid var(--border)', borderRadius:'20px', background:'var(--card)', color:'var(--text-secondary)', fontSize:'10px', textAlign:'left' }}>
+                                          {found?.play?.title || cardId}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              </details>
+                            </div>
+                          );
+                        })}
+                        {hiddenNodes.length > 0 && (
+                          <div style={{ padding:'12px', background:'var(--surface-alt)', border:'1px dashed var(--border)', borderRadius:'6px', color:'var(--text-muted)', fontSize:'12px', lineHeight:1.55 }}>
+                            <div style={{ fontSize:'10px', textTransform:'uppercase', letterSpacing:'.08em', color:'var(--text-muted)', marginBottom:'8px' }}>Hidden in this stage</div>
+                            <div style={{ display:'grid', gap:'7px' }}>
+                              {hiddenNodes.map(node => (
+                                <div key={node.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:'8px' }}>
+                                  <span style={{ color:'var(--text-secondary)', lineHeight:1.35 }}>{node.title}</span>
+                                  <button onClick={() => restoreBlock(node.id)}
+                                    style={{ padding:'5px 7px', border:'1px solid var(--border)', background:'var(--surface)', color:'var(--text-secondary)', borderRadius:'3px', fontSize:'10px', flexShrink:0 }}>
+                                    Restore
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop:'24px', padding:'16px 18px', border:'1px solid var(--border)', background:'var(--surface)', borderRadius:'6px' }}>
+            <SectionLabel>What to validate next</SectionLabel>
+            <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.68, fontWeight:300 }}>
+              This route is a management starting point. The next step is to validate assumptions behind blocks marked already existing, confirm data and process gaps, and narrow the path to the few areas with the strongest business case.
+            </p>
+          </div>
+        </div>
+      )}
+    </Page>
+  );
+};
+
+/* ─── FILTER BAR ─────────────────────────────────────────────────── */
+const FilterGroupLabel = ({ label, tooltip }) => (
+  <span style={{ display:'inline-flex', alignItems:'center', gap:'3px' }}>
+    <span style={{ fontSize:'11px', color:'var(--text-muted)', fontWeight:500 }}>{label}</span>
+    {tooltip && (
+      <Tooltip text={tooltip}>
+        <span style={{ fontSize:'10px', color:'var(--text-muted)', cursor:'default', lineHeight:1, opacity:.7,
+          border:'1px solid var(--border)', borderRadius:'50%', width:'13px', height:'13px',
+          display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>?</span>
+      </Tooltip>
+    )}
+  </span>
+);
+
+const FilterBar = ({ filters, setFilters, searchInput, setSearchInput, impactOptions = [], domainOptions = [] }) => {
+  const toggle = (key, val) => setFilters(f => {
+    const arr = f[key] || [];
+    return { ...f, [key]: arr.includes(val) ? arr.filter(x=>x!==val) : [...arr, val] };
+  });
+  const tagCount = ['speed','requirements','effort','impact','domain'].reduce((n, k) => n + (filters[k]||[]).length, 0);
+  const hasSearch = !!(searchInput && searchInput.trim());
+  const activeCount = tagCount + (hasSearch ? 1 : 0);
+
+  return (
+    <div style={{ marginBottom:'24px' }}>
+      <div style={{ display:'flex', gap:'8px', alignItems:'center', flexWrap:'wrap', marginBottom:'10px' }}>
+        <input value={searchInput ?? ''} onChange={e => setSearchInput && setSearchInput(e.target.value)}
+          placeholder="Search solutions..."
+          style={{ padding:'9px 14px', border:'1px solid var(--border)', borderRadius:'3px', fontSize:'13px', color:'var(--text-primary)', background:'var(--surface)', outline:'none', width:'200px', fontFamily:'DM Sans' }} />
+        {activeCount > 0 && (
+          <button onClick={() => { setFilters({}); setSearchInput && setSearchInput(''); }}
+            style={{ fontSize:'12px', color:'var(--text-secondary)', background:'none', border:'1px solid var(--border)', borderRadius:'20px', padding:'5px 12px', cursor:'pointer' }}>
+            Clear {activeCount > 1 ? `filters (${activeCount})` : 'search'}
+          </button>
+        )}
+      </div>
+      <div style={{ display:'flex', gap:'6px', flexWrap:'wrap', alignItems:'center' }}>
+        <FilterGroupLabel label="Speed:" />
+        {(_SPEED_OPTIONS||[]).map(s => {
+          const on = (filters.speed||[]).includes(s);
+          return (
+            <Tooltip key={s} text={(_TAG_TOOLTIPS||{})[s]}>
+              <button onClick={() => toggle('speed', s)} className="tag"
+                style={{ background: on ? TAG_STYLES[s].bg : 'var(--surface)', color: on ? TAG_STYLES[s].color : 'var(--text-muted)', border:`1px solid ${on ? 'transparent' : 'var(--border)'}`, cursor:'pointer', fontSize:'11px' }}>{s}</button>
+            </Tooltip>
+          );
+        })}
+        <FilterGroupLabel label="Requirements:" />
+        {(_REQ_OPTIONS||[]).map(r => {
+          const on = (filters.requirements||[]).includes(r);
+          return (
+            <Tooltip key={r} text={(_TAG_TOOLTIPS||{})[r]}>
+              <button onClick={() => toggle('requirements', r)} className="tag"
+                style={{ background: on ? TAG_STYLES[r].bg : 'var(--surface)', color: on ? TAG_STYLES[r].color : 'var(--text-muted)', border:`1px solid ${on ? 'transparent' : 'var(--border)'}`, cursor:'pointer', fontSize:'11px' }}>{r}</button>
+            </Tooltip>
+          );
+        })}
+        <FilterGroupLabel label="Indicative effort:" />
+        {(_EFFORT_OPTIONS||[]).map(c => {
+          const on = (filters.effort||[]).includes(c);
+          return (
+            <Tooltip key={c} text={(_TAG_TOOLTIPS||{})[c]}>
+              <button onClick={() => toggle('effort', c)} className="tag"
+                style={{ background: on ? TAG_STYLES[c].bg : 'var(--surface)', color: on ? TAG_STYLES[c].color : 'var(--text-muted)', border:`1px solid ${on ? 'transparent' : 'var(--border)'}`, cursor:'pointer', fontSize:'11px' }}>{c}</button>
+            </Tooltip>
+          );
+        })}
+        {impactOptions.length > 0 && <FilterGroupLabel label="Impact:" />}
+        {impactOptions.map(i => {
+          const on = (filters.impact||[]).includes(i);
+          const st = IMPACT_STYLES[i] || { bg:'#F0F0F0', color:'#555' };
+          return (
+            <button key={i} onClick={() => toggle('impact', i)} className="tag"
+              style={{ background: on ? st.bg : 'var(--surface)', color: on ? st.color : 'var(--text-muted)', border:`1px solid ${on ? 'transparent' : 'var(--border)'}`, cursor:'pointer', fontSize:'11px' }}>{i}</button>
+          );
+        })}
+        {domainOptions.length > 0 && <FilterGroupLabel label="Business area:" />}
+        {domainOptions.map(d => {
+          const on = (filters.domain||[]).includes(d.id);
+          return (
+            <button key={d.id} onClick={() => toggle('domain', d.id)} className="tag"
+              style={{ background: on ? 'var(--accent-dim)' : 'var(--surface)', color: on ? 'var(--accent-text)' : 'var(--text-muted)', border:`1px solid ${on ? 'transparent' : 'var(--border)'}`, cursor:'pointer', fontSize:'11px' }}>{d.title}</button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+/* ─── DOMAINS GRID (stage navigation) ───────────────────────────── */
+const DomainsScreen = ({ stageFilter, onClearFilter, onDomain, onBack }) => {
+  const domains = stageFilter
+    ? (_ALL_DOMAINS||[]).filter(d => d.stage === stageFilter)
+    : (_ALL_DOMAINS||[]).filter(d => d.stage < 3);
+  const { label, color } = stageFilter ? ((_STAGE_META||{})[stageFilter]||{}) : {};
+  const isStage3View = stageFilter === 3;
+
+  return (
+    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><span style={{ width:'60px' }} /></>}>
+      <div className="fade-up" style={{ marginBottom:'28px' }}>
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(26px,4vw,38px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'8px' }}>
+          {stageFilter ? <span style={{ color }}>{label}</span> : 'All business areas'}
+        </h2>
+        <div style={{ display:'flex', alignItems:'center', gap:'14px', flexWrap:'wrap' }}>
+          <p style={{ fontSize:'15px', color:'var(--text-secondary)', fontWeight:300 }}>
+            {domains.length} business area{domains.length !== 1 ? 's' : ''} · {domains.reduce((n,d)=>n+d.plays.length,0)} solutions
+          </p>
+          {stageFilter && (
+            <button onClick={onClearFilter} style={{ fontSize:'12px', color:'var(--text-muted)', background:'none', border:'1px solid var(--border)', borderRadius:'20px', padding:'4px 12px', cursor:'pointer' }}>All stages ×</button>
+          )}
+        </div>
+        {/* Stage 3 strategic context note */}
+        {isStage3View && (
+          <div style={{ marginTop:'16px', padding:'14px 18px', background:'var(--teal-dim)', border:'1px solid rgba(27,155,121,0.18)', borderRadius:'4px', display:'flex', gap:'10px', alignItems:'flex-start', maxWidth:'680px' }}>
+            <span style={{ color:'var(--teal)', fontSize:'15px', flexShrink:0, marginTop:'1px' }}>◈</span>
+            <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.7, fontWeight:300 }}>
+              <strong style={{ fontWeight:500, color:'var(--teal)' }}>Optional strategic expansion</strong> — these services are relevant once the core operating domains are working well. They are not a default starting point for every retailer.
+            </p>
+          </div>
+        )}
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:'12px' }}>
+        {domains.map((d, i) => (
+          <div key={d.id} className="card-lift fade-up" onClick={() => onDomain(d)}
+            style={{ padding:'22px 20px', background: d.stage === 3 ? 'var(--surface-alt)' : 'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', cursor:'pointer', animationDelay:`${i*22}ms` }}>
+            <h3 style={{ fontFamily:'DM Sans', fontSize:'15px', fontWeight:600, color:'var(--text-primary)', margin:'0 0 8px', lineHeight:1.3 }}>{d.title}</h3>
+            <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.58, fontWeight:300, marginBottom:'14px' }}>{d.subtitle}</p>
+            <span style={{ fontSize:'12px', color:'var(--text-muted)' }}>{d.plays.length} solution{d.plays.length !== 1 ? 's' : ''}</span>
+          </div>
+        ))}
+      </div>
+    </Page>
+  );
+};
+
+/* ─── BROWSE SCREEN ──────────────────────────────────────────────── */
+const BrowseScreen = ({ onPlay, onDomain, onBack, stageFilter, onClearFilter }) => {
+  const [filters, setFilters]         = useState({});
+  const [searchInput, setSearchInput] = useState('');
+
+  useEffect(() => {
+    const t = setTimeout(() => setFilters(f => ({ ...f, search: searchInput || undefined })), 350);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
+  const domains = stageFilter
+    ? (_ALL_DOMAINS||[]).filter(d => d.stage === stageFilter)
+    : (_ALL_DOMAINS||[]).filter(d => d.stage < 3);
+
+  const { label: stageLabel, color: stageColor } = stageFilter ? ((_STAGE_META||{})[stageFilter]||{}) : {};
+  const isStage3View = stageFilter === 3;
+
+  const allPlays = useMemo(() => domains.flatMap(d => d.plays.map(p => ({ ...p, _domain: d }))), [domains]);
+  const visible  = useMemo(() => applyFiltersLocal(allPlays, filters), [allPlays, filters]);
+  const impactOptions = useMemo(() => {
+    const seen = new Set();
+    allPlays.forEach(p => (p.impact||[]).forEach(i => seen.add(i)));
+    return (_IMPACT_OPTIONS||[]).filter(i => seen.has(i));
+  }, [allPlays]);
+
+  const grouped = useMemo(() => {
+    const map = new Map();
+    visible.forEach(p => {
+      const key = p._domain.id;
+      if (!map.has(key)) map.set(key, { domain: p._domain, plays: [] });
+      map.get(key).plays.push(p);
+    });
+    return [...map.values()];
+  }, [visible]);
+
+  const totalPlays = domains.reduce((n,d) => n + d.plays.length, 0);
+
+  return (
+    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><span style={{ width:'60px' }} /></>}>
+      <div className="fade-up" style={{ marginBottom:'24px' }}>
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(26px,4vw,38px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'8px' }}>
+          {stageFilter ? <><span style={{ color:stageColor }}>{stageLabel}</span> — solutions</> : 'All solutions'}
+        </h2>
+        <div style={{ display:'flex', alignItems:'center', gap:'14px', flexWrap:'wrap' }}>
+          <p style={{ fontSize:'15px', color:'var(--text-secondary)', fontWeight:300 }}>
+            {visible.length} of {totalPlays} solutions across {domains.length} domains
+          </p>
+          {stageFilter && (
+            <button onClick={onClearFilter} style={{ fontSize:'12px', color:'var(--text-muted)', background:'none', border:'1px solid var(--border)', borderRadius:'20px', padding:'4px 12px', cursor:'pointer' }}>All stages ×</button>
+          )}
+        </div>
+        {isStage3View && (
+          <div style={{ marginTop:'16px', padding:'14px 18px', background:'var(--teal-dim)', border:'1px solid rgba(27,155,121,0.18)', borderRadius:'4px', display:'flex', gap:'10px', alignItems:'flex-start', maxWidth:'680px' }}>
+            <span style={{ color:'var(--teal)', fontSize:'15px', flexShrink:0, marginTop:'1px' }}>◈</span>
+            <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.7, fontWeight:300 }}>
+              <strong style={{ fontWeight:500, color:'var(--teal)' }}>Optional strategic expansion</strong> — these services are relevant once the core operating domains are working well. They are not a default starting point for every retailer.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className="fade-up" style={{ animationDelay:'40ms' }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', flexWrap:'wrap', gap:'10px', marginBottom:'0' }}>
+          <FilterBar filters={filters} setFilters={setFilters} searchInput={searchInput} setSearchInput={setSearchInput} impactOptions={impactOptions} />
+        </div>
+      </div>
+
+      {visible.length === 0
+        ? (
+          <div style={{ padding:'40px', textAlign:'center', color:'var(--text-muted)', fontSize:'14px', background:'var(--surface)', borderRadius:'6px', border:'1px solid var(--border)' }}>
+            No solutions match your filters.{' '}
+            <button onClick={() => setFilters({})} style={{ background:'none', border:'none', color:'var(--accent)', cursor:'pointer', textDecoration:'underline', fontSize:'14px' }}>Clear all</button>
+          </div>
+        ) : (
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:'12px' }}>
+            {grouped.flatMap(group =>
+              group.plays.map((play, pi) => (
+                <PlayCard key={play.id} play={play} onClick={() => onPlay(play, group.domain)} delay={pi*20} />
+              ))
+            )}
+          </div>
+        )
+      }
+    </Page>
+  );
+};
+
+/* ─── DOMAIN SCREEN ──────────────────────────────────────────────── */
+const DomainScreen = ({ domain, onPlay, onBack, onCopilot }) => {
+  const plays = useMemo(() => sortPlays(domain.plays, 'default'), [domain]);
+  const isStage3 = domain.stage === 3;
+
+  return (
+    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><span style={{ width:'60px' }} /></>}>
+      <div className="fade-up" style={{ marginBottom:'40px', maxWidth:'820px' }}>
+        {isStage3 && (
+          <div style={{ marginBottom:'10px' }}>
+            <span style={{ fontSize:'11px', background:'var(--teal-dim)', color:'var(--teal)', border:'1px solid rgba(27,155,121,0.20)', borderRadius:'20px', padding:'2px 10px', fontWeight:500 }}>Optional · Strategic</span>
+          </div>
+        )}
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(28px,4vw,44px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'16px', lineHeight:1.12 }}>{domain.title}</h2>
+        <SectionLabel>{isStage3 ? 'Strategic role' : 'Business area'}</SectionLabel>
+        <p style={{ fontSize:'17px', color:'var(--accent-text)', fontWeight:500, lineHeight:1.62, marginBottom:'12px' }}>{domain.subtitle}</p>
+        <p style={{ fontSize:'15px', color:'var(--text-secondary)', lineHeight:1.78, fontWeight:300, maxWidth:'780px' }}>{domain.context}</p>
+      </div>
+
+      <div className="fade-up" style={{ animationDelay:'60ms' }}>
+        <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:500, marginBottom:'16px' }}>solutions in this domain</p>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:'14px' }}>
+          {plays.map((play, i) => (
+            <PlayCard key={play.id} play={play} onClick={() => onPlay(play)} delay={i*40} />
+          ))}
+        </div>
+        <div style={{ marginTop:'28px' }}>
+          <CopilotNudge text="Ask the retail advisor about this domain" onOpen={onCopilot} />
+        </div>
+      </div>
+    </Page>
+  );
+};
+
+/* ─── SOLUTION DETAIL PANEL ──────────────────────────────────────── */
+const SolutionCardPanel = ({ play, domain, onClose, onCopilot }) => {
+  useEffect(() => {
+    const h = e => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [onClose]);
+
+  const Field = ({ label, children, muted=false }) => (
+    <div style={{ marginBottom:'22px' }}>
+      <SectionLabel>{label}</SectionLabel>
+      <div style={{ fontSize:'14px', color: muted ? 'var(--text-muted)' : 'var(--text-secondary)', lineHeight:1.78, fontWeight:300 }}>{children}</div>
+    </div>
+  );
+
+  const isStage3 = domain.stage === 3;
+
+  return (
+    <div style={{ position:'fixed', inset:0, zIndex:50, display:'flex', justifyContent:'flex-end' }}>
+      <div style={{ position:'absolute', inset:0, background:'rgba(20,16,10,0.40)' }} onClick={onClose} />
+      <div className="slide-in" style={{ position:'relative', width:'min(560px,100vw)', height:'100%', background:'var(--surface)', borderLeft:'1px solid var(--border)', overflowY:'auto', padding:'32px clamp(20px,4vw,40px)', display:'flex', flexDirection:'column', boxShadow:'-12px 0 40px rgba(0,0,0,0.10)' }}>
+
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'16px', gap:'12px' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:'8px', flexWrap:'wrap' }}>
+            {isStage3 && (
+              <span style={{ fontSize:'10px', background:'var(--teal-dim)', color:'var(--teal)', border:'1px solid rgba(27,155,121,0.20)', borderRadius:'20px', padding:'2px 8px', fontWeight:500 }}>Optional · Strategic</span>
+            )}
+          </div>
+          <button onClick={onClose} style={{ background:'none', border:'1px solid var(--border)', width:'30px', height:'30px', borderRadius:'50%', cursor:'pointer', color:'var(--text-secondary)', fontSize:'16px', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, lineHeight:1 }}>×</button>
+        </div>
+
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(20px,3vw,28px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'4px', lineHeight:1.18 }}>{play.title}</h2>
+        <p style={{ fontSize:'13px', color:'var(--text-muted)', marginBottom:'18px' }}>{domain.title}</p>
+
+        {/* Tags */}
+        <div style={{ marginBottom:'24px', paddingBottom:'24px', borderBottom:'1px solid var(--border)', display:'flex', flexDirection:'column', gap:'10px' }}>
+          <div>
+            <SectionLabel style={{ color:'var(--text-muted)', fontSize:'10px' }}>Indicative effort</SectionLabel>
+            <div style={{ display:'flex', gap:'5px', flexWrap:'wrap' }}>
+              <Tag label={play.speed} size="md" />
+              <Tag label={play.requirements} size="md" />
+              <Tag label={play.cost} size="md" />
+            </div>
+          </div>
+          {(play.impact||[]).length > 0 && (
+            <div>
+              <SectionLabel style={{ color:'var(--text-muted)', fontSize:'10px' }}>Impact</SectionLabel>
+              <div style={{ display:'flex', gap:'5px', flexWrap:'wrap' }}>
+                {(play.impact||[]).map(i => <ImpactTag key={i} label={i} />)}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <Field label="Business pressure">{play.shortPain}</Field>
+        <Field label="What we do">
+          {(play.whatWeDo||'').split('\n').map((line, i) => (
+            line.startsWith('- ')
+              ? <div key={i} style={{ display:'flex', gap:'6px', marginTop:'4px' }}><span style={{ flexShrink:0, color:'var(--text-muted)' }}>–</span><span>{line.slice(2)}</span></div>
+              : <span key={i}>{line}</span>
+          ))}
+        </Field>
+        <Field label="What this helps improve">{play.helpImprove || play.outcomes}</Field>
+
+        <Field label="How data / AI supports it">{play.dataBehind}</Field>
+
+        <div style={{ marginBottom:'28px' }}>
+          <SectionLabel style={{ marginBottom:'10px' }}>Diagnostic questions</SectionLabel>
+          <ol style={{ paddingLeft:'18px', display:'flex', flexDirection:'column', gap:'10px' }}>
+            {(play.diagnosticQuestions||[]).map((q, i) => (
+              <li key={i} style={{ fontSize:'14px', color:'var(--text-secondary)', lineHeight:1.65, fontWeight:300 }}>{q}</li>
+            ))}
+          </ol>
+        </div>
+
+        <div style={{ marginTop:'auto', paddingTop:'20px', borderTop:'1px solid var(--border)' }}>
+          <button onClick={() => onCopilot(`Tell me more about "${play.title}" — is it relevant for us?`)}
+            style={{ width:'100%', textAlign:'center', padding:'14px', background:'none', border:'1px solid var(--border)', borderRadius:'3px', fontSize:'14px', color:'var(--text-secondary)', cursor:'pointer', transition:'border-color .15s', fontFamily:'DM Sans' }}
+            onMouseEnter={e => e.currentTarget.style.borderColor='var(--border-hover)'}
+            onMouseLeave={e => e.currentTarget.style.borderColor='var(--border)'}>
+            Ask the retail advisor about this ◎
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─── COPILOT PANEL ──────────────────────────────────────────────── */
+const STARTER_PROMPTS = [
+  'Where should we start if waste is our biggest issue?',
+  'Which services can start without a major data program?',
+  'What would a 90-day diagnostic scope look like?',
+  'What is the difference between Stage 1 and Stage 2?',
+];
+
+const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
+  const [msgs, setMsgs]     = useState([{ role:'assistant', text:"I'm here to help you navigate the canvas. Ask me about any business pressure, solution area, or where to start. I keep it practical and grounded." }]);
+  const [input, setInput]   = useState('');
+  const [loading, setLoading] = useState(false);
+  const bodyRef  = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+  }, [msgs, loading]);
+
+  useEffect(() => {
+    if (isOpen && prefill) { setInput(prefill); setTimeout(() => inputRef.current?.focus(), 100); }
+  }, [isOpen, prefill]);
+
+  const send = async text => {
+    if (!text.trim() || loading) return;
+    setMsgs(m => [...m, { role:'user', text }]);
+    setInput('');
+    setLoading(true);
+    try {
+      const ctxStr = [
+        context?.pressures?.length && `User pressures: ${context.pressures.join(', ')}`,
+        context?.domain && `Currently viewing domain: ${context.domain}`,
+        context?.play   && `Currently viewing play: ${context.play}`,
+      ].filter(Boolean).join('. ');
+
+      const reply = await window.claude.complete({
+        messages: [{ role:'user', content: `[System instructions: ${_COPILOT_SYSTEM||''}${ctxStr ? ` Context: ${ctxStr}` : ''}]\n\n${text}` }]
+      });
+      setMsgs(m => [...m, { role:'assistant', text: reply }]);
+    } catch {
+      setMsgs(m => [...m, { role:'assistant', text:'Something went wrong — please try again.' }]);
+    }
+    setLoading(false);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="slide-up" style={{ position:'fixed', bottom:'80px', right:'24px', width:'380px', height:'510px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'10px', zIndex:40, display:'flex', flexDirection:'column', boxShadow:'0 16px 48px rgba(0,0,0,0.14)' }}>
+      <div style={{ padding:'14px 18px', borderBottom:'1px solid var(--border)', display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+        <div>
+          <div style={{ fontSize:'14px', fontWeight:600, color:'var(--text-primary)' }}>Retail Advisor</div>
+          <div style={{ fontSize:'11px', color:'var(--text-muted)' }}>Practical · Grounded · Business-focused</div>
+        </div>
+        <button onClick={onClose} style={{ background:'none', border:'none', color:'var(--text-secondary)', cursor:'pointer', fontSize:'18px', lineHeight:1, padding:'2px 6px' }}>×</button>
+      </div>
+
+      <div ref={bodyRef} style={{ flex:1, overflowY:'auto', padding:'14px', display:'flex', flexDirection:'column', gap:'10px' }}>
+        {msgs.map((m, i) => (
+          <div key={i} style={{ display:'flex', justifyContent: m.role==='user' ? 'flex-end' : 'flex-start' }}>
+            <div style={{ maxWidth:'88%', padding:'10px 13px', borderRadius: m.role==='user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px', background: m.role==='user' ? 'var(--text-primary)' : 'var(--surface-alt)', fontSize:'13px', color: m.role==='user' ? '#FFF' : 'var(--text-secondary)', lineHeight:1.65, fontWeight:300 }}>
+              {m.text}
+            </div>
+          </div>
+        ))}
+        {loading && (
+          <div style={{ display:'flex', gap:'4px', padding:'10px 14px' }}>
+            {[0,1,2].map(i => <div key={i} className="dot" style={{ animationDelay:`${i*160}ms` }} />)}
+          </div>
+        )}
+      </div>
+
+      {msgs.length === 1 && (
+        <div style={{ padding:'6px 12px 0', display:'flex', flexWrap:'wrap', gap:'5px', flexShrink:0 }}>
+          {STARTER_PROMPTS.map((p,i) => (
+            <button key={i} onClick={() => send(p)}
+              style={{ fontSize:'11px', color:'var(--text-secondary)', background:'var(--surface-alt)', border:'1px solid var(--border)', borderRadius:'20px', padding:'5px 10px', cursor:'pointer', textAlign:'left', lineHeight:1.3, fontFamily:'DM Sans', transition:'border-color .15s' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor='var(--border-hover)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor='var(--border)'}>
+              {p}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div style={{ padding:'10px 12px', borderTop:'1px solid var(--border)', display:'flex', gap:'8px', flexShrink:0 }}>
+        <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && send(input)}
+          placeholder="Ask a question..."
+          style={{ flex:1, background:'var(--surface-alt)', border:'1px solid var(--border)', borderRadius:'4px', padding:'9px 12px', fontSize:'13px', color:'var(--text-primary)', fontFamily:'DM Sans', outline:'none' }} />
+        <button onClick={() => send(input)} disabled={!input.trim() || loading}
+          style={{ padding:'9px 16px', background:'var(--text-primary)', color:'#FFF', border:'none', borderRadius:'4px', cursor:'pointer', fontSize:'13px', fontWeight:600, fontFamily:'DM Sans', opacity: input.trim()&&!loading ? 1 : .35 }}>→</button>
+      </div>
+    </div>
+  );
+};
+
+/* ─── TWEAKS PANEL (inline — no external file) ───────────────────── */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#B8832A",
+  "fontStyle": "serif"
+}/*EDITMODE-END*/;
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:260px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.82);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;height:22px;
+    border-radius:6px;cursor:default;padding:0}
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:52px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = useState(defaults);
+  const setTweak = useCallback((key, val) => {
+    setValues(prev => ({ ...prev, [key]: val }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: val } }, '*');
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ children }) {
+  const [open, setOpen] = useState(false);
+  const dragRef  = useRef(null);
+  const offsetRef = useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clamp = useCallback(() => {
+    const p = dragRef.current; if (!p) return;
+    const w = p.offsetWidth, h = p.offsetHeight;
+    offsetRef.current = {
+      x: Math.min(Math.max(PAD, offsetRef.current.x), Math.max(PAD, window.innerWidth - w - PAD)),
+      y: Math.min(Math.max(PAD, offsetRef.current.y), Math.max(PAD, window.innerHeight - h - PAD)),
+    };
+    p.style.right  = offsetRef.current.x + 'px';
+    p.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    clamp();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(clamp) : null;
+    if (ro) { ro.observe(document.documentElement); return () => ro.disconnect(); }
+    window.addEventListener('resize', clamp);
+    return () => window.removeEventListener('resize', clamp);
+  }, [open, clamp]);
+
+  useEffect(() => {
+    const onMsg = e => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode')   setOpen(true);
+      if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = e => {
+    const p = dragRef.current; if (!p) return;
+    const r = p.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const sr = window.innerWidth  - r.right;
+    const sb = window.innerHeight - r.bottom;
+    const move = ev => { offsetRef.current = { x: sr - (ev.clientX - sx), y: sb - (ev.clientY - sy) }; clamp(); };
+    const up   = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>Tweaks</b>
+          <button className="twk-x" aria-label="Close tweaks" onMouseDown={e => e.stopPropagation()} onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+function TweakSection({ label }) { return <div className="twk-sect">{label}</div>; }
+
+function TweakColor({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input type="color" className="twk-swatch" value={value} onChange={e => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = useRef(null);
+  const [dragging, setDragging] = useState(false);
+  const opts = options.map(o => typeof o === 'object' ? o : { value:o, label:o });
+  const idx = Math.max(0, opts.findIndex(o => o.value === value));
+  const n = opts.length;
+  const valueRef = useRef(value); valueRef.current = value;
+  const segAt = cx => {
+    const r = trackRef.current.getBoundingClientRect();
+    return opts[Math.max(0, Math.min(n-1, Math.floor(((cx-r.left-2)/(r.width-4))*n)))].value;
+  };
+  const onPointerDown = e => {
+    setDragging(true);
+    const v0 = segAt(e.clientX); if (v0 !== valueRef.current) onChange(v0);
+    const move = ev => { const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); };
+    const up   = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-row">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown} className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb" style={{ left:`calc(2px + ${idx}*(100% - 4px)/${n})`, width:`calc((100% - 4px)/${n})` }} />
+        {opts.map(o => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── APP ROOT ───────────────────────────────────────────────────── */
+const App = () => {
+  const [screen, setScreen]                   = useState('landing');
+  const [answers, setAnswers]                 = useState({});
+  const [domain, setDomain]                   = useState(null);
+  const [play, setPlay]                       = useState(null);
+  const [copilot, setCopilot]                 = useState(false);
+  const [copilotPrefill, setCopilotPrefill]   = useState(null);
+  const [stageFilter, setStageFilter]         = useState(null);
+  const [t, setTweak]                         = useTweaks(TWEAK_DEFAULTS);
+
+  useEffect(() => {
+    const goHome = () => {
+      setScreen('landing');
+      setDomain(null);
+      setPlay(null);
+      setCopilot(false);
+      setStageFilter(null);
+    };
+    window.addEventListener('retail-canvas:home', goHome);
+    return () => window.removeEventListener('retail-canvas:home', goHome);
+  }, []);
+
+  const openCopilot = prefill => { setCopilotPrefill(prefill || null); setCopilot(true); };
+  const goToDomain  = d  => {
+    // Expand and Monetize: jump straight to its DomainScreen (no intermediary grid)
+    setDomain(d);
+    setScreen('domain');
+  };
+  const goToStage3Domain = () => {
+    const d = (_ALL_DOMAINS||[]).find(x => x.id === 'expand_monetize');
+    if (d) { setDomain(d); setScreen('domain'); }
+  };
+  const goToWorkforceAI = () => {
+    const d = (_ALL_DOMAINS||[]).find(x => x.id === 'workforce_ai');
+    if (d) { setDomain(d); setScreen('domain'); }
+  };
+  const fromDomain  = () => setScreen((answers.pressures||[]).length ? 'recommended' : screen === 'domain' ? 'domains' : 'browse');
+  const goToStage   = s  => {
+    // Stage 3 goes straight to the Expand and Monetize domain screen
+    if (s === 3) { goToStage3Domain(); return; }
+    setStageFilter(s); setScreen('domains');
+  };
+  const goBrowse    = () => { setStageFilter(null); setScreen('browse'); };
+  const goRoadmap   = () => setScreen('roadmap');
+
+  const copilotContext = {
+    pressures: (answers.pressures||[]).map(id => ((_PRESSURES||[]).find(p => p.id===id)||{}).label).filter(Boolean),
+    domain:    domain?.title || '',
+    play:      play?.title   || '',
+  };
+
+  return (
+    <div style={{ '--accent': t.accentColor }}>
+      {screen==='landing'     && <LandingScreen onStart={() => setScreen('questions')} onBrowse={goBrowse} onStage={goToStage} onCopilot={() => openCopilot()} />}
+      {screen==='questions'   && <QuestionsScreen onDone={a => { setAnswers(a); setScreen('recommended'); }} onBack={() => setScreen('landing')} onCopilot={() => openCopilot()} />}
+      {screen==='recommended' && <RecommendedScreen answers={answers} onPlay={(p,d) => { setDomain(d); setPlay(p); }} onDomain={goToDomain} onBrowse={goBrowse} onRoadmap={goRoadmap} onBack={() => setScreen('questions')} onCopilot={openCopilot} />}
+      {screen==='roadmap'     && <RoadmapScreen answers={answers} onBack={() => setScreen((answers.pressures||[]).length ? 'recommended' : 'landing')} onPlay={(p,d) => { setDomain(d); setPlay(p); }} />}
+      {screen==='domains'     && <DomainsScreen stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} onDomain={d => d.id === 'expand_monetize' ? goToStage3Domain() : goToDomain(d)} onBack={() => setScreen('landing')} />}
+      {screen==='browse'      && <BrowseScreen onPlay={(p,d) => { setDomain(d); setPlay(p); }} onDomain={goToDomain} onBack={() => setScreen('landing')} stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} />}
+      {screen==='domain' && domain && <DomainScreen domain={domain} onPlay={p => setPlay(p)} onBack={fromDomain} onCopilot={openCopilot} />}
+
+      {play && domain && <SolutionCardPanel play={play} domain={domain} onClose={() => setPlay(null)} onCopilot={msg => { setPlay(null); openCopilot(msg); }} />}
+
+      <CopilotPanel isOpen={copilot} onClose={() => setCopilot(false)} context={copilotContext} prefill={copilotPrefill} />
+
+      <button onClick={() => setCopilot(c => !c)} title="Retail Advisor"
+        style={{ position:'fixed', bottom:'24px', right:'24px', width:'48px', height:'48px', background: copilot ? 'var(--text-primary)' : 'var(--surface)', border:'1px solid var(--border)', borderRadius:'50%', cursor:'pointer', zIndex:30, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 16px rgba(0,0,0,.12)', transition:'all .2s ease', color: copilot ? '#FFF' : 'var(--text-secondary)', fontSize:'16px' }}>
+        {copilot ? '×' : '◎'}
+      </button>
+
+      <TweaksPanel>
+        <TweakSection label="Theme" />
+        <TweakColor label="Accent color" value={t.accentColor} onChange={v => setTweak('accentColor', v)} />
+        <TweakSection label="Typography" />
+        <TweakRadio label="Heading style" value={t.fontStyle} options={['serif','sans']} onChange={v => setTweak('fontStyle', v)} />
+      </TweaksPanel>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
