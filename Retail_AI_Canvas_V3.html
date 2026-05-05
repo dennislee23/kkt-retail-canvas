@@ -1510,11 +1510,6 @@ const App = () => {
 
       <CopilotPanel isOpen={copilot} onClose={() => setCopilot(false)} context={copilotContext} prefill={copilotPrefill} />
 
-      <button onClick={() => setCopilot(c => !c)} title="Retail Advisor"
-        style={{ position:'fixed', bottom:'24px', right:'24px', width:'48px', height:'48px', background: copilot ? 'var(--text-primary)' : 'var(--surface)', border:'1px solid var(--border)', borderRadius:'50%', cursor:'pointer', zIndex:30, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 16px rgba(0,0,0,.12)', transition:'all .2s ease', color: copilot ? '#FFF' : 'var(--text-secondary)', fontSize:'16px' }}>
-        {copilot ? '×' : '◎'}
-      </button>
-
       <TweaksPanel>
         <TweakSection label="Theme" />
         <TweakColor label="Accent color" value={t.accentColor} onChange={v => setTweak('accentColor', v)} />
