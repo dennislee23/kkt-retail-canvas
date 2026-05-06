@@ -1476,6 +1476,25 @@ const linkifyAnswer = (text, onCard, onStage) => {
 
 const ADVISOR_WELCOME = "I work through retail situations the way our consulting team does — drawing on the 43 cards in this canvas, the staged model, and the roadmap. Ask about a pressure, a domain, or where to start. The right-hand panel shows what I'm reading.";
 
+// Strip markdown drift from advisor answers. The prompt forbids markdown
+// (the frontend renders raw text, not parsed markdown) but Sonnet
+// sometimes leaks **bold** / *italic* / `backticks` for emphasis. This
+// helper guarantees the user never sees raw asterisks/backticks even if
+// the prompt rule is violated.
+//
+// Order matters: **bold** is collapsed first so that after that pass no
+// `**` sequences remain. Then the italic pattern can be a simple
+// /\*([^*\n]+?)\*/ — no lookbehind needed (Babel-in-browser doesn't
+// support negative lookbehind reliably, and this code runs in the
+// browser via Babel-standalone).
+const stripMarkdownDrift = (s) => {
+  if (typeof s !== 'string' || !s) return s;
+  return s
+    .replace(/\*\*([^\n]+?)\*\*/g, '$1')   // **bold** → bold
+    .replace(/\*([^*\n]+?)\*/g,    '$1')   // *italic* → italic
+    .replace(/`([^`\n]+?)`/g,      '$1');  // `code` → code
+};
+
 const CopilotPanel = ({ isOpen, onClose, context, prefill, onGoToCard, onGoToStage, onGoToRoadmap }) => {
   const [msgs, setMsgs]     = useState([{ role:'assistant', text: ADVISOR_WELCOME, complete: true }]);
   const [input, setInput]   = useState('');
@@ -1592,16 +1611,16 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill, onGoToCard, onGoToSta
           if (payload.type === 'text' && typeof payload.text === 'string') {
             visibleText += payload.text;
             rawAccumulated += payload.text;
-            // Safety net: the prompt forbids markdown in answers, but Sonnet
-            // sometimes drifts and adds **bold** or `backticks` for emphasis.
-            // Strip the most common offenders before display so the user
-            // never sees raw asterisks. We do this on the FULL accumulated
-            // visibleText each tick (cheap — answer is < 200 words) so partial
-            // tokens like "**stoc" → "**stock-3**" don't leave orphans.
-            const cleaned = visibleText
-              .replace(/\*\*(.+?)\*\*/g, '$1')   // **bold** → bold
-              .replace(/(?<!\*)\*(?!\*)([^*\n]+?)\*(?!\*)/g, '$1')  // *italic* → italic (avoid **)
-              .replace(/`([^`\n]+?)`/g, '$1');   // `code` → code
+            // Safety net: the prompt forbids markdown but Sonnet sometimes
+            // drifts and adds **bold** or `backticks`. Strip the common
+            // offenders before display so the user never sees raw asterisks.
+            //
+            // Applied in this order so that **bold** runs first, removing
+            // pairs of double-asterisks. After that pass there are no `**`
+            // sequences left, so the italic pattern `\*([^*\n]+?)\*` can be
+            // a simple match (no lookbehind needed — older Safari /
+            // in-browser Babel choke on lookbehind).
+            const cleaned = stripMarkdownDrift(visibleText);
             updateAssistant({ text: cleaned });
           } else if (payload.type === 'done') {
             // Parse the META block (if any) for reasoning data. The full
@@ -1614,11 +1633,7 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill, onGoToCard, onGoToSta
               : rawAccumulated;
             const parts = fullRaw.split('<<<META>>>');
             // Strip drift markdown (same rules as the streaming path).
-            const finalText = parts[0]
-              .replace(/\*\*(.+?)\*\*/g, '$1')
-              .replace(/(?<!\*)\*(?!\*)([^*\n]+?)\*(?!\*)/g, '$1')
-              .replace(/`([^`\n]+?)`/g, '$1')
-              .trim();
+            const finalText = stripMarkdownDrift(parts[0]).trim();
             let reasoning = null;
             if (parts.length > 1) {
               const metaRaw = parts[1].trim()
