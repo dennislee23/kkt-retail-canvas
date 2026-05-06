@@ -1,0 +1,12 @@
+# Belt-and-braces: parent .htaccess already blocks .env and .git, but the
+# api/ folder is sensitive enough to be explicit. Anything starting with a
+# dot is forbidden directly. The PHP scripts themselves remain serveable.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Don't cache API responses. Calls are dynamic and short-lived.
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+</IfModule>

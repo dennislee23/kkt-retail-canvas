@@ -1242,12 +1242,13 @@ const STARTER_PROMPTS = [
   'What is the difference between Stage 1 and Stage 2?',
 ];
 
-// Retail advisor backend. Lives in the GAS STATIONS PROJECT REV 3.0 codebase
-// alongside the Optimus AI services (same Claude integration pattern, different
-// system prompt and audience). Anonymous, rate-limited per-IP, ZDR posture.
-// Repointing this is a one-line change — no other call sites.
-// Ends with "/api/retail/advisor" — see TZ_RETAIL_ASSISTANT_V1.md §10.2.
-const RETAIL_ADVISOR_API = 'https://fuel.kittykat.tech/rev3/backend/public/api/retail/advisor';
+// Retail advisor backend. Self-contained PHP script in the same retail/
+// folder (same-origin → no CORS preflight → no Basic-Auth headaches).
+// Anonymous, rate-limited per-IP, ZDR posture. See retail/api/advisor.php.
+//
+// Why relative not absolute: works in dev, on staging subdomains, and on
+// production without changes. Repointing to a different host is one line.
+const RETAIL_ADVISOR_API = 'api/advisor.php';
 
 const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
   const [msgs, setMsgs]     = useState([{ role:'assistant', text:"I'm here to help you navigate the canvas. Ask me about any business pressure, solution area, or where to start. I keep it practical and grounded." }]);
