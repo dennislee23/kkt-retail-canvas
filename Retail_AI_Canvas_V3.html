@@ -1759,7 +1759,7 @@ const stripMarkdownDrift = (s) => {
     .replace(/`([^`\n]+?)`/g,      '$1');  // `code` → code
 };
 
-const CopilotPanel = ({ isOpen, onClose, context, prefill, onGoToCard, onGoToStage, onGoToRoadmap }) => {
+const CopilotPanel = ({ isOpen, onClose, context, prefill, playForStarters, onGoToCard, onGoToStage, onGoToRoadmap }) => {
   const [msgs, setMsgs]     = useState([{ role:'assistant', text: ADVISOR_WELCOME, complete: true }]);
   const [input, setInput]   = useState('');
   const [loading, setLoading] = useState(false);
@@ -2038,40 +2038,55 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill, onGoToCard, onGoToSta
               </div>
             )}
 
-            {msgs.length === 1 && (
-              <div style={{ marginTop:'24px', display:'flex', flexDirection:'column', gap:'8px' }}>
-                <SectionLabel style={{ marginBottom:'4px' }}>Or start with one of these</SectionLabel>
-                {STARTER_PROMPTS.map((p,i) => (
-                  <button key={i} onClick={() => send(p)}
-                    style={{
-                      textAlign:'left',
-                      padding:'12px 16px',
-                      fontSize:'13px',
-                      color:'var(--text-secondary)',
-                      background:'var(--surface)',
-                      border:'1px solid var(--border)',
-                      borderRadius:'4px',
-                      cursor:'pointer',
-                      fontFamily:'DM Sans',
-                      fontWeight:400,
-                      lineHeight:1.5,
-                      transition:'border-color .15s, color .15s, background .15s',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'var(--border-hover)';
-                      e.currentTarget.style.color = 'var(--text-primary)';
-                      e.currentTarget.style.background = 'var(--surface-alt)';
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'var(--border)';
-                      e.currentTarget.style.color = 'var(--text-secondary)';
-                      e.currentTarget.style.background = 'var(--surface)';
-                    }}>
-                    {p}
-                  </button>
-                ))}
-              </div>
-            )}
+            {msgs.length === 1 && (() => {
+              // Card-specific starter prompts: when the advisor was opened
+              // from a service card (via the "Tell me more" button on
+              // SolutionCardPanel), use that card's diagnosticQuestions —
+              // they're already curated 3 questions per card targeting the
+              // specific service. When opened from a generic entry point
+              // (Cmd+K, header link, screen nudge), fall back to the four
+              // generic STARTER_PROMPTS.
+              const cardQuestions = playForStarters?.diagnosticQuestions;
+              const usingCardQuestions = Array.isArray(cardQuestions) && cardQuestions.length > 0;
+              const starters = usingCardQuestions ? cardQuestions.slice(0, 4) : STARTER_PROMPTS;
+              const label = usingCardQuestions
+                ? `Questions about "${playForStarters.title}"`
+                : 'Or start with one of these';
+              return (
+                <div style={{ marginTop:'24px', display:'flex', flexDirection:'column', gap:'8px' }}>
+                  <SectionLabel style={{ marginBottom:'4px' }}>{label}</SectionLabel>
+                  {starters.map((p,i) => (
+                    <button key={i} onClick={() => send(p)}
+                      style={{
+                        textAlign:'left',
+                        padding:'12px 16px',
+                        fontSize:'13px',
+                        color:'var(--text-secondary)',
+                        background:'var(--surface)',
+                        border:'1px solid var(--border)',
+                        borderRadius:'4px',
+                        cursor:'pointer',
+                        fontFamily:'DM Sans',
+                        fontWeight:400,
+                        lineHeight:1.5,
+                        transition:'border-color .15s, color .15s, background .15s',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.borderColor = 'var(--border-hover)';
+                        e.currentTarget.style.color = 'var(--text-primary)';
+                        e.currentTarget.style.background = 'var(--surface-alt)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.borderColor = 'var(--border)';
+                        e.currentTarget.style.color = 'var(--text-secondary)';
+                        e.currentTarget.style.background = 'var(--surface)';
+                      }}>
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
 
           {/* Input row */}
@@ -2279,7 +2294,7 @@ function TweakRadio({ label, value, options, onChange }) {
 // first deploy, or local dev), the badge still shows the version label,
 // just without the git-detail tooltip.
 // ──────────────────────────────────────────────────────────────────────────
-const SITE_VERSION = '0.7.0';
+const SITE_VERSION = '0.7.1';
 const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
 
 const formatRelative = (isoString) => {
@@ -2351,6 +2366,13 @@ const App = () => {
   const [play, setPlay]                       = useState(null);
   const [copilot, setCopilot]                 = useState(false);
   const [copilotPrefill, setCopilotPrefill]   = useState(null);
+  // Snapshot of the service card the advisor was opened FROM (if any).
+  // Used to drive card-specific starter prompts in CopilotPanel — when the
+  // user opens the advisor from a margin/cash card, the four scenario
+  // suggestions should be margin/cash questions, not the generic ones. We
+  // capture at open-time because `play` is nulled when SolutionCardPanel
+  // closes (which happens before the advisor opens).
+  const [copilotPlay, setCopilotPlay]         = useState(null);
   const [stageFilter, setStageFilter]         = useState(null);
   const [profileSection, setProfileSection]   = useState('company');
   const [t, setTweak]                         = useTweaks(TWEAK_DEFAULTS);
@@ -2407,7 +2429,26 @@ const App = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const openCopilot = prefill => { setCopilotPrefill(prefill || null); setCopilot(true); };
+  // When the advisor closes (any path: X, Esc, Cmd+K toggle, navigate-to-card,
+  // navigate-to-stage), drop the captured card snapshot so the NEXT open
+  // doesn't carry stale card-specific starter prompts. Generic Cmd+K open
+  // after closing-from-card should show the four generic scenarios.
+  useEffect(() => {
+    if (!copilot) setCopilotPlay(null);
+  }, [copilot]);
+
+  // openCopilot(prefill, forPlay) — open the advisor.
+  //   prefill : optional string pre-loaded into the input (used by the
+  //             "Tell me more about X" button on SolutionCardPanel).
+  //   forPlay : optional service card object captured at open-time so
+  //             CopilotPanel can render card-specific starter prompts
+  //             (the card's diagnosticQuestions). Pass null/undefined for
+  //             generic entry points (header link, Cmd+K, screen nudges).
+  const openCopilot = (prefill, forPlay) => {
+    setCopilotPrefill(prefill || null);
+    setCopilotPlay(forPlay || null);
+    setCopilot(true);
+  };
 
   // Navigation helpers triggered from inside the advisor panel — clicking a
   // cited card or a stage/roadmap link in an answer closes the advisor and
@@ -2469,13 +2510,14 @@ const App = () => {
       {screen==='domain' && domain && <DomainScreen domain={domain} onPlay={p => setPlay(p)} onBack={fromDomain} onCopilot={openCopilot} />}
       {screen==='profile'     && <KKProfileScreen section={profileSection} onBack={() => setScreen('landing')} />}
 
-      {play && domain && <SolutionCardPanel play={play} domain={domain} onClose={() => setPlay(null)} onCopilot={msg => { setPlay(null); openCopilot(msg); }} />}
+      {play && domain && <SolutionCardPanel play={play} domain={domain} onClose={() => setPlay(null)} onCopilot={msg => { openCopilot(msg, play); setPlay(null); }} />}
 
       <CopilotPanel
         isOpen={copilot}
         onClose={() => setCopilot(false)}
         context={copilotContext}
         prefill={copilotPrefill}
+        playForStarters={copilotPlay}
         onGoToCard={goToCardFromAdvisor}
         onGoToStage={goToStageFromAdvisor}
         onGoToRoadmap={goToRoadmapFromAdvisor} />
