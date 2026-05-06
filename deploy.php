@@ -96,6 +96,32 @@ if ($mode !== 'status') {
         echo file_exists("{$projectDir}/{$f}") ? "{$f}: OK\n" : "{$f}: MISSING\n";
     }
 
+    // Write version.json so the site can show what's running. The frontend
+    // reads this on load and renders a small short-hash badge in the corner.
+    // Fields are minimal — full hash for click-through to GitHub, short hash
+    // for display, branch, last commit message and timestamp, plus the deploy
+    // moment itself (so a stale deploy still shows when it happened).
+    $commit     = trim((string)shell_exec('git rev-parse HEAD 2>/dev/null'));
+    $short      = trim((string)shell_exec('git rev-parse --short HEAD 2>/dev/null'));
+    $message    = trim((string)shell_exec('git log -1 --pretty=%s 2>/dev/null'));
+    $authoredAt = trim((string)shell_exec('git log -1 --pretty=%cI 2>/dev/null'));
+    $payload = [
+        'commit'     => $commit,
+        'short'      => $short,
+        'branch'     => $currentBranch,
+        'message'    => $message,
+        'authoredAt' => $authoredAt,
+        'deployedAt' => date('c'),
+    ];
+    if (file_put_contents(
+        $projectDir . '/version.json',
+        json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+    ) !== false) {
+        echo "version.json: written ({$short})\n";
+    } else {
+        echo "version.json: WRITE FAILED\n";
+    }
+
     if (function_exists('opcache_reset')) {
         opcache_reset();
         echo "Opcache: cleared\n";

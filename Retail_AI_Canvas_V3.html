@@ -1445,6 +1445,73 @@ function TweakRadio({ label, value, options, onChange }) {
 }
 
 /* ─── APP ROOT ───────────────────────────────────────────────────── */
+// ──────────────────────────────────────────────────────────────────────────
+// VersionBadge — bottom-right indicator showing what's running.
+//
+// Reads version.json (written by deploy.php after each pull). If the file
+// is missing (first run after a fresh clone, or local dev), the badge is
+// silently hidden. Click takes you to the commit on GitHub. Hover shows
+// branch + commit message + when it was deployed in human-friendly form.
+// ──────────────────────────────────────────────────────────────────────────
+const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
+
+const formatRelative = (isoString) => {
+  if (!isoString) return '';
+  const t = Date.parse(isoString);
+  if (Number.isNaN(t)) return '';
+  const diffSec = Math.max(0, (Date.now() - t) / 1000);
+  if (diffSec < 60)        return Math.floor(diffSec) + 's ago';
+  if (diffSec < 3600)      return Math.floor(diffSec / 60) + ' min ago';
+  if (diffSec < 86400)     return Math.floor(diffSec / 3600) + ' h ago';
+  if (diffSec < 86400 * 7) return Math.floor(diffSec / 86400) + ' d ago';
+  return new Date(t).toISOString().slice(0, 10);
+};
+
+const VersionBadge = () => {
+  const [info, setInfo] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('version.json', { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (!cancelled && data && data.short) setInfo(data); })
+      .catch(() => { /* silently hide on any error */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (!info) return null;
+
+  const tooltipParts = [];
+  if (info.message) tooltipParts.push(info.message);
+  if (info.branch && info.branch !== 'main') tooltipParts.push('branch: ' + info.branch);
+  if (info.deployedAt) tooltipParts.push('deployed ' + formatRelative(info.deployedAt));
+  if (info.authoredAt) tooltipParts.push('authored ' + formatRelative(info.authoredAt));
+
+  const href = info.commit
+    ? VERSION_REPO_URL + '/commit/' + info.commit
+    : VERSION_REPO_URL;
+
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer"
+       title={tooltipParts.join(' · ')}
+       style={{
+         position:'fixed', bottom:'8px', right:'12px',
+         fontSize:'10px',
+         fontFamily:'ui-monospace, SFMono-Regular, Menlo, monospace',
+         color:'var(--text-muted)',
+         textDecoration:'none',
+         opacity:0.55,
+         letterSpacing:'.04em',
+         zIndex:5,
+         transition:'opacity .15s',
+       }}
+       onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+       onMouseLeave={e => e.currentTarget.style.opacity = '0.55'}>
+      {info.short}{info.branch && info.branch !== 'main' ? ' · ' + info.branch : ''}
+    </a>
+  );
+};
+
 const App = () => {
   const [screen, setScreen]                   = useState('landing');
   const [answers, setAnswers]                 = useState({});
@@ -1465,6 +1532,30 @@ const App = () => {
     };
     window.addEventListener('retail-canvas:home', goHome);
     return () => window.removeEventListener('retail-canvas:home', goHome);
+  }, []);
+
+  // Cmd+K / Ctrl+K toggles the advisor anywhere on the site. Escape closes
+  // it when open. Both bindings are global so the user is never more than
+  // one keystroke from the assistant — including from inside any screen,
+  // any modal, any input. The handler runs at the document level and
+  // doesn't interfere with typed-text input boxes (which rarely use Cmd+K).
+  useEffect(() => {
+    const onKey = (e) => {
+      // Toggle on Cmd+K (mac) or Ctrl+K (others). Match key case-insensitively
+      // so caps-lock doesn't break it.
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        setCopilot(c => !c);
+        return;
+      }
+      // Escape closes only if the copilot is open. We don't read state here
+      // — calling setCopilot with a function lets the component decide.
+      if (e.key === 'Escape') {
+        setCopilot(c => c ? false : c);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
 
   const openCopilot = prefill => { setCopilotPrefill(prefill || null); setCopilot(true); };
@@ -1516,6 +1607,8 @@ const App = () => {
         <TweakSection label="Typography" />
         <TweakRadio label="Heading style" value={t.fontStyle} options={['serif','sans']} onChange={v => setTweak('fontStyle', v)} />
       </TweaksPanel>
+
+      <VersionBadge />
     </div>
   );
 };
