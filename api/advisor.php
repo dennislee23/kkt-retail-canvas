@@ -31,7 +31,10 @@
 declare(strict_types=1);
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-const RETAIL_ADVISOR_MODEL              = 'claude-sonnet-4-5-20251001';
+// Model is overridable via CLAUDE_MODEL in retail/.env so a wrong default
+// doesn't require a code push to fix. Default points at a Sonnet alias which
+// Anthropic typically keeps mapped to the latest stable release.
+const RETAIL_ADVISOR_DEFAULT_MODEL      = 'claude-sonnet-4-5';
 const RETAIL_ADVISOR_MAX_TOKENS         = 1500;
 const RETAIL_ADVISOR_TIMEOUT_SECONDS    = 25;
 const RETAIL_ADVISOR_MAX_MESSAGE_LENGTH = 2000;
@@ -176,12 +179,6 @@ try {
 } catch (\Throwable $e) {
     // Never bubble vendor internals (credit balance, API key, etc) to the user.
     error_log('retail-advisor error: ' . $e->getMessage());
-    // TEMPORARY DEBUG: also surface the raw error message via response header
-    // so a developer can read it in the browser's Network tab without needing
-    // shell access to error.log. REMOVE this header before going public —
-    // it can leak vendor-internal details (credit balance, etc) if a debugger
-    // captures it. See https://github.com/dennislee23/kkt-retail-canvas
-    header('X-Debug-Error: ' . substr(preg_replace('/[\r\n]+/', ' ', $e->getMessage()), 0, 500));
     respond_fallback(friendly_error($e->getMessage()));
 }
 
@@ -198,15 +195,36 @@ try {
  */
 function load_api_key(): string
 {
+    return load_env('ANTHROPIC_API_KEY');
+}
+
+/**
+ * Read CLAUDE_MODEL override from .env. Falls back to the default if not set.
+ * Lets ops swap the model id (e.g. when Anthropic releases a new Sonnet)
+ * without a code push.
+ */
+function load_model(): string
+{
+    $override = load_env('CLAUDE_MODEL');
+    return $override !== '' ? $override : RETAIL_ADVISOR_DEFAULT_MODEL;
+}
+
+/**
+ * Generic .env reader. Single-line `KEY=value` format, no quotes processing,
+ * no expansion. Comment lines (starting with #) skipped.
+ */
+function load_env(string $key): string
+{
     $envPath = __DIR__ . '/../.env';
     if (!is_readable($envPath)) {
         return '';
     }
+    $needle = $key . '=';
     $lines = @file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
     foreach ($lines as $line) {
         if (str_starts_with(trim($line), '#')) continue;
-        if (str_starts_with($line, 'ANTHROPIC_API_KEY=')) {
-            return trim(substr($line, strlen('ANTHROPIC_API_KEY=')));
+        if (str_starts_with($line, $needle)) {
+            return trim(substr($line, strlen($needle)));
         }
     }
     return '';
@@ -242,7 +260,7 @@ function build_user_message(string $message, array $context): string
 function call_claude(string $apiKey, string $system, string $user): string
 {
     $payload = json_encode([
-        'model'      => RETAIL_ADVISOR_MODEL,
+        'model'      => load_model(),
         'max_tokens' => RETAIL_ADVISOR_MAX_TOKENS,
         'system'     => [
             ['type' => 'text', 'text' => $system, 'cache_control' => ['type' => 'ephemeral']],
