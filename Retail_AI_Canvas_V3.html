@@ -1252,7 +1252,225 @@ const STARTER_PROMPTS = [
 // production without changes. Repointing to a different host is one line.
 const RETAIL_ADVISOR_API = 'api/advisor.php';
 
-const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
+// Reasoning panel — shows which canvas cards / roadmap step the model
+// drew on. Each cited card is a clickable button that closes the
+// advisor and navigates to that service detail. The roadmap step (if
+// any) opens the roadmap screen.
+const CitedCardButton = ({ id, onGoToCard }) => {
+  const found = findServiceAndDomainById(id);
+  // Unknown id — render as code, no link. Should be rare with the
+  // grounded knowledge prompt but the safety net stays.
+  if (!found) {
+    return (
+      <div style={{
+        padding: '10px 12px',
+        background: 'var(--surface-alt)',
+        border: '1px solid var(--border)',
+        borderRadius: '3px',
+        marginBottom: '8px',
+      }}>
+        <code style={{ fontSize:'12px', fontFamily:'ui-monospace, SFMono-Regular, monospace', color:'var(--text-muted)' }}>{id}</code>
+        <div style={{ fontSize:'11px', color:'var(--text-muted)', marginTop:'4px', fontStyle:'italic' }}>not in catalog</div>
+      </div>
+    );
+  }
+  return (
+    <button onClick={() => onGoToCard(id)}
+      style={{
+        display: 'block',
+        width: '100%',
+        textAlign: 'left',
+        padding: '12px 14px',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: '3px',
+        marginBottom: '8px',
+        cursor: 'pointer',
+        fontFamily: 'DM Sans',
+        transition: 'border-color .15s, background .15s',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-hover)'; e.currentTarget.style.background = 'var(--surface-alt)'; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)'; }}>
+      <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'4px' }}>
+        <StageBadge stage={found.domain.stage} />
+        <span style={{ fontSize:'10px', color:'var(--text-muted)', letterSpacing:'.04em' }}>·</span>
+        <span style={{ fontSize:'10px', color:'var(--text-muted)', letterSpacing:'.04em', textTransform:'uppercase', fontWeight:500 }}>{found.domain.title}</span>
+      </div>
+      <div style={{ fontSize:'13px', fontWeight:500, color:'var(--text-primary)', lineHeight:1.4, marginBottom:'4px' }}>
+        {found.play.title}
+      </div>
+      <div style={{ fontSize:'10px', color:'var(--text-muted)', fontFamily:'ui-monospace, SFMono-Regular, monospace' }}>
+        {id} <span style={{ color:'var(--accent-text, #B8832A)', marginLeft:'4px', fontFamily:'DM Sans' }}>open card →</span>
+      </div>
+    </button>
+  );
+};
+
+const RoadmapStepButton = ({ stepId, onGoToRoadmap }) => {
+  const step = (window._ROADMAP_STEPS || []).find(s => s.id === stepId);
+  if (!step) {
+    return <div style={{ fontSize:'12px', color:'var(--text-muted)', fontStyle:'italic' }}>{stepId}</div>;
+  }
+  return (
+    <button onClick={() => onGoToRoadmap()}
+      style={{
+        display: 'block',
+        width: '100%',
+        textAlign: 'left',
+        padding: '12px 14px',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: '3px',
+        cursor: 'pointer',
+        fontFamily: 'DM Sans',
+        transition: 'border-color .15s, background .15s',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-hover)'; e.currentTarget.style.background = 'var(--surface-alt)'; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)'; }}>
+      <div style={{ fontSize:'10px', color:'var(--text-muted)', letterSpacing:'.08em', textTransform:'uppercase', fontWeight:600, marginBottom:'4px' }}>
+        Step {step.sequence || ''} · {step.label}
+      </div>
+      {step.executiveQuestion && (
+        <div style={{ fontSize:'12px', color:'var(--text-secondary)', lineHeight:1.5, marginBottom:'4px' }}>
+          {step.executiveQuestion}
+        </div>
+      )}
+      <div style={{ fontSize:'10px', color:'var(--accent-text, #B8832A)', fontFamily:'DM Sans' }}>
+        open roadmap →
+      </div>
+    </button>
+  );
+};
+
+const ReasoningPanel = ({ reasoning, onGoToCard, onGoToRoadmap }) => (
+  <div style={{
+    width:'40%',
+    borderLeft:'1px solid var(--border)',
+    background:'var(--card)',
+    overflowY:'auto',
+    padding:'24px 22px',
+    display:'flex', flexDirection:'column', gap:'22px',
+  }}>
+    <SectionLabel>Reasoning</SectionLabel>
+
+    {!reasoning && (
+      <div style={{ fontSize:'12px', color:'var(--text-muted)', lineHeight:1.7, fontStyle:'italic' }}>
+        When you ask a question, this panel will show which canvas cards, roadmap steps, and stage logic informed the advisor's answer. Click any reference to open it.
+      </div>
+    )}
+
+    {reasoning && (
+      <>
+        <div>
+          <div style={{ fontSize:'10px', textTransform:'uppercase', letterSpacing:'.1em', color:'var(--text-muted)', fontWeight:600, marginBottom:'10px' }}>
+            Cited cards
+          </div>
+          {(reasoning.cardIds || []).length === 0 ? (
+            <div style={{ fontSize:'12px', color:'var(--text-muted)', fontStyle:'italic' }}>
+              No specific service cited — methodological question.
+            </div>
+          ) : (
+            reasoning.cardIds.map(id => (
+              <CitedCardButton key={id} id={id} onGoToCard={onGoToCard} />
+            ))
+          )}
+        </div>
+
+        {reasoning.roadmapStep && (
+          <div>
+            <div style={{ fontSize:'10px', textTransform:'uppercase', letterSpacing:'.1em', color:'var(--text-muted)', fontWeight:600, marginBottom:'10px' }}>
+              Roadmap step
+            </div>
+            <RoadmapStepButton stepId={reasoning.roadmapStep} onGoToRoadmap={onGoToRoadmap} />
+          </div>
+        )}
+
+        {reasoning.summary && (
+          <div>
+            <div style={{ fontSize:'10px', textTransform:'uppercase', letterSpacing:'.1em', color:'var(--text-muted)', fontWeight:600, marginBottom:'10px' }}>
+              Why these
+            </div>
+            <div style={{ fontSize:'12px', color:'var(--text-secondary)', lineHeight:1.7, fontStyle:'italic' }}>
+              {reasoning.summary}
+            </div>
+          </div>
+        )}
+      </>
+    )}
+  </div>
+);
+
+// Linkify an assistant's answer text — turn references like "Stage 1",
+// "Strengthen Core Operations", or card ids ("stock-3") into clickable
+// inline links. Returns an array of strings + React nodes ready to drop
+// into a JSX tree.
+//
+// Only applied when the message is COMPLETE (m.complete === true).
+// Mid-stream tokens like "stoc" → "stock" → "stock-3" would flicker
+// link state — we wait until streaming finishes for stability.
+const linkifyAnswer = (text, onCard, onStage) => {
+  if (!text) return null;
+
+  const STAGE_BY_NAME = {
+    'Strengthen Core Operations': 1,
+    'Optimize and Grow':          2,
+    'Expand and Monetize':        3,
+  };
+  // Card-id pattern: lowercase prefix + dash + digits.
+  // Stage pattern: "Stage 1/2/3" or one of the stage names verbatim.
+  const pattern = /\b(Stage [123]|Strengthen Core Operations|Optimize and Grow|Expand and Monetize|[a-z]+-\d+)\b/g;
+
+  const out = [];
+  let lastIdx = 0;
+  let m;
+  while ((m = pattern.exec(text)) !== null) {
+    if (m.index > lastIdx) out.push(text.slice(lastIdx, m.index));
+    const matched = m[0];
+    const linkStyle = {
+      color: 'var(--accent-text, #B8832A)',
+      borderBottom: '1px dotted currentColor',
+      cursor: 'pointer',
+      textDecoration: 'none',
+    };
+
+    // Stage by number
+    let stageNum = null;
+    const stageNumMatch = matched.match(/^Stage ([123])$/);
+    if (stageNumMatch) stageNum = parseInt(stageNumMatch[1], 10);
+    else if (matched in STAGE_BY_NAME) stageNum = STAGE_BY_NAME[matched];
+
+    if (stageNum) {
+      out.push(
+        <button key={m.index} onClick={() => onStage(stageNum)}
+          style={{ ...linkStyle, background:'none', border:'none', borderBottom:'1px dotted currentColor', padding:0, fontFamily:'inherit', fontSize:'inherit', fontWeight:'inherit' }}>
+          {matched}
+        </button>
+      );
+    } else if (/^[a-z]+-\d+$/.test(matched)) {
+      // Card id — only link if it actually resolves to a real card.
+      const found = findServiceAndDomainById(matched);
+      if (found) {
+        out.push(
+          <button key={m.index} onClick={() => onCard(matched)}
+            style={{ ...linkStyle, background:'none', border:'none', borderBottom:'1px dotted currentColor', padding:0, fontFamily:'ui-monospace, SFMono-Regular, monospace', fontSize:'.92em', fontWeight:'inherit' }}>
+            {matched}
+          </button>
+        );
+      } else {
+        // Unknown id — render as code, no link.
+        out.push(<code key={m.index} style={{ fontFamily:'ui-monospace, SFMono-Regular, monospace', fontSize:'.92em' }}>{matched}</code>);
+      }
+    } else {
+      out.push(matched);
+    }
+
+    lastIdx = m.index + matched.length;
+  }
+  if (lastIdx < text.length) out.push(text.slice(lastIdx));
+  return out;
+};
+
+const CopilotPanel = ({ isOpen, onClose, context, prefill, onGoToCard, onGoToStage, onGoToRoadmap }) => {
   const [msgs, setMsgs]     = useState([{ role:'assistant', text:"I'm here to help you navigate the canvas. Ask me about any business pressure, solution area, or where to start. I keep it practical and grounded." }]);
   const [input, setInput]   = useState('');
   const [loading, setLoading] = useState(false);
@@ -1379,7 +1597,7 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
                 };
               } catch (e) { /* meta JSON malformed — leave reasoning null */ }
             }
-            updateAssistant({ text: finalText || visibleText, reasoning });
+            updateAssistant({ text: finalText || visibleText, reasoning, complete: true });
           }
         }
       }
@@ -1463,10 +1681,16 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
               // Skip rendering an empty assistant placeholder — the dots
               // below cover that "waiting for first chunk" state instead.
               if (m.role === 'assistant' && (!m.text || !m.text.trim())) return null;
+              // Inline links are added only after streaming completes —
+              // mid-token text would flicker between link/non-link states
+              // as patterns appear and disappear.
+              const renderedText = (m.role === 'assistant' && m.complete)
+                ? linkifyAnswer(m.text, onGoToCard, onGoToStage)
+                : m.text;
               return (
                 <div key={i} style={{ display:'flex', justifyContent: m.role==='user' ? 'flex-end' : 'flex-start' }}>
                   <div style={{ maxWidth:'88%', padding:'10px 13px', borderRadius: m.role==='user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px', background: m.role==='user' ? 'var(--text-primary)' : 'var(--surface-alt)', fontSize:'13px', color: m.role==='user' ? '#FFF' : 'var(--text-secondary)', lineHeight:1.65, fontWeight:300, whiteSpace:'pre-wrap' }}>
-                    {m.text}
+                    {renderedText}
                   </div>
                 </div>
               );
@@ -1505,41 +1729,11 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
 
         {/* Reasoning column ~40% — desktop only for now */}
         {!isNarrow && (
-          <div style={{
-            width:'40%',
-            borderLeft:'1px solid var(--border)',
-            background:'var(--card)',
-            overflowY:'auto',
-            padding:'24px 22px',
-            display:'flex', flexDirection:'column', gap:'24px',
-          }}>
-            <SectionLabel>Reasoning</SectionLabel>
-            {!reasoning && (
-              <div style={{ fontSize:'12px', color:'var(--text-muted)', lineHeight:1.7, fontStyle:'italic' }}>
-                When you ask a question, this panel will show which canvas cards, roadmap steps, and stage logic informed the advisor's answer. Click any reference to open it.
-              </div>
-            )}
-            {reasoning && (
-              <div style={{ fontSize:'12px', color:'var(--text-muted)', lineHeight:1.6 }}>
-                <div style={{ marginBottom:'6px', textTransform:'uppercase', letterSpacing:'.08em', fontSize:'10px', color:'var(--text-muted)', fontWeight:600 }}>cited cards</div>
-                {(reasoning.cardIds || []).length === 0
-                  ? <div style={{ fontStyle:'italic' }}>—</div>
-                  : reasoning.cardIds.map(id => <div key={id} style={{ marginBottom:'4px', color:'var(--text-secondary)' }}>{id}</div>)}
-                {reasoning.roadmapStep && (
-                  <>
-                    <div style={{ marginTop:'14px', marginBottom:'6px', textTransform:'uppercase', letterSpacing:'.08em', fontSize:'10px', color:'var(--text-muted)', fontWeight:600 }}>roadmap step</div>
-                    <div style={{ color:'var(--text-secondary)' }}>{reasoning.roadmapStep}</div>
-                  </>
-                )}
-                {reasoning.summary && (
-                  <>
-                    <div style={{ marginTop:'14px', marginBottom:'6px', textTransform:'uppercase', letterSpacing:'.08em', fontSize:'10px', color:'var(--text-muted)', fontWeight:600 }}>why these</div>
-                    <div style={{ color:'var(--text-secondary)', fontStyle:'italic', lineHeight:1.6 }}>{reasoning.summary}</div>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
+          <ReasoningPanel
+            reasoning={reasoning}
+            onGoToCard={onGoToCard}
+            onGoToRoadmap={onGoToRoadmap}
+          />
         )}
       </div>
     </div>
@@ -1726,7 +1920,7 @@ function TweakRadio({ label, value, options, onChange }) {
 // first deploy, or local dev), the badge still shows the version label,
 // just without the git-detail tooltip.
 // ──────────────────────────────────────────────────────────────────────────
-const SITE_VERSION = '0.3.1';
+const SITE_VERSION = '0.4.0';
 const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
 
 const formatRelative = (isoString) => {
@@ -1838,6 +2032,28 @@ const App = () => {
   }, []);
 
   const openCopilot = prefill => { setCopilotPrefill(prefill || null); setCopilot(true); };
+
+  // Navigation helpers triggered from inside the advisor panel — clicking a
+  // cited card or a stage/roadmap link in an answer closes the advisor and
+  // takes the user to the corresponding screen. Each closes the panel via
+  // setCopilot(false), then mutates app state.
+  const goToCardFromAdvisor = (cardId) => {
+    const found = findServiceAndDomainById(cardId);
+    if (!found) return;
+    setCopilot(false);
+    setDomain(found.domain);
+    setPlay(found.play);
+  };
+  const goToStageFromAdvisor = (stageNum) => {
+    setCopilot(false);
+    if (stageNum === 3) { goToStage3Domain(); return; }
+    setStageFilter(stageNum);
+    setScreen('domains');
+  };
+  const goToRoadmapFromAdvisor = () => {
+    setCopilot(false);
+    setScreen('roadmap');
+  };
   const goToDomain  = d  => {
     // Expand and Monetize: jump straight to its DomainScreen (no intermediary grid)
     setDomain(d);
@@ -1878,7 +2094,14 @@ const App = () => {
 
       {play && domain && <SolutionCardPanel play={play} domain={domain} onClose={() => setPlay(null)} onCopilot={msg => { setPlay(null); openCopilot(msg); }} />}
 
-      <CopilotPanel isOpen={copilot} onClose={() => setCopilot(false)} context={copilotContext} prefill={copilotPrefill} />
+      <CopilotPanel
+        isOpen={copilot}
+        onClose={() => setCopilot(false)}
+        context={copilotContext}
+        prefill={copilotPrefill}
+        onGoToCard={goToCardFromAdvisor}
+        onGoToStage={goToStageFromAdvisor}
+        onGoToRoadmap={goToRoadmapFromAdvisor} />
 
       <TweaksPanel>
         <TweakSection label="Theme" />
