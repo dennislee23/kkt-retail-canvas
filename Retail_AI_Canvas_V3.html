@@ -1242,6 +1242,13 @@ const STARTER_PROMPTS = [
   'What is the difference between Stage 1 and Stage 2?',
 ];
 
+// Retail advisor backend. Lives in the GAS STATIONS PROJECT REV 3.0 codebase
+// alongside the Optimus AI services (same Claude integration pattern, different
+// system prompt and audience). Anonymous, rate-limited per-IP, ZDR posture.
+// Repointing this is a one-line change — no other call sites.
+// Ends with "/api/retail/advisor" — see TZ_RETAIL_ASSISTANT_V1.md §10.2.
+const RETAIL_ADVISOR_API = 'https://fuel.kittykat.tech/rev3/backend/public/api/retail/advisor';
+
 const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
   const [msgs, setMsgs]     = useState([{ role:'assistant', text:"I'm here to help you navigate the canvas. Ask me about any business pressure, solution area, or where to start. I keep it practical and grounded." }]);
   const [input, setInput]   = useState('');
@@ -1257,25 +1264,63 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
     if (isOpen && prefill) { setInput(prefill); setTimeout(() => inputRef.current?.focus(), 100); }
   }, [isOpen, prefill]);
 
+  // Send a question to the backend. Backend returns the structured shape
+  // {answer, cited_card_ids, cited_roadmap_step, reasoning_summary} per
+  // TZ §10.2 — we attach the reasoning fields to the assistant message so
+  // the upcoming reasoning panel (commit 6) can render citations and the
+  // roadmap step alongside the spoken answer. Until that panel lands, the
+  // reasoning data is captured but not displayed.
   const send = async text => {
     if (!text.trim() || loading) return;
     setMsgs(m => [...m, { role:'user', text }]);
     setInput('');
     setLoading(true);
-    try {
-      const ctxStr = [
-        context?.pressures?.length && `User pressures: ${context.pressures.join(', ')}`,
-        context?.domain && `Currently viewing domain: ${context.domain}`,
-        context?.play   && `Currently viewing play: ${context.play}`,
-      ].filter(Boolean).join('. ');
 
-      const reply = await window.claude.complete({
-        messages: [{ role:'user', content: `[System instructions: ${_COPILOT_SYSTEM||''}${ctxStr ? ` Context: ${ctxStr}` : ''}]\n\n${text}` }]
+    try {
+      const response = await fetch(RETAIL_ADVISOR_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          context: {
+            pressures: context?.pressures || [],
+            domain:    context?.domain    || null,
+            play:      context?.play      || null,
+          },
+        }),
       });
-      setMsgs(m => [...m, { role:'assistant', text: reply }]);
-    } catch {
-      setMsgs(m => [...m, { role:'assistant', text:'Something went wrong — please try again.' }]);
+
+      // Read the body even on non-2xx — backend mirrors the success shape
+      // on 4xx so we can surface useful error copy in the transcript.
+      let parsed = null;
+      try { parsed = await response.json(); } catch { /* keep null, fallback below */ }
+
+      if (!response.ok) {
+        const friendly = response.status === 429
+          ? 'Too many requests right now — please wait a moment and try again.'
+          : (parsed && parsed.answer) || 'Something went wrong — please try again.';
+        setMsgs(m => [...m, { role:'assistant', text: friendly }]);
+      } else if (parsed && typeof parsed.answer === 'string') {
+        setMsgs(m => [...m, {
+          role: 'assistant',
+          text: parsed.answer,
+          reasoning: {
+            cardIds:     Array.isArray(parsed.cited_card_ids) ? parsed.cited_card_ids : [],
+            roadmapStep: parsed.cited_roadmap_step || null,
+            summary:     typeof parsed.reasoning_summary === 'string' ? parsed.reasoning_summary : '',
+          },
+        }]);
+      } else {
+        // Backend returned 200 but body wasn't parseable. Rare — service.chat()
+        // catches malformed JSON server-side and falls back. If we see this,
+        // it's a network or proxy weirdness, not a model error.
+        setMsgs(m => [...m, { role:'assistant', text:'Got an empty response — please try again.' }]);
+      }
+    } catch (err) {
+      // Network error, CORS rejection, DNS, etc — not a backend response.
+      setMsgs(m => [...m, { role:'assistant', text:'Connection issue reaching the advisor. Please try again.' }]);
     }
+
     setLoading(false);
   };
 
