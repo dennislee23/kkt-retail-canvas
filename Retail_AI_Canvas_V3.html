@@ -79,6 +79,7 @@ ol, ul { list-style-position:outside; }
 <div id="root"></div>
 <script src="canvas-data.js"></script>
 <script src="roadmap-data.js"></script>
+<script src="kktechnologies-profile-data.js"></script>
 <script type="text/babel">
 const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
@@ -95,6 +96,7 @@ const _EFFORT_OPTIONS    = window.EFFORT_OPTIONS;
 const _IMPACT_OPTIONS    = window.IMPACT_OPTIONS;
 const _TAG_TOOLTIPS      = window.TAG_TOOLTIPS;
 const _ROADMAP_STEPS     = window.ROADMAP_STEPS;
+const _KKTECH_PROFILE    = window.KKTECH_PROFILE || {};
 const _ROADMAP_PATHWAYS  = window.ROADMAP_PATHWAYS;
 const _ROADMAP_OPTIONS   = window.ROADMAP_READINESS_OPTIONS;
 const _ROADMAP_STATES    = window.ROADMAP_BLOCK_STATES;
@@ -244,6 +246,33 @@ const StageBadge = ({ stage }) => {
 };
 
 /* ─── SHARED LAYOUT ─────────────────────────────────────────────── */
+
+// ProfileFooter — KKTechnologies nav pinned to the bottom of every Page.
+// Mirror identity (canvas + by KKTechnologies) on the left, profile-section
+// links (KKTechnologies / How We Work / Team & Experts / Contact) on the right.
+// Each link dispatches `retail-canvas:profile` with the section id; the App
+// listens and switches `screen` to `'profile'` with the matching section.
+const ProfileFooter = () => {
+  const nav = _KKTECH_PROFILE.nav || [];
+  return (
+    <footer style={{ borderTop:'1px solid var(--border)', background:'var(--surface)', padding:'18px clamp(20px,5vw,72px)', display:'flex', justifyContent:'space-between', alignItems:'center', gap:'16px', flexWrap:'wrap' }}>
+      <button onClick={() => window.dispatchEvent(new CustomEvent('retail-canvas:home'))}
+        style={{ background:'none', border:'none', padding:0, cursor:'pointer', color:'var(--text-muted)', fontSize:'11px', letterSpacing:'.12em', textTransform:'uppercase', fontFamily:'DM Sans', fontWeight:500 }}>
+        {_KKTECH_PROFILE.brand?.canvasIdentity || 'Retail AI Canvas by KKTechnologies'}
+      </button>
+      <div style={{ display:'flex', gap:'14px', flexWrap:'wrap', alignItems:'center' }}>
+        {nav.map(item => (
+          <button key={item.id}
+            onClick={() => window.dispatchEvent(new CustomEvent('retail-canvas:profile', { detail:{ section:item.id } }))}
+            style={{ background:'none', border:'none', padding:'4px 0', cursor:'pointer', color:'var(--text-secondary)', fontSize:'12px', fontWeight:400, fontFamily:'DM Sans' }}>
+            {item.label}
+          </button>
+        ))}
+      </div>
+    </footer>
+  );
+};
+
 const Page = ({ children, header }) => (
   <div style={{ minHeight:'100vh', display:'flex', flexDirection:'column', background:'var(--bg)' }}>
     <header style={{ padding:'0 clamp(20px,5vw,72px)', height:'58px', display:'flex', alignItems:'center', justifyContent:'space-between', background:'var(--surface)', borderBottom:'1px solid var(--border)', flexShrink:0, position:'sticky', top:0, zIndex:20 }}>
@@ -252,6 +281,7 @@ const Page = ({ children, header }) => (
     <main style={{ flex:1, maxWidth:'1080px', margin:'0 auto', width:'100%', padding:'clamp(36px,6vh,64px) clamp(20px,4vw,48px)' }}>
       {children}
     </main>
+    <ProfileFooter />
   </div>
 );
 
@@ -261,11 +291,17 @@ const BackBtn = ({ onClick, label='Back' }) => (
   </button>
 );
 
-const Wordmark = () => (
+// Wordmark — "Retail AI Canvas" with a small "by KKTechnologies" caption
+// underneath. Vertical stack centered, click returns to landing. The subline
+// reinforces brand identity introduced in V4 of the canvas (2026-05-06).
+const Wordmark = ({ showSubline = true }) => (
   <button onClick={() => window.dispatchEvent(new CustomEvent('retail-canvas:home'))}
     aria-label="Return to Retail AI Canvas front page"
-    style={{ background:'none', border:'none', padding:0, cursor:'pointer', fontSize:'12px', letterSpacing:'.14em', color:'var(--text-muted)', textTransform:'uppercase', fontFamily:'DM Sans', fontWeight:500 }}>
-    Retail AI Canvas
+    style={{ background:'none', border:'none', padding:0, cursor:'pointer', display:'flex', flexDirection:'column', alignItems:'center', gap:'2px', fontFamily:'DM Sans', textTransform:'uppercase' }}>
+    <span style={{ fontSize:'12px', letterSpacing:'.14em', color:'var(--text-muted)', fontWeight:500 }}>Retail AI Canvas</span>
+    {showSubline && (
+      <span style={{ fontSize:'9px', letterSpacing:'.16em', color:'var(--accent)', fontWeight:600 }}>by KKTechnologies</span>
+    )}
   </button>
 );
 
@@ -1148,6 +1184,234 @@ const DomainScreen = ({ domain, onPlay, onBack, onCopilot }) => {
   );
 };
 
+/* ─── KKTECHNOLOGIES PROFILE ─────────────────────────────────────── */
+
+// Small rounded chip used in the team-member cards inside KKProfileScreen
+// to surface a member's specialties (e.g. "fuel retail", "supply chain
+// optimization"). Style mirrors the canvas's tag chips but in a more
+// muted form since these are background context, not active filters.
+const ProfileChip = ({ label }) => (
+  <span style={{ display:'inline-flex', alignItems:'center', padding:'4px 8px', border:'1px solid var(--border)', borderRadius:'20px', color:'var(--text-muted)', fontSize:'11px', lineHeight:1.2 }}>
+    {label}
+  </span>
+);
+
+// KKProfileScreen — Company / How We Work / Team & Experts / Contact
+// pages, navigated from the ProfileFooter links and reachable via
+// `retail-canvas:profile` events. Single-component switch on `section`
+// prop. All content lives in window.KKTECH_PROFILE (kktechnologies-profile-data.js)
+// — when content needs editing, change the data file, not this component.
+const KKProfileScreen = ({ section, onBack }) => {
+  const profile = _KKTECH_PROFILE || {};
+  const company = profile.company || {};
+  const how = profile.howWeWork || {};
+  const team = profile.team || {};
+  const contact = profile.contact || {};
+  const active = section || 'company';
+  const [activeCase, setActiveCase] = useState(null);
+
+  const renderCompany = () => (
+    <div className="fade-up">
+      <div style={{ maxWidth:'780px', marginBottom:'30px' }}>
+        <p style={{ fontSize:'11px', color:'var(--accent)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:600, marginBottom:'10px' }}>{company.eyebrow}</p>
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(30px,4vw,48px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'14px', lineHeight:1.14 }}>{company.title}</h2>
+        <p style={{ fontSize:'17px', color:'var(--text-secondary)', lineHeight:1.72, fontWeight:300 }}>{company.lead}</p>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'12px', marginBottom:'28px' }}>
+        {(company.proofPoints || []).map(point => (
+          <div key={point} style={{ padding:'16px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px' }}>
+            <p style={{ fontSize:'13px', color:'var(--text-primary)', lineHeight:1.55, fontWeight:500 }}>{point}</p>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ padding:'22px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', display:'grid', gap:'14px' }}>
+        {(company.body || []).map((text, i) => (
+          <p key={i} style={{ fontSize:'14px', color:'var(--text-secondary)', lineHeight:1.7, fontWeight:300 }}>{text}</p>
+        ))}
+      </div>
+
+      {!!company.trackRecord?.items?.length && (
+        <section style={{ marginTop:'30px' }}>
+          <div style={{ maxWidth:'760px', marginBottom:'16px' }}>
+            <SectionLabel>{company.trackRecord.title}</SectionLabel>
+            <p style={{ fontSize:'14px', color:'var(--text-secondary)', lineHeight:1.65, fontWeight:300, marginTop:'8px' }}>{company.trackRecord.lead}</p>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(250px,1fr))', gap:'12px' }}>
+            {(company.trackRecord.items || []).map(item => (
+              <button key={item.id} onClick={() => setActiveCase(item)}
+                style={{ textAlign:'left', padding:'18px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', cursor:'pointer', display:'flex', flexDirection:'column', alignItems:'stretch', gap:'12px', height:'100%' }}>
+                <div style={{ display:'grid', gap:'10px' }}>
+                  <div style={{ fontSize:'11px', color:'var(--accent)', fontWeight:600, letterSpacing:'.06em', textTransform:'uppercase', lineHeight:1.35 }}>{item.label}</div>
+                  {item.meta && (
+                    <div style={{ fontSize:'11px', color:'var(--text-muted)', lineHeight:1.45, minHeight:'2.9em', display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{item.meta}</div>
+                  )}
+                  <div>
+                    <h3 style={{ fontSize:'16px', color:'var(--text-primary)', fontWeight:600, lineHeight:1.3, marginBottom:'8px' }}>{item.focus}</h3>
+                    <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.55, fontWeight:300, display:'-webkit-box', WebkitLineClamp:5, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{item.whatWeDid}</p>
+                  </div>
+                </div>
+                <div style={{ borderTop:'1px solid var(--border)', paddingTop:'10px', marginTop:'auto' }}>
+                  <SectionLabel>Business outcome</SectionLabel>
+                  <p style={{ fontSize:'12px', color:'var(--text-secondary)', lineHeight:1.55, fontWeight:300, marginTop:'6px' }}>{item.result}</p>
+                </div>
+                <div style={{ fontSize:'12px', color:'var(--text-muted)', fontWeight:500 }}>Open case detail →</div>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+
+  const renderHow = () => (
+    <div className="fade-up">
+      <div style={{ maxWidth:'820px', marginBottom:'30px' }}>
+        <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:500, marginBottom:'10px' }}>{how.title}</p>
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(30px,4vw,48px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'14px', lineHeight:1.14 }}>{how.subtitle}</h2>
+        <p style={{ fontSize:'16px', color:'var(--text-secondary)', lineHeight:1.72, fontWeight:300 }}>{how.lead}</p>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(230px,1fr))', gap:'14px' }}>
+        {(how.steps || []).map((step, i) => (
+          <div key={step.id} style={{ padding:'18px', background:'var(--surface)', border:'1px solid var(--border)', borderTop:'3px solid var(--accent)', borderRadius:'6px', display:'flex', flexDirection:'column', gap:'12px' }}>
+            <div>
+              <div style={{ fontSize:'11px', color:'var(--accent)', fontWeight:700, letterSpacing:'.09em', textTransform:'uppercase', marginBottom:'8px' }}>{i + 1}. {step.title}</div>
+              <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.62, fontWeight:300 }}>{step.summary}</p>
+            </div>
+            <div style={{ borderTop:'1px solid var(--border)', paddingTop:'12px', marginTop:'auto' }}>
+              <SectionLabel>Outputs</SectionLabel>
+              <ul style={{ margin:'8px 0 0 0', padding:'0 0 0 16px', display:'grid', gap:'7px' }}>
+                {(step.outputs || []).map(output => (
+                  <li key={output} style={{ fontSize:'12px', color:'var(--text-secondary)', lineHeight:1.5 }}>{output}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderTeam = () => (
+    <div className="fade-up">
+      <div style={{ maxWidth:'820px', marginBottom:'30px' }}>
+        <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:500, marginBottom:'10px' }}>{team.title}</p>
+        <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(30px,4vw,48px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'14px', lineHeight:1.14 }}>Domain expertise and technical delivery expertise in one team</h2>
+        <p style={{ fontSize:'16px', color:'var(--text-secondary)', lineHeight:1.72, fontWeight:300, marginBottom:'8px' }}>{team.lead}</p>
+        <p style={{ fontSize:'14px', color:'var(--text-muted)', lineHeight:1.65, fontWeight:300 }}>{team.sublead}</p>
+      </div>
+
+      <div style={{ display:'grid', gap:'26px' }}>
+        {(team.groups || []).map(group => (
+          <section key={group.id}>
+            <SectionLabel>{group.title}</SectionLabel>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))', gap:'12px', marginTop:'12px' }}>
+              {(group.members || []).map(member => (
+                <div key={member.name} style={{ padding:'16px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', display:'grid', gap:'12px' }}>
+                  <div style={{ display:'flex', gap:'12px', alignItems:'flex-start' }}>
+                    <div style={{ width:'42px', height:'42px', borderRadius:'50%', background:'var(--surface-alt)', border:'1px solid var(--border)', color:'var(--accent)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:700, flexShrink:0 }}>
+                      {member.initials}
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize:'16px', color:'var(--text-primary)', fontWeight:600, marginBottom:'6px', lineHeight:1.25 }}>{member.name}</h3>
+                      <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.55, fontWeight:300 }}>{member.line}</p>
+                    </div>
+                  </div>
+                  <div style={{ display:'flex', gap:'6px', flexWrap:'wrap' }}>
+                    {(member.chips || []).map(chip => <ProfileChip key={chip} label={chip} />)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      {team.benchNote && (
+        <div style={{ marginTop:'22px', padding:'16px', background:'var(--surface-alt)', border:'1px solid var(--border)', borderRadius:'6px' }}>
+          <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.6, fontWeight:300 }}>{team.benchNote}</p>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderContact = () => (
+    <div className="fade-up" style={{ maxWidth:'760px' }}>
+      <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:500, marginBottom:'10px' }}>{contact.title}</p>
+      <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(30px,4vw,48px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'14px', lineHeight:1.14 }}>{contact.lead}</h2>
+      <div style={{ marginTop:'28px', padding:'22px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', display:'grid', gap:'14px' }}>
+        <div>
+          <SectionLabel>Email</SectionLabel>
+          <a href={`mailto:${contact.email}`} style={{ color:'var(--text-primary)', fontSize:'16px', textDecoration:'none' }}>{contact.email}</a>
+        </div>
+        <div>
+          <SectionLabel>Website</SectionLabel>
+          <a href={`https://${contact.website}`} style={{ color:'var(--text-primary)', fontSize:'16px', textDecoration:'none' }}>{contact.website}</a>
+        </div>
+        <div>
+          <SectionLabel>Company</SectionLabel>
+          <p style={{ color:'var(--text-secondary)', fontSize:'14px', lineHeight:1.6 }}>{contact.company}<br />{contact.location}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><span style={{ width:'60px' }} /></>}>
+      {active === 'how-we-work' && renderHow()}
+      {active === 'team' && renderTeam()}
+      {active === 'contact' && renderContact()}
+      {active === 'company' && renderCompany()}
+
+      {activeCase && (
+        <div style={{ position:'fixed', inset:0, zIndex:50 }}>
+          <div style={{ position:'absolute', inset:0, background:'rgba(20,16,10,0.45)' }} onClick={() => setActiveCase(null)} />
+          <div style={{ position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:'min(860px, calc(100vw - 32px))', maxHeight:'calc(100vh - 48px)', overflow:'auto', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'8px', boxShadow:'0 18px 48px rgba(0,0,0,.18)' }}>
+            <div style={{ padding:'18px 20px', borderBottom:'1px solid var(--border)', display:'flex', justifyContent:'space-between', gap:'12px', alignItems:'flex-start' }}>
+              <div>
+                <div style={{ fontSize:'11px', color:'var(--accent)', fontWeight:700, letterSpacing:'.08em', textTransform:'uppercase', marginBottom:'6px' }}>{activeCase.label}</div>
+                {activeCase.meta && (
+                  <div style={{ fontSize:'12px', color:'var(--text-muted)', lineHeight:1.45, marginBottom:'8px' }}>{activeCase.meta}</div>
+                )}
+                <h3 style={{ fontSize:'24px', color:'var(--text-primary)', fontWeight:600, lineHeight:1.2 }}>{activeCase.focus}</h3>
+              </div>
+              <button onClick={() => setActiveCase(null)} style={{ background:'none', border:'1px solid var(--border)', width:'30px', height:'30px', borderRadius:'50%', cursor:'pointer', color:'var(--text-secondary)', flexShrink:0 }}>×</button>
+            </div>
+            <div style={{ padding:'22px 20px', display:'grid', gap:'18px' }}>
+              <div>
+                <SectionLabel>Business context</SectionLabel>
+                <p style={{ fontSize:'14px', color:'var(--text-secondary)', lineHeight:1.65, fontWeight:300, marginTop:'8px' }}>{activeCase.detail?.context}</p>
+              </div>
+              <div>
+                <SectionLabel>Our role</SectionLabel>
+                <p style={{ fontSize:'14px', color:'var(--text-secondary)', lineHeight:1.65, fontWeight:300, marginTop:'8px' }}>{activeCase.detail?.role}</p>
+              </div>
+              <div>
+                <SectionLabel>What we did</SectionLabel>
+                <ul style={{ margin:'8px 0 0 0', padding:'0 0 0 18px', display:'grid', gap:'8px' }}>
+                  {(activeCase.detail?.scope || []).map(point => (
+                    <li key={point} style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.55 }}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <SectionLabel>Business outcome</SectionLabel>
+                <ul style={{ margin:'8px 0 0 0', padding:'0 0 0 18px', display:'grid', gap:'8px' }}>
+                  {(activeCase.detail?.outcome || []).map(point => (
+                    <li key={point} style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.55 }}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </Page>
+  );
+};
+
 /* ─── SOLUTION DETAIL PANEL ──────────────────────────────────────── */
 const SolutionCardPanel = ({ play, domain, onClose, onCopilot }) => {
   useEffect(() => {
@@ -2015,7 +2279,7 @@ function TweakRadio({ label, value, options, onChange }) {
 // first deploy, or local dev), the badge still shows the version label,
 // just without the git-detail tooltip.
 // ──────────────────────────────────────────────────────────────────────────
-const SITE_VERSION = '0.6.2';
+const SITE_VERSION = '0.7.0';
 const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
 
 const formatRelative = (isoString) => {
@@ -2088,6 +2352,7 @@ const App = () => {
   const [copilot, setCopilot]                 = useState(false);
   const [copilotPrefill, setCopilotPrefill]   = useState(null);
   const [stageFilter, setStageFilter]         = useState(null);
+  const [profileSection, setProfileSection]   = useState('company');
   const [t, setTweak]                         = useTweaks(TWEAK_DEFAULTS);
 
   useEffect(() => {
@@ -2098,8 +2363,24 @@ const App = () => {
       setCopilot(false);
       setStageFilter(null);
     };
+    // KKTechnologies profile entry from ProfileFooter links. Each link in
+    // the footer dispatches CustomEvent('retail-canvas:profile', { detail:
+    // { section: 'company'|'how-we-work'|'team'|'contact' } }) — we
+    // capture the section, switch screen, and let KKProfileScreen route
+    // internally on the active prop.
+    const onProfile = (e) => {
+      const section = e?.detail?.section || 'company';
+      setProfileSection(section);
+      setPlay(null);
+      setCopilot(false);
+      setScreen('profile');
+    };
     window.addEventListener('retail-canvas:home', goHome);
-    return () => window.removeEventListener('retail-canvas:home', goHome);
+    window.addEventListener('retail-canvas:profile', onProfile);
+    return () => {
+      window.removeEventListener('retail-canvas:home', goHome);
+      window.removeEventListener('retail-canvas:profile', onProfile);
+    };
   }, []);
 
   // Cmd+K / Ctrl+K toggles the advisor anywhere on the site. Escape closes
@@ -2186,6 +2467,7 @@ const App = () => {
       {screen==='domains'     && <DomainsScreen stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} onDomain={d => d.id === 'expand_monetize' ? goToStage3Domain() : goToDomain(d)} onBack={() => setScreen('landing')} onCopilot={() => openCopilot()} />}
       {screen==='browse'      && <BrowseScreen onPlay={(p,d) => { setDomain(d); setPlay(p); }} onDomain={goToDomain} onBack={() => setScreen('landing')} stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} onCopilot={() => openCopilot()} />}
       {screen==='domain' && domain && <DomainScreen domain={domain} onPlay={p => setPlay(p)} onBack={fromDomain} onCopilot={openCopilot} />}
+      {screen==='profile'     && <KKProfileScreen section={profileSection} onBack={() => setScreen('landing')} />}
 
       {play && domain && <SolutionCardPanel play={play} domain={domain} onClose={() => setPlay(null)} onCopilot={msg => { setPlay(null); openCopilot(msg); }} />}
 
