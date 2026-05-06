@@ -176,6 +176,12 @@ try {
 } catch (\Throwable $e) {
     // Never bubble vendor internals (credit balance, API key, etc) to the user.
     error_log('retail-advisor error: ' . $e->getMessage());
+    // TEMPORARY DEBUG: also surface the raw error message via response header
+    // so a developer can read it in the browser's Network tab without needing
+    // shell access to error.log. REMOVE this header before going public —
+    // it can leak vendor-internal details (credit balance, etc) if a debugger
+    // captures it. See https://github.com/dennislee23/kkt-retail-canvas
+    header('X-Debug-Error: ' . substr(preg_replace('/[\r\n]+/', ' ', $e->getMessage()), 0, 500));
     respond_fallback(friendly_error($e->getMessage()));
 }
 
