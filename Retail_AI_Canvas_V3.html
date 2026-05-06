@@ -274,6 +274,48 @@ const CopilotNudge = ({ text, onOpen }) => (
   </button>
 );
 
+/* ─── ADVISOR HEADER LINK ─────────────────────────────────────────
+   Small "⌘K Ask the advisor" link injected into every screen's header.
+   Sits next to whatever right-side controls the screen already has.
+   The kbd chip is informative on touch devices too — even without a
+   physical Cmd/Ctrl key, the click still opens the advisor. We pick
+   the shortcut symbol per platform so Mac users see ⌘ and others see
+   Ctrl (the actual keydown listener at App level accepts both). */
+const IS_MAC = typeof navigator !== 'undefined' &&
+  /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent || '');
+
+const AdvisorHeaderLink = ({ onCopilot }) => (
+  <button onClick={onCopilot} aria-label="Open retail advisor"
+    style={{
+      fontSize:'12px',
+      color:'var(--text-muted)',
+      background:'none',
+      border:'none',
+      cursor:'pointer',
+      display:'inline-flex',
+      alignItems:'center',
+      gap:'7px',
+      fontFamily:'DM Sans',
+      padding:'6px 8px',
+      borderRadius:'3px',
+      transition:'color .15s',
+    }}
+    onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+    <kbd style={{
+      fontSize:'10px',
+      fontFamily:'ui-monospace, SFMono-Regular, Menlo, monospace',
+      background:'var(--surface-alt)',
+      border:'1px solid var(--border)',
+      borderRadius:'3px',
+      padding:'1px 5px',
+      color:'var(--text-secondary)',
+      letterSpacing:'.04em',
+    }}>{IS_MAC ? '⌘K' : 'Ctrl K'}</kbd>
+    <span>Ask the advisor</span>
+  </button>
+);
+
 /* ─── STAGE CARD ─────────────────────────────────────────────────── */
 const StageCard = ({ stage, title, desc, cta, clickable, optional, onStage }) => {
   const [hov, setHov] = useState(false);
@@ -313,7 +355,10 @@ const LandingScreen = ({ onStart, onBrowse, onStage, onCopilot }) => (
   <Page header={
     <>
       <Wordmark />
-      <button onClick={onBrowse} style={{ fontSize:'13px', color:'var(--text-secondary)', background:'none', border:'none', cursor:'pointer' }}>Browse all solutions →</button>
+      <div style={{ display:'flex', alignItems:'center', gap:'14px' }}>
+        <AdvisorHeaderLink onCopilot={onCopilot} />
+        <button onClick={onBrowse} style={{ fontSize:'13px', color:'var(--text-secondary)', background:'none', border:'none', cursor:'pointer' }}>Browse all solutions →</button>
+      </div>
     </>
   }>
     <div className="fade-up" style={{ maxWidth:'660px', marginBottom:'52px' }}>
@@ -392,13 +437,16 @@ const QuestionsScreen = ({ onDone, onBack, onCopilot }) => {
       <>
         <BackBtn onClick={onBack} label="Start over" />
         <Wordmark />
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:'10px', minWidth:'92px' }}>
-          <div style={{ display:'flex', gap:'5px' }}>
-            {QS_DEF.map((_,i) => (
-              <div key={i} style={{ height:'3px', width: i===step?'22px':'7px', borderRadius:'2px', background: i<=step?'var(--text-primary)':'var(--border)', transition:'all .22s ease' }} />
-            ))}
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:'14px' }}>
+          <AdvisorHeaderLink onCopilot={onCopilot} />
+          <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+            <div style={{ display:'flex', gap:'5px' }}>
+              {QS_DEF.map((_,i) => (
+                <div key={i} style={{ height:'3px', width: i===step?'22px':'7px', borderRadius:'2px', background: i<=step?'var(--text-primary)':'var(--border)', transition:'all .22s ease' }} />
+              ))}
+            </div>
+            <span style={{ fontSize:'12px', color:'var(--text-muted)', minWidth:'36px', textAlign:'right' }}>{step+1} / {QS_DEF.length}</span>
           </div>
-          <span style={{ fontSize:'12px', color:'var(--text-muted)', minWidth:'36px', textAlign:'right' }}>{step+1} / {QS_DEF.length}</span>
         </div>
       </>
     }>
@@ -480,7 +528,10 @@ const RecommendedScreen = ({ answers, onPlay, onDomain, onBrowse, onRoadmap, onB
       <>
         <BackBtn onClick={onBack} label="Change answers" />
         <Wordmark />
-        <button onClick={onBrowse} style={{ fontSize:'13px', color:'var(--text-secondary)', background:'none', border:'none', cursor:'pointer' }}>Browse all solutions →</button>
+        <div style={{ display:'flex', alignItems:'center', gap:'14px' }}>
+          <AdvisorHeaderLink onCopilot={onCopilot} />
+          <button onClick={onBrowse} style={{ fontSize:'13px', color:'var(--text-secondary)', background:'none', border:'none', cursor:'pointer' }}>Browse all solutions →</button>
+        </div>
       </>
     }>
       <div className="fade-up" style={{ marginBottom:'36px' }}>
@@ -535,7 +586,7 @@ const RecommendedScreen = ({ answers, onPlay, onDomain, onBrowse, onRoadmap, onB
 };
 
 /* ─── ROADMAP SCREEN ─────────────────────────────────────────────── */
-const RoadmapScreen = ({ answers, onBack, onPlay }) => {
+const RoadmapScreen = ({ answers, onBack, onPlay, onCopilot }) => {
   const suggestions = useMemo(() => _getRoadmapPathwaySuggestions(answers), [answers]);
   const defaultPathway = suggestions[0]?.id || (_ROADMAP_PATHWAYS || [])[0]?.id;
   const [pathwayId, setPathwayId] = useState(defaultPathway);
@@ -610,7 +661,7 @@ const RoadmapScreen = ({ answers, onBack, onPlay }) => {
       <>
         <BackBtn onClick={onBack} label="Back to recommendations" />
         <Wordmark />
-        <span style={{ width:'120px' }} />
+        <AdvisorHeaderLink onCopilot={onCopilot} />
       </>
     }>
       <div className="fade-up" style={{ marginBottom:'34px', maxWidth:'820px' }}>
@@ -929,7 +980,7 @@ const FilterBar = ({ filters, setFilters, searchInput, setSearchInput, impactOpt
 };
 
 /* ─── DOMAINS GRID (stage navigation) ───────────────────────────── */
-const DomainsScreen = ({ stageFilter, onClearFilter, onDomain, onBack }) => {
+const DomainsScreen = ({ stageFilter, onClearFilter, onDomain, onBack, onCopilot }) => {
   const domains = stageFilter
     ? (_ALL_DOMAINS||[]).filter(d => d.stage === stageFilter)
     : (_ALL_DOMAINS||[]).filter(d => d.stage < 3);
@@ -937,7 +988,7 @@ const DomainsScreen = ({ stageFilter, onClearFilter, onDomain, onBack }) => {
   const isStage3View = stageFilter === 3;
 
   return (
-    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><span style={{ width:'60px' }} /></>}>
+    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><AdvisorHeaderLink onCopilot={onCopilot} /></>}>
       <div className="fade-up" style={{ marginBottom:'28px' }}>
         <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(26px,4vw,38px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'8px' }}>
           {stageFilter ? <span style={{ color }}>{label}</span> : 'All business areas'}
@@ -975,7 +1026,7 @@ const DomainsScreen = ({ stageFilter, onClearFilter, onDomain, onBack }) => {
 };
 
 /* ─── BROWSE SCREEN ──────────────────────────────────────────────── */
-const BrowseScreen = ({ onPlay, onDomain, onBack, stageFilter, onClearFilter }) => {
+const BrowseScreen = ({ onPlay, onDomain, onBack, stageFilter, onClearFilter, onCopilot }) => {
   const [filters, setFilters]         = useState({});
   const [searchInput, setSearchInput] = useState('');
 
@@ -1012,7 +1063,7 @@ const BrowseScreen = ({ onPlay, onDomain, onBack, stageFilter, onClearFilter }) 
   const totalPlays = domains.reduce((n,d) => n + d.plays.length, 0);
 
   return (
-    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><span style={{ width:'60px' }} /></>}>
+    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><AdvisorHeaderLink onCopilot={onCopilot} /></>}>
       <div className="fade-up" style={{ marginBottom:'24px' }}>
         <h2 style={{ fontFamily:'Playfair Display, serif', fontSize:'clamp(26px,4vw,38px)', fontWeight:400, color:'var(--text-primary)', marginBottom:'8px' }}>
           {stageFilter ? <><span style={{ color:stageColor }}>{stageLabel}</span> — solutions</> : 'All solutions'}
@@ -1067,7 +1118,7 @@ const DomainScreen = ({ domain, onPlay, onBack, onCopilot }) => {
   const isStage3 = domain.stage === 3;
 
   return (
-    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><span style={{ width:'60px' }} /></>}>
+    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><AdvisorHeaderLink onCopilot={onCopilot} /></>}>
       <div className="fade-up" style={{ marginBottom:'40px', maxWidth:'820px' }}>
         {isStage3 && (
           <div style={{ marginBottom:'10px' }}>
@@ -1592,9 +1643,9 @@ const App = () => {
       {screen==='landing'     && <LandingScreen onStart={() => setScreen('questions')} onBrowse={goBrowse} onStage={goToStage} onCopilot={() => openCopilot()} />}
       {screen==='questions'   && <QuestionsScreen onDone={a => { setAnswers(a); setScreen('recommended'); }} onBack={() => setScreen('landing')} onCopilot={() => openCopilot()} />}
       {screen==='recommended' && <RecommendedScreen answers={answers} onPlay={(p,d) => { setDomain(d); setPlay(p); }} onDomain={goToDomain} onBrowse={goBrowse} onRoadmap={goRoadmap} onBack={() => setScreen('questions')} onCopilot={openCopilot} />}
-      {screen==='roadmap'     && <RoadmapScreen answers={answers} onBack={() => setScreen((answers.pressures||[]).length ? 'recommended' : 'landing')} onPlay={(p,d) => { setDomain(d); setPlay(p); }} />}
-      {screen==='domains'     && <DomainsScreen stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} onDomain={d => d.id === 'expand_monetize' ? goToStage3Domain() : goToDomain(d)} onBack={() => setScreen('landing')} />}
-      {screen==='browse'      && <BrowseScreen onPlay={(p,d) => { setDomain(d); setPlay(p); }} onDomain={goToDomain} onBack={() => setScreen('landing')} stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} />}
+      {screen==='roadmap'     && <RoadmapScreen answers={answers} onBack={() => setScreen((answers.pressures||[]).length ? 'recommended' : 'landing')} onPlay={(p,d) => { setDomain(d); setPlay(p); }} onCopilot={() => openCopilot()} />}
+      {screen==='domains'     && <DomainsScreen stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} onDomain={d => d.id === 'expand_monetize' ? goToStage3Domain() : goToDomain(d)} onBack={() => setScreen('landing')} onCopilot={() => openCopilot()} />}
+      {screen==='browse'      && <BrowseScreen onPlay={(p,d) => { setDomain(d); setPlay(p); }} onDomain={goToDomain} onBack={() => setScreen('landing')} stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} onCopilot={() => openCopilot()} />}
       {screen==='domain' && domain && <DomainScreen domain={domain} onPlay={p => setPlay(p)} onBack={fromDomain} onCopilot={openCopilot} />}
 
       {play && domain && <SolutionCardPanel play={play} domain={domain} onClose={() => setPlay(null)} onCopilot={msg => { setPlay(null); openCopilot(msg); }} />}
