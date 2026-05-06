@@ -12,7 +12,38 @@ Single static HTML page + two data modules + Claude-backed AI advisor.
 | `Retail_AI_Canvas_V3.html` | The whole site — Babel-in-browser React, no build step |
 | `canvas-data.js` | 43 service cards across 11 domains, recommendation engine, copilot system prompt |
 | `roadmap-data.js` | 5-step roadmap nodes, dependency graph, pathway routing |
+| `api/advisor.php` | Self-contained Claude-backed advisor endpoint |
+| `knowledge/*.md` | What the advisor knows — see "Knowledge files" below |
+| `scripts/gen-knowledge.js` | Regenerates 02-cards.md / 03-roadmap.md from the data files |
 | `TZ_RETAIL_ASSISTANT_V1.md` | Spec for the assistant refresh currently in progress |
+
+## Knowledge files
+
+`api/advisor.php` builds its system prompt by concatenating every `.md`
+file in `knowledge/` in alphabetical order. This means the advisor's
+behaviour, tone, and grounding are editable **without touching code**.
+
+| File | What it controls |
+|------|------------------|
+| `knowledge/01-base.md` | Tone rules, stage model, response format. Edit to tune voice. |
+| `knowledge/02-cards.md` | All 43 services with full content. Auto-generated from canvas-data.js. |
+| `knowledge/03-roadmap.md` | 5-step roadmap with dependency graph. Auto-generated from roadmap-data.js. |
+| `knowledge/04-*.md`, `05-*.md`, … | (none yet) Drop in case studies, benchmarks, internal frameworks, FAQ, etc. The advisor reads them all. |
+
+To regenerate `02-cards.md` / `03-roadmap.md` after editing the source
+data files:
+
+```bash
+node scripts/gen-knowledge.js
+```
+
+The order is determined by filename (numeric prefix), so `04-case-studies.md`
+loads after the canvas catalog, `00-priority-override.md` would load before
+the base prompt.
+
+If the `knowledge/` directory is empty or missing, `advisor.php` falls back
+to a built-in minimal prompt — the advisor keeps working but loses the
+canvas-specific grounding.
 
 ## Audience
 

@@ -42,11 +42,13 @@ const RETAIL_ADVISOR_RATE_LIMIT         = 10;   // requests per window
 const RETAIL_ADVISOR_RATE_WINDOW        = 60;   // window length in seconds
 const RETAIL_ADVISOR_API_URL            = 'https://api.anthropic.com/v1/messages';
 
-// Same advisor voice as canvas-data.js → window.COPILOT_SYSTEM. Kept inline
-// here to make this file self-contained — when you change the voice, change
-// it in BOTH places. The JSON-output appendix is what ties responses to the
-// reasoning panel in the frontend (cited_card_ids, cited_roadmap_step, etc.).
-const RETAIL_ADVISOR_SYSTEM_PROMPT = <<<'PROMPT'
+// Hardcoded fallback prompt — used only if knowledge/ directory is empty
+// or unreadable. The real prompt is assembled at request time from the
+// .md files in retail/knowledge/ — see load_system_prompt(). This makes
+// the advisor's behaviour editable WITHOUT touching code: an editor can
+// edit knowledge/*.md (or add new files) and the next request picks up
+// the change.
+const RETAIL_ADVISOR_FALLBACK_PROMPT = <<<'PROMPT'
 You are a retail transformation advisor embedded in the Retail AI Canvas — a strategic tool for senior leaders at mid-sized food retailers.
 
 Stage model:
@@ -148,10 +150,11 @@ if (!$apiKey) {
 }
 
 try {
-    $userMsg = build_user_message($message, $context);
+    $userMsg      = build_user_message($message, $context);
+    $systemPrompt = load_system_prompt();
 
     // First attempt — normal pass.
-    $raw    = call_claude($apiKey, RETAIL_ADVISOR_SYSTEM_PROMPT, $userMsg);
+    $raw    = call_claude($apiKey, $systemPrompt, $userMsg);
     $parsed = parse_structured_response($raw);
     if ($parsed !== null) {
         respond_json(200, $parsed);
@@ -160,7 +163,7 @@ try {
     // Malformed JSON — single retry with a stricter reminder.
     error_log('retail-advisor: first response malformed, retrying');
     $strictMsg = $userMsg . "\n\nReminder: respond with ONLY valid JSON. No prose before or after. No code fences.";
-    $raw2      = call_claude($apiKey, RETAIL_ADVISOR_SYSTEM_PROMPT, $strictMsg);
+    $raw2      = call_claude($apiKey, $systemPrompt, $strictMsg);
     $parsed2   = parse_structured_response($raw2);
     if ($parsed2 !== null) {
         respond_json(200, $parsed2);
@@ -196,6 +199,44 @@ try {
 function load_api_key(): string
 {
     return load_env('ANTHROPIC_API_KEY');
+}
+
+/**
+ * Assemble the system prompt from the retail/knowledge/ directory. Reads
+ * every .md file in alphabetical order and concatenates them. This is the
+ * file-based grounding mechanism: editors can drop in 04-case-studies.md,
+ * 05-benchmarks.md, etc., without touching code, and the next request
+ * picks them up.
+ *
+ * The order matters — naming convention is NN-name.md so files sort
+ * deterministically. 01-base.md is the tone/format spec, 02-cards.md is
+ * the canvas catalog, 03-roadmap.md is the staged sequence. Anything
+ * after that extends the model's grounding (case studies, additional
+ * frameworks, FAQ, etc).
+ *
+ * Falls back to the hardcoded RETAIL_ADVISOR_FALLBACK_PROMPT if the
+ * knowledge directory is empty or missing — keeps the advisor working
+ * even on a stripped-down deploy.
+ */
+function load_system_prompt(): string
+{
+    $dir = __DIR__ . '/../knowledge';
+    if (!is_dir($dir)) {
+        return RETAIL_ADVISOR_FALLBACK_PROMPT;
+    }
+    $files = glob($dir . '/*.md') ?: [];
+    sort($files); // alphabetical — controls ordering
+    $parts = [];
+    foreach ($files as $f) {
+        $content = @file_get_contents($f);
+        if ($content !== false && trim($content) !== '') {
+            $parts[] = trim($content);
+        }
+    }
+    if (!$parts) {
+        return RETAIL_ADVISOR_FALLBACK_PROMPT;
+    }
+    return implode("\n\n---\n\n", $parts);
 }
 
 /**
