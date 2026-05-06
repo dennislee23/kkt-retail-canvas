@@ -1267,22 +1267,42 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
     if (isOpen && prefill) { setInput(prefill); setTimeout(() => inputRef.current?.focus(), 100); }
   }, [isOpen, prefill]);
 
-  // Send a question to the backend. Backend returns the structured shape
-  // {answer, cited_card_ids, cited_roadmap_step, reasoning_summary} per
-  // TZ §10.2 — we attach the reasoning fields to the assistant message so
-  // the upcoming reasoning panel (commit 6) can render citations and the
-  // roadmap step alongside the spoken answer. Until that panel lands, the
-  // reasoning data is captured but not displayed.
+  // Send a question to the streaming backend. The transport is Server-Sent
+  // Events (SSE): the backend emits `data: {"type":"text","text":"..."}`
+  // frames as Claude generates each token, then a final
+  // `data: {"type":"done","fullText":"<answer>\n<<<META>>>\n<json>"}` frame.
+  //
+  // The model is instructed (in knowledge/01-base.md) to produce the spoken
+  // answer first, then a literal `<<<META>>>` separator, then a JSON object
+  // with cited card ids, roadmap step, and reasoning summary. We stream the
+  // answer portion live to the transcript, then on `done` parse the meta
+  // block to populate the reasoning panel.
   const send = async text => {
     if (!text.trim() || loading) return;
-    setMsgs(m => [...m, { role:'user', text }]);
+    const userMsg = { role:'user', text };
+    setMsgs(m => [...m, userMsg]);
     setInput('');
     setLoading(true);
+
+    // Insert a placeholder assistant message and grow it as text streams in.
+    // Tracking the index lets us update by position without scanning.
+    let assistantIdx = -1;
+    setMsgs(m => {
+      assistantIdx = m.length;
+      return [...m, { role:'assistant', text: '' }];
+    });
+
+    const updateAssistant = (patch) => {
+      setMsgs(m => m.map((msg, i) => i === assistantIdx ? { ...msg, ...patch } : msg));
+    };
+
+    let visibleText = '';
+    let rawAccumulated = '';
 
     try {
       const response = await fetch(RETAIL_ADVISOR_API, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
         body: JSON.stringify({
           message: text,
           context: {
@@ -1293,35 +1313,81 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
         }),
       });
 
-      // Read the body even on non-2xx — backend mirrors the success shape
-      // on 4xx so we can surface useful error copy in the transcript.
-      let parsed = null;
-      try { parsed = await response.json(); } catch { /* keep null, fallback below */ }
-
-      if (!response.ok) {
+      // Pre-stream errors (rate limit, validation) come back as JSON.
+      const ct = response.headers.get('content-type') || '';
+      if (!response.ok || ct.includes('application/json')) {
+        let parsed = null;
+        try { parsed = await response.json(); } catch {}
         const friendly = response.status === 429
           ? 'Too many requests right now — please wait a moment and try again.'
-          : (parsed && parsed.answer) || 'Something went wrong — please try again.';
-        setMsgs(m => [...m, { role:'assistant', text: friendly }]);
-      } else if (parsed && typeof parsed.answer === 'string') {
-        setMsgs(m => [...m, {
-          role: 'assistant',
-          text: parsed.answer,
-          reasoning: {
-            cardIds:     Array.isArray(parsed.cited_card_ids) ? parsed.cited_card_ids : [],
-            roadmapStep: parsed.cited_roadmap_step || null,
-            summary:     typeof parsed.reasoning_summary === 'string' ? parsed.reasoning_summary : '',
-          },
-        }]);
-      } else {
-        // Backend returned 200 but body wasn't parseable. Rare — service.chat()
-        // catches malformed JSON server-side and falls back. If we see this,
-        // it's a network or proxy weirdness, not a model error.
-        setMsgs(m => [...m, { role:'assistant', text:'Got an empty response — please try again.' }]);
+          : (parsed && (parsed.message || parsed.answer)) || 'Something went wrong — please try again.';
+        updateAssistant({ text: friendly });
+        setLoading(false);
+        return;
+      }
+
+      // Stream loop — read SSE frames until the body ends.
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        let evtEnd;
+        while ((evtEnd = buffer.indexOf('\n\n')) !== -1) {
+          const frame = buffer.slice(0, evtEnd);
+          buffer = buffer.slice(evtEnd + 2);
+
+          // Each frame is one or more lines like `data: {...}`. We only
+          // emit one data line per frame, so a simple match suffices.
+          const m = frame.match(/^data:\s*(.+)$/m);
+          if (!m) continue;
+
+          let payload;
+          try { payload = JSON.parse(m[1]); } catch { continue; }
+
+          if (payload.type === 'text' && typeof payload.text === 'string') {
+            visibleText += payload.text;
+            rawAccumulated += payload.text;
+            updateAssistant({ text: visibleText });
+          } else if (payload.type === 'done') {
+            // Parse the META block (if any) for reasoning data. The full
+            // raw text came through `text` events; backend strips the
+            // META block from the displayed stream but the reasoning info
+            // is in `payload.fullText`. Either source works — prefer
+            // fullText since it's authoritative.
+            const fullRaw = (typeof payload.fullText === 'string' && payload.fullText)
+              ? payload.fullText
+              : rawAccumulated;
+            const parts = fullRaw.split('<<<META>>>');
+            const finalText = parts[0].trim();
+            let reasoning = null;
+            if (parts.length > 1) {
+              const metaRaw = parts[1].trim()
+                .replace(/^```(?:json)?\s*/i, '')
+                .replace(/```\s*$/i, '')
+                .trim();
+              try {
+                const meta = JSON.parse(metaRaw);
+                reasoning = {
+                  cardIds:     Array.isArray(meta.cited_card_ids) ? meta.cited_card_ids : [],
+                  roadmapStep: typeof meta.cited_roadmap_step === 'string' ? meta.cited_roadmap_step : null,
+                  summary:     typeof meta.reasoning_summary === 'string' ? meta.reasoning_summary : '',
+                };
+              } catch (e) { /* meta JSON malformed — leave reasoning null */ }
+            }
+            updateAssistant({ text: finalText || visibleText, reasoning });
+          }
+        }
       }
     } catch (err) {
-      // Network error, CORS rejection, DNS, etc — not a backend response.
-      setMsgs(m => [...m, { role:'assistant', text:'Connection issue reaching the advisor. Please try again.' }]);
+      // Network error, CORS rejection, DNS, abort, etc.
+      updateAssistant({ text: visibleText
+        ? visibleText + '\n\n(Connection dropped mid-answer. Please try again.)'
+        : 'Connection issue reaching the advisor. Please try again.' });
     }
 
     setLoading(false);
@@ -1393,14 +1459,19 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill }) => {
             padding:'22px 24px',
             display:'flex', flexDirection:'column', gap:'10px',
           }}>
-            {msgs.map((m, i) => (
-              <div key={i} style={{ display:'flex', justifyContent: m.role==='user' ? 'flex-end' : 'flex-start' }}>
-                <div style={{ maxWidth:'88%', padding:'10px 13px', borderRadius: m.role==='user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px', background: m.role==='user' ? 'var(--text-primary)' : 'var(--surface-alt)', fontSize:'13px', color: m.role==='user' ? '#FFF' : 'var(--text-secondary)', lineHeight:1.65, fontWeight:300 }}>
-                  {m.text}
+            {msgs.map((m, i) => {
+              // Skip rendering an empty assistant placeholder — the dots
+              // below cover that "waiting for first chunk" state instead.
+              if (m.role === 'assistant' && (!m.text || !m.text.trim())) return null;
+              return (
+                <div key={i} style={{ display:'flex', justifyContent: m.role==='user' ? 'flex-end' : 'flex-start' }}>
+                  <div style={{ maxWidth:'88%', padding:'10px 13px', borderRadius: m.role==='user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px', background: m.role==='user' ? 'var(--text-primary)' : 'var(--surface-alt)', fontSize:'13px', color: m.role==='user' ? '#FFF' : 'var(--text-secondary)', lineHeight:1.65, fontWeight:300, whiteSpace:'pre-wrap' }}>
+                    {m.text}
+                  </div>
                 </div>
-              </div>
-            ))}
-            {loading && (
+              );
+            })}
+            {loading && (msgs[msgs.length-1]?.text || '').trim() === '' && (
               <div style={{ display:'flex', gap:'4px', padding:'10px 14px' }}>
                 {[0,1,2].map(i => <div key={i} className="dot" style={{ animationDelay:`${i*160}ms` }} />)}
               </div>
@@ -1655,7 +1726,7 @@ function TweakRadio({ label, value, options, onChange }) {
 // first deploy, or local dev), the badge still shows the version label,
 // just without the git-detail tooltip.
 // ──────────────────────────────────────────────────────────────────────────
-const SITE_VERSION = '0.3.0';
+const SITE_VERSION = '0.3.1';
 const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
 
 const formatRelative = (isoString) => {

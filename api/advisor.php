@@ -1,45 +1,45 @@
 <?php
 /**
- * retail.kittykat.tech — Retail Advisor backend (self-contained).
+ * retail.kittykat.tech — Retail Advisor backend (self-contained, streaming).
+ *
+ * Streams Claude's response via Server-Sent Events so the user sees the
+ * answer appearing as it's generated, not in a single 8-second blob.
  *
  * Why this file exists:
- *   The fuel-management codebase already has a Claude-backed advisor service
- *   pattern (OptimusService) and we initially wired retail to a new endpoint
- *   inside that codebase. But the /rev3/ directory on the production host is
- *   gated by Apache Basic Auth and SetEnvIf+Satisfy bypass does not actually
- *   work on this hosting (zone.eu shared) — every test of /api/cron/* and
- *   /api/retail/* returns 401 before PHP even runs.
+ *   The fuel-management /rev3/ codebase is gated by Apache Basic Auth and
+ *   SetEnvIf bypass does not work on this hosting (zone.eu shared) — every
+ *   test of /api/cron/* and /api/retail/* there returned 401 before PHP ran.
  *
  *   This file lives inside the retail/ folder which has no Basic Auth, so
- *   anonymous public traffic from retail.kittykat.tech can reach it. Same
- *   semantics as the fuel-management RetailAdvisorService:
- *     - JSON contract: { message, context } -> { answer, cited_card_ids,
- *       cited_roadmap_step, reasoning_summary }
- *     - Claude Sonnet 4.5
- *     - retry/backoff on 429 / 5xx / network
- *     - prompt caching on the system prompt
- *     - retry-once on malformed JSON output, fall back to raw text
- *     - per-IP rate limit (10 req/min sliding window, file-based)
- *     - ZDR header sent
- *     - no user content in logs
+ *   anonymous public traffic from retail.kittykat.tech can reach it.
  *
- * Why inline (not requires/autoloader):
- *   Single static-host folder. No composer, no PSR-4, no shared deps.
- *   Everything self-contained makes deploy a trivial git-pull.
+ * Output format on the wire (SSE):
+ *   data: {"text": "Start with stock visibility..."}
+ *   data: {"text": "—"}
+ *   ...
+ *   data: {"done": true, "fullText": "Start with stock...\n<<<META>>>\n{...}"}
+ *
+ * The model itself is asked (in 01-base.md) to produce:
+ *   <plain answer>
+ *   <<<META>>>
+ *   {"cited_card_ids": [...], "cited_roadmap_step": "...", "reasoning_summary": "..."}
+ *
+ * The frontend streams the answer above <<<META>>> char-by-char into the
+ * transcript, then on `done` parses the meta block to populate the
+ * reasoning panel.
+ *
+ * Why inline (not autoloader): single static-host folder, no composer.
  */
 
 declare(strict_types=1);
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-// Model is overridable via CLAUDE_MODEL in retail/.env so a wrong default
-// doesn't require a code push to fix. Default points at a Sonnet alias which
-// Anthropic typically keeps mapped to the latest stable release.
 const RETAIL_ADVISOR_DEFAULT_MODEL      = 'claude-sonnet-4-5';
-const RETAIL_ADVISOR_MAX_TOKENS         = 1500;
-const RETAIL_ADVISOR_TIMEOUT_SECONDS    = 25;
+const RETAIL_ADVISOR_MAX_TOKENS         = 800;   // 120-word answer + ~200 tokens of meta JSON ≈ 350 tokens, 800 is generous
+const RETAIL_ADVISOR_TIMEOUT_SECONDS    = 60;    // streaming can take longer than non-stream
 const RETAIL_ADVISOR_MAX_MESSAGE_LENGTH = 2000;
-const RETAIL_ADVISOR_RATE_LIMIT         = 10;   // requests per window
-const RETAIL_ADVISOR_RATE_WINDOW        = 60;   // window length in seconds
+const RETAIL_ADVISOR_RATE_LIMIT         = 10;
+const RETAIL_ADVISOR_RATE_WINDOW        = 60;
 const RETAIL_ADVISOR_API_URL            = 'https://api.anthropic.com/v1/messages';
 
 // Hardcoded fallback prompt — used only if knowledge/ directory is empty
@@ -49,56 +49,25 @@ const RETAIL_ADVISOR_API_URL            = 'https://api.anthropic.com/v1/messages
 // edit knowledge/*.md (or add new files) and the next request picks up
 // the change.
 const RETAIL_ADVISOR_FALLBACK_PROMPT = <<<'PROMPT'
-You are a retail transformation advisor embedded in the Retail AI Canvas — a strategic tool for senior leaders at mid-sized food retailers.
+You are a retail transformation advisor for mid-sized food retailers. Speak in
+business language (margin, waste, availability, basket, working capital).
+Stay under 120 words.
 
-Stage model:
-- Stage 1 (Strengthen Core Operations): Data Foundation, Stock & Availability, Store Execution, Margin & Cash, Supplier Performance, Reporting & Decisions, Loss Prevention, Workforce & AI Assistants
-- Stage 2 (Optimize and Grow): Customers & Loyalty, Promotions & Pricing
-- Stage 3 (Expand and Monetize): optional strategic expansion — retail media, supplier activation, paid loyalty, partner ecosystems, new revenue pools — only relevant when the core is mature
+Output your answer as plain text, then on a new line the literal token
+<<<META>>>, then a JSON object:
 
-Tone rules:
-- Speak in retail business language: margin, waste, availability, basket, promotions, stock cover, working capital
-- Stay under 120 words unless asked for more depth
-- Lead with the business problem, not the technology
-- Explain trade-offs clearly and honestly — including sequencing and complexity
-- Admit when a diagnostic is needed before recommending a path
-- Avoid: "digital transformation", "hyper-personalization", "game-changing", "state-of-the-art"
-- Do not promise fixed financial results
-- Do not push platform-first programs by default — recommend pragmatic entry points
-- Stage 3 is optional and strategic. Do not recommend it as a default starting point.
-
-When asked where to start: ask one clarifying question about their biggest pressure, then recommend 2–3 relevant areas with brief rationale.
-When asked about a specific domain or play: explain the business problem first, the improvement second, what would need to be true third.
-
-RESPONSE FORMAT — STRUCTURED OUTPUT
-
-Always respond as valid JSON matching this shape, and nothing else:
-
-{
-  "answer": string,                  // your spoken response, plain text, max ~120 words
-  "cited_card_ids": string[],        // 0–3 card ids you drew on (e.g. "df-1", "cust-2", "promo-3")
-  "cited_roadmap_step": string|null, // one of: "see", "control", "optimize", "scale", "expand"; or null
-  "reasoning_summary": string        // 1–2 sentences explaining why these cards/step, max 40 words
-}
-
-Rules for structured output:
-- Output JSON only. No prose before or after. No code fences.
-- Use card ids exactly as they appear in the canvas (df-1, df-2, cust-1, promo-1, stock-2, etc.).
-- If your answer doesn't naturally cite specific cards (e.g. an abstract methodological question), return cited_card_ids: [] and a roadmap_step that fits.
-- "reasoning_summary" is read by a senior buyer and should be substantive, not "I picked these because they are relevant."
+{"cited_card_ids": [], "cited_roadmap_step": null, "reasoning_summary": ""}
 PROMPT;
 
 const RETAIL_ADVISOR_ALLOWED_ROADMAP_STEPS = ['see', 'control', 'optimize', 'scale', 'expand'];
 
 
-// ─── Entry ───────────────────────────────────────────────────────────────────
-header('Content-Type: application/json');
-
-// CORS — same-origin in production (retail.kittykat.tech calls retail.kittykat.tech)
-// so technically not needed, but echoing allows local dev from another origin
-// without breaking things.
+// ─── Entry: handle CORS, OPTIONS, method check ───────────────────────────────
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if ($origin === 'https://retail.kittykat.tech' || preg_match('#^http://(localhost|127\.0\.0\.1)(:\d+)?$#', $origin)) {
+$originAllowed = ($origin === 'https://retail.kittykat.tech')
+    || (preg_match('#^http://(localhost|127\.0\.0\.1)(:\d+)?$#', $origin) === 1);
+
+if ($originAllowed) {
     header('Access-Control-Allow-Origin: ' . $origin);
     header('Vary: Origin');
 }
@@ -112,25 +81,31 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'OPTIONS') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    respond_error(405, 'method_not_allowed', 'Only POST is allowed.');
+    header('Content-Type: application/json');
+    respond_error_json(405, 'method_not_allowed', 'Only POST is allowed.');
 }
 
 // ─── Rate limit (per-IP, sliding window, file-based) ─────────────────────────
+// Sets headers + emits a JSON 429 response and exits if the bucket is full.
+// SSE streaming doesn't start yet — we're still in the "before any echo" zone.
 rate_limit_check();
 
 // ─── Parse + validate request body ───────────────────────────────────────────
 $rawBody = file_get_contents('php://input');
 $body    = json_decode((string)$rawBody, true);
 if (!is_array($body)) {
-    respond_error(400, 'invalid_json', 'Request body must be valid JSON.');
+    header('Content-Type: application/json');
+    respond_error_json(400, 'invalid_json', 'Request body must be valid JSON.');
 }
 
 $message = isset($body['message']) && is_string($body['message']) ? trim($body['message']) : '';
 if ($message === '') {
-    respond_error(400, 'empty_message', 'Message is required.');
+    header('Content-Type: application/json');
+    respond_error_json(400, 'empty_message', 'Message is required.');
 }
 if (mb_strlen($message) > RETAIL_ADVISOR_MAX_MESSAGE_LENGTH) {
-    respond_error(400, 'message_too_long',
+    header('Content-Type: application/json');
+    respond_error_json(400, 'message_too_long',
         'Message must be ' . RETAIL_ADVISOR_MAX_MESSAGE_LENGTH . ' characters or fewer.');
 }
 
@@ -143,58 +118,187 @@ $context = [
     'play'      => is_string($rawCtx['play']   ?? null) ? $rawCtx['play']   : null,
 ];
 
-// ─── Generate the answer ─────────────────────────────────────────────────────
+// ─── Switch into SSE streaming mode ──────────────────────────────────────────
+// From this point on, everything is `data: {...}\n\n` frames. Errors are
+// emitted as text events too (so the frontend can display them in the
+// transcript) — no more http_response_code() changes possible after the
+// first echo.
+header('Content-Type: text/event-stream');
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('X-Accel-Buffering: no'); // hint to nginx not to buffer; harmless on Apache
+@ini_set('output_buffering',     'off');
+@ini_set('zlib.output_compression', 'off');
+@ini_set('implicit_flush',       '1');
+while (ob_get_level() > 0) @ob_end_flush();
+ob_implicit_flush(true);
+@set_time_limit(0);
+@ignore_user_abort(false);
+
+// Tell the frontend the stream has started — useful for showing a "thinking"
+// state immediately even before the first text token lands.
+sse_emit('start', ['model' => load_model()]);
+
 $apiKey = load_api_key();
 if (!$apiKey) {
-    respond_fallback('AI advisor is temporarily unavailable. Please try again later.');
+    sse_emit('text', ['text' => 'AI advisor is temporarily unavailable. Please try again later.']);
+    sse_emit('done', ['fullText' => '']);
+    exit;
 }
 
 try {
-    $userMsg      = build_user_message($message, $context);
     $systemPrompt = load_system_prompt();
+    $userMsg      = build_user_message($message, $context);
 
-    // First attempt — normal pass.
-    $raw    = call_claude($apiKey, $systemPrompt, $userMsg);
-    $parsed = parse_structured_response($raw);
-    if ($parsed !== null) {
-        respond_json(200, $parsed);
-    }
+    $accumulated = '';
+    stream_claude($apiKey, $systemPrompt, $userMsg, function(string $delta) use (&$accumulated) {
+        $accumulated .= $delta;
 
-    // Malformed JSON — single retry with a stricter reminder.
-    error_log('retail-advisor: first response malformed, retrying');
-    $strictMsg = $userMsg . "\n\nReminder: respond with ONLY valid JSON. No prose before or after. No code fences.";
-    $raw2      = call_claude($apiKey, $systemPrompt, $strictMsg);
-    $parsed2   = parse_structured_response($raw2);
-    if ($parsed2 !== null) {
-        respond_json(200, $parsed2);
-    }
+        // Don't stream the META block to the user — they don't need to see
+        // raw JSON appearing. Only stream the part before <<<META>>>.
+        $metaPos = strpos($accumulated, '<<<META>>>');
+        if ($metaPos === false) {
+            // Still in the answer portion — emit the new delta.
+            sse_emit('text', ['text' => $delta]);
+        } else {
+            // META marker reached. Emit only the portion of this delta that
+            // came before the marker (if any), then suppress further deltas
+            // for the answer transcript.
+            $deltaLen   = strlen($delta);
+            $beforeMeta = strlen($accumulated) - $metaPos;
+            if ($beforeMeta < $deltaLen) {
+                $tail = substr($delta, 0, $deltaLen - $beforeMeta);
+                if ($tail !== '') sse_emit('text', ['text' => $tail]);
+            }
+            // Subsequent deltas land entirely after the marker → silent.
+        }
+    });
 
-    // Both attempts unparseable — return raw text in answer field so the
-    // frontend at least shows something useful.
-    error_log('retail-advisor: retry also malformed, falling back to raw text');
-    respond_json(200, [
-        'answer'             => trim((string)$raw2) ?: trim((string)$raw),
-        'cited_card_ids'     => [],
-        'cited_roadmap_step' => null,
-        'reasoning_summary'  => '',
-    ]);
+    sse_emit('done', ['fullText' => $accumulated]);
 
 } catch (\Throwable $e) {
-    // Never bubble vendor internals (credit balance, API key, etc) to the user.
-    error_log('retail-advisor error: ' . $e->getMessage());
-    respond_fallback(friendly_error($e->getMessage()));
+    error_log('retail-advisor stream error: ' . $e->getMessage());
+    sse_emit('text', ['text' => "\n\n" . friendly_error($e->getMessage())]);
+    sse_emit('done', ['fullText' => '']);
 }
 
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Helpers below
+// Helpers
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
+ * Emit one Server-Sent Event frame and flush. Per the SSE spec, each event
+ * is `data: <json>\n\n`. We don't use the `event:` field since the payload
+ * itself carries the type marker (text / start / done / error).
+ */
+function sse_emit(string $type, array $payload): void
+{
+    $payload['type'] = $type;
+    echo 'data: ' . json_encode($payload, JSON_UNESCAPED_UNICODE) . "\n\n";
+    @flush();
+}
+
+/**
+ * Stream Claude's response via curl + WRITEFUNCTION. The callback is
+ * invoked once for each text delta the model produces. Anthropic's SSE
+ * format wraps each delta in a `content_block_delta` event — we parse
+ * those events out of the chunked response and pass just the text to
+ * the callback.
+ *
+ * Throws on network / API errors. Caller handles user-facing fallback.
+ */
+function stream_claude(string $apiKey, string $system, string $user, callable $onText): void
+{
+    $payload = json_encode([
+        'model'      => load_model(),
+        'max_tokens' => RETAIL_ADVISOR_MAX_TOKENS,
+        'stream'     => true,
+        'system'     => [
+            ['type' => 'text', 'text' => $system, 'cache_control' => ['type' => 'ephemeral']],
+        ],
+        'messages'   => [
+            ['role' => 'user', 'content' => $user],
+        ],
+    ], JSON_UNESCAPED_UNICODE);
+
+    $sseBuffer = '';
+    $apiError  = null;
+    $apiHttp   = 0;
+
+    $ch = curl_init(RETAIL_ADVISOR_API_URL);
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => $payload,
+        CURLOPT_RETURNTRANSFER => false, // streaming via WRITEFUNCTION
+        CURLOPT_TIMEOUT        => RETAIL_ADVISOR_TIMEOUT_SECONDS,
+        CURLOPT_HTTPHEADER     => [
+            'Content-Type: application/json',
+            'x-api-key: ' . $apiKey,
+            'anthropic-version: 2023-06-01',
+            'anthropic-zdr: true',
+            'Accept: text/event-stream',
+        ],
+        CURLOPT_WRITEFUNCTION  => function($ch, string $chunk) use (&$sseBuffer, &$apiError, &$apiHttp, $onText) {
+            // Capture first-chunk HTTP status. If it's an error response
+            // (4xx/5xx), the body is JSON not SSE — accumulate and report.
+            if ($apiHttp === 0) {
+                $apiHttp = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            }
+            if ($apiHttp >= 400) {
+                $apiError = ($apiError ?? '') . $chunk;
+                return strlen($chunk);
+            }
+
+            $sseBuffer .= $chunk;
+            // Parse out complete SSE events (terminated by \n\n).
+            while (($pos = strpos($sseBuffer, "\n\n")) !== false) {
+                $event = substr($sseBuffer, 0, $pos);
+                $sseBuffer = substr($sseBuffer, $pos + 2);
+
+                // Each event is one or more lines like `event: name` and
+                // `data: payload`. We only care about the `data:` line.
+                $dataLine = null;
+                foreach (preg_split('/\r?\n/', $event) as $line) {
+                    if (strncmp($line, 'data:', 5) === 0) {
+                        $dataLine = ltrim(substr($line, 5));
+                        break;
+                    }
+                }
+                if ($dataLine === null) continue;
+
+                $parsed = json_decode($dataLine, true);
+                if (!is_array($parsed)) continue;
+
+                // text_delta is what the model is producing word-by-word.
+                if (($parsed['type'] ?? '') === 'content_block_delta'
+                    && (($parsed['delta']['type'] ?? '') === 'text_delta')
+                    && isset($parsed['delta']['text']) && is_string($parsed['delta']['text'])) {
+                    $onText($parsed['delta']['text']);
+                }
+                // We deliberately ignore message_start, content_block_start,
+                // ping, message_delta, message_stop — they don't carry text
+                // and the "done" marker on our side comes from curl finishing.
+            }
+
+            return strlen($chunk);
+        },
+    ]);
+
+    $ok      = curl_exec($ch);
+    $curlErr = curl_error($ch);
+    curl_close($ch);
+
+    if ($apiError !== null) {
+        $msg = "HTTP {$apiHttp}: " . substr(trim($apiError), 0, 500);
+        throw new \RuntimeException("Claude API {$msg}");
+    }
+    if ($ok === false || $curlErr !== '') {
+        throw new \RuntimeException('Claude API curl error: ' . $curlErr);
+    }
+}
+
+/**
  * Read ANTHROPIC_API_KEY from the .env file in the retail folder root.
- * The .env is one level up from this file (retail/api/advisor.php → retail/.env).
- * Operator pastes the key during deploy setup — same file that already holds
- * DEPLOY_KEY for the update.html / deploy.php pair.
  */
 function load_api_key(): string
 {
@@ -202,47 +306,7 @@ function load_api_key(): string
 }
 
 /**
- * Assemble the system prompt from the retail/knowledge/ directory. Reads
- * every .md file in alphabetical order and concatenates them. This is the
- * file-based grounding mechanism: editors can drop in 04-case-studies.md,
- * 05-benchmarks.md, etc., without touching code, and the next request
- * picks them up.
- *
- * The order matters — naming convention is NN-name.md so files sort
- * deterministically. 01-base.md is the tone/format spec, 02-cards.md is
- * the canvas catalog, 03-roadmap.md is the staged sequence. Anything
- * after that extends the model's grounding (case studies, additional
- * frameworks, FAQ, etc).
- *
- * Falls back to the hardcoded RETAIL_ADVISOR_FALLBACK_PROMPT if the
- * knowledge directory is empty or missing — keeps the advisor working
- * even on a stripped-down deploy.
- */
-function load_system_prompt(): string
-{
-    $dir = __DIR__ . '/../knowledge';
-    if (!is_dir($dir)) {
-        return RETAIL_ADVISOR_FALLBACK_PROMPT;
-    }
-    $files = glob($dir . '/*.md') ?: [];
-    sort($files); // alphabetical — controls ordering
-    $parts = [];
-    foreach ($files as $f) {
-        $content = @file_get_contents($f);
-        if ($content !== false && trim($content) !== '') {
-            $parts[] = trim($content);
-        }
-    }
-    if (!$parts) {
-        return RETAIL_ADVISOR_FALLBACK_PROMPT;
-    }
-    return implode("\n\n---\n\n", $parts);
-}
-
-/**
  * Read CLAUDE_MODEL override from .env. Falls back to the default if not set.
- * Lets ops swap the model id (e.g. when Anthropic releases a new Sonnet)
- * without a code push.
  */
 function load_model(): string
 {
@@ -251,8 +315,7 @@ function load_model(): string
 }
 
 /**
- * Generic .env reader. Single-line `KEY=value` format, no quotes processing,
- * no expansion. Comment lines (starting with #) skipped.
+ * Generic .env reader. Single-line `KEY=value` format, no quotes processing.
  */
 function load_env(string $key): string
 {
@@ -272,8 +335,33 @@ function load_env(string $key): string
 }
 
 /**
+ * Assemble the system prompt from the retail/knowledge/ directory.
+ * Globs every .md file in alphabetical order and concatenates with --- separators.
+ * Falls back to RETAIL_ADVISOR_FALLBACK_PROMPT if the directory is empty.
+ */
+function load_system_prompt(): string
+{
+    $dir = __DIR__ . '/../knowledge';
+    if (!is_dir($dir)) {
+        return RETAIL_ADVISOR_FALLBACK_PROMPT;
+    }
+    $files = glob($dir . '/*.md') ?: [];
+    sort($files);
+    $parts = [];
+    foreach ($files as $f) {
+        $content = @file_get_contents($f);
+        if ($content !== false && trim($content) !== '') {
+            $parts[] = trim($content);
+        }
+    }
+    if (!$parts) {
+        return RETAIL_ADVISOR_FALLBACK_PROMPT;
+    }
+    return implode("\n\n---\n\n", $parts);
+}
+
+/**
  * Embed canvas context in the user message so the model can ground its picks.
- * Compact — system prompt is the heavy part and is cached.
  */
 function build_user_message(string $message, array $context): string
 {
@@ -292,133 +380,7 @@ function build_user_message(string $message, array $context): string
 }
 
 /**
- * Call Claude with retry/backoff. 4xx (auth, bad request) is not retried —
- * won't recover on its own. 429/5xx/network errors are retried up to 3 times
- * with growing backoff. Anthropic prompt caching is enabled on the system
- * prompt — first call writes the cache, subsequent calls within 5 min read
- * at ~10% of input cost.
- */
-function call_claude(string $apiKey, string $system, string $user): string
-{
-    $payload = json_encode([
-        'model'      => load_model(),
-        'max_tokens' => RETAIL_ADVISOR_MAX_TOKENS,
-        'system'     => [
-            ['type' => 'text', 'text' => $system, 'cache_control' => ['type' => 'ephemeral']],
-        ],
-        'messages'   => [
-            ['role' => 'user', 'content' => $user],
-        ],
-    ], JSON_UNESCAPED_UNICODE);
-
-    $maxAttempts = 3;
-    $lastError   = 'unknown';
-    $start       = microtime(true);
-
-    for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
-        $ch = curl_init(RETAIL_ADVISOR_API_URL);
-        curl_setopt_array($ch, [
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => $payload,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => RETAIL_ADVISOR_TIMEOUT_SECONDS,
-            CURLOPT_HTTPHEADER     => [
-                'Content-Type: application/json',
-                'x-api-key: ' . $apiKey,
-                'anthropic-version: 2023-06-01',
-                'anthropic-zdr: true',
-            ],
-        ]);
-
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlErr  = curl_error($ch);
-        curl_close($ch);
-
-        if ($curlErr === '' && $httpCode === 200) {
-            $data = json_decode((string)$response, true);
-            if ($data && isset($data['content'][0]['text'])) {
-                $latencyMs = (int)((microtime(true) - $start) * 1000);
-                error_log("retail-advisor ok attempt={$attempt} latency_ms={$latencyMs}");
-                return $data['content'][0]['text'];
-            }
-            throw new \RuntimeException('Claude API unexpected response shape');
-        }
-
-        $lastError = $curlErr !== ''
-            ? "curl error: {$curlErr}"
-            : "HTTP {$httpCode}: " . mb_substr((string)$response, 0, 500);
-
-        $retryable = ($curlErr !== '') || $httpCode === 429 || $httpCode >= 500;
-        if (!$retryable || $attempt === $maxAttempts) {
-            if (!$retryable) {
-                throw new \RuntimeException("Claude API {$lastError}");
-            }
-            break;
-        }
-        // 500ms then 1500ms backoff between attempts
-        usleep($attempt * 500000 + ($attempt - 1) * 1000000);
-        error_log("retail-advisor retry {$attempt}/{$maxAttempts} after {$lastError}");
-    }
-
-    throw new \RuntimeException("Claude API failed after {$maxAttempts} attempts: {$lastError}");
-}
-
-/**
- * Parse + validate the structured JSON the model is supposed to return.
- * Returns null on any validation failure (caller decides whether to retry
- * or fall back). Strips accidental markdown fences. Tolerates whitespace.
- */
-function parse_structured_response(string $raw): ?array
-{
-    $clean = trim($raw);
-    if (preg_match('/^```(?:json)?\s*([\s\S]*?)\s*```$/m', $clean, $m)) {
-        $clean = trim($m[1]);
-    }
-    $data = json_decode($clean, true);
-    if (!is_array($data) && preg_match('/\{[\s\S]*\}/', $clean, $m)) {
-        $data = json_decode($m[0], true);
-    }
-    if (!is_array($data)) {
-        return null;
-    }
-
-    $answer = isset($data['answer']) && is_string($data['answer']) ? trim($data['answer']) : '';
-    if ($answer === '') {
-        return null;
-    }
-
-    $cardIds = [];
-    if (isset($data['cited_card_ids']) && is_array($data['cited_card_ids'])) {
-        foreach ($data['cited_card_ids'] as $id) {
-            if (is_string($id) && $id !== '') {
-                $cardIds[] = $id;
-                if (count($cardIds) >= 3) break;
-            }
-        }
-    }
-
-    $step = $data['cited_roadmap_step'] ?? null;
-    if (!is_string($step) || !in_array($step, RETAIL_ADVISOR_ALLOWED_ROADMAP_STEPS, true)) {
-        $step = null;
-    }
-
-    $summary = isset($data['reasoning_summary']) && is_string($data['reasoning_summary'])
-        ? trim($data['reasoning_summary'])
-        : '';
-
-    return [
-        'answer'             => $answer,
-        'cited_card_ids'     => $cardIds,
-        'cited_roadmap_step' => $step,
-        'reasoning_summary'  => $summary,
-    ];
-}
-
-/**
- * Per-IP sliding window. Same approach as PublicRateLimiter.php in fuel-management:
- * single JSON file in tmp, hashed IPs as keys, prune old timestamps each call.
- * Fail-open: if filesystem hiccups, allow the request (logged).
+ * Per-IP sliding window. Same approach as PublicRateLimiter.php.
  */
 function rate_limit_check(): void
 {
@@ -434,15 +396,11 @@ function rate_limit_check(): void
     }
 
     try {
-        if (!flock($fp, LOCK_EX)) {
-            error_log('retail-advisor: rate limiter cannot lock — failing open');
-            return;
-        }
+        if (!flock($fp, LOCK_EX)) return;
 
         $raw  = stream_get_contents($fp);
         $data = ($raw === '' || $raw === false) ? [] : (json_decode($raw, true) ?: []);
 
-        // Prune across all IPs so the file doesn't grow forever.
         $cutoff = $now - RETAIL_ADVISOR_RATE_WINDOW;
         foreach ($data as $k => $stamps) {
             $kept = array_values(array_filter($stamps, fn($t) => $t >= $cutoff));
@@ -461,21 +419,19 @@ function rate_limit_check(): void
             fclose($fp);
 
             http_response_code(429);
+            header('Content-Type: application/json');
             header("Retry-After: {$retryAfter}");
             echo json_encode([
-                'answer'             => "Too many requests. Limit: " . RETAIL_ADVISOR_RATE_LIMIT
-                                       . " per " . RETAIL_ADVISOR_RATE_WINDOW . "s.",
-                'cited_card_ids'     => [],
-                'cited_roadmap_step' => null,
-                'reasoning_summary'  => '',
-                'error'              => 'rate_limited',
-                'retry_after'        => $retryAfter,
+                'error'       => 'rate_limited',
+                'message'     => "Too many requests. Limit: " . RETAIL_ADVISOR_RATE_LIMIT
+                                 . " per " . RETAIL_ADVISOR_RATE_WINDOW . "s.",
+                'retry_after' => $retryAfter,
             ]);
             exit;
         }
 
-        $stamps[]     = $now;
-        $data[$key]   = $stamps;
+        $stamps[]   = $now;
+        $data[$key] = $stamps;
 
         ftruncate($fp, 0); rewind($fp);
         fwrite($fp, json_encode($data));
@@ -499,10 +455,6 @@ function client_ip(): string
     return $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 }
 
-/**
- * Map upstream API errors to short user-readable messages. Same pattern as
- * OptimusService::friendlyAiError (KKT-99) but in EN — retail audience.
- */
 function friendly_error(string $rawMessage): string
 {
     $lower = mb_strtolower($rawMessage);
@@ -524,30 +476,19 @@ function friendly_error(string $rawMessage): string
     return 'Something went wrong — please try again.';
 }
 
-function respond_json(int $statusCode, array $payload): void
+/**
+ * JSON error reply for the pre-streaming validation phase. Once SSE has
+ * started we use sse_emit('text', ...) instead.
+ */
+function respond_error_json(int $statusCode, string $errorCode, string $message): void
 {
     http_response_code($statusCode);
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE);
-    exit;
-}
-
-function respond_error(int $statusCode, string $errorCode, string $message): void
-{
-    respond_json($statusCode, [
+    echo json_encode([
         'answer'             => $message,
         'cited_card_ids'     => [],
         'cited_roadmap_step' => null,
         'reasoning_summary'  => '',
         'error'              => $errorCode,
-    ]);
-}
-
-function respond_fallback(string $message): void
-{
-    respond_json(200, [
-        'answer'             => $message,
-        'cited_card_ids'     => [],
-        'cited_roadmap_step' => null,
-        'reasoning_summary'  => '',
-    ]);
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
 }
