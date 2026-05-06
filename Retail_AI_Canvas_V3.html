@@ -1592,7 +1592,17 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill, onGoToCard, onGoToSta
           if (payload.type === 'text' && typeof payload.text === 'string') {
             visibleText += payload.text;
             rawAccumulated += payload.text;
-            updateAssistant({ text: visibleText });
+            // Safety net: the prompt forbids markdown in answers, but Sonnet
+            // sometimes drifts and adds **bold** or `backticks` for emphasis.
+            // Strip the most common offenders before display so the user
+            // never sees raw asterisks. We do this on the FULL accumulated
+            // visibleText each tick (cheap — answer is < 200 words) so partial
+            // tokens like "**stoc" → "**stock-3**" don't leave orphans.
+            const cleaned = visibleText
+              .replace(/\*\*(.+?)\*\*/g, '$1')   // **bold** → bold
+              .replace(/(?<!\*)\*(?!\*)([^*\n]+?)\*(?!\*)/g, '$1')  // *italic* → italic (avoid **)
+              .replace(/`([^`\n]+?)`/g, '$1');   // `code` → code
+            updateAssistant({ text: cleaned });
           } else if (payload.type === 'done') {
             // Parse the META block (if any) for reasoning data. The full
             // raw text came through `text` events; backend strips the
@@ -1603,7 +1613,12 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill, onGoToCard, onGoToSta
               ? payload.fullText
               : rawAccumulated;
             const parts = fullRaw.split('<<<META>>>');
-            const finalText = parts[0].trim();
+            // Strip drift markdown (same rules as the streaming path).
+            const finalText = parts[0]
+              .replace(/\*\*(.+?)\*\*/g, '$1')
+              .replace(/(?<!\*)\*(?!\*)([^*\n]+?)\*(?!\*)/g, '$1')
+              .replace(/`([^`\n]+?)`/g, '$1')
+              .trim();
             let reasoning = null;
             if (parts.length > 1) {
               const metaRaw = parts[1].trim()
@@ -1985,7 +2000,7 @@ function TweakRadio({ label, value, options, onChange }) {
 // first deploy, or local dev), the badge still shows the version label,
 // just without the git-detail tooltip.
 // ──────────────────────────────────────────────────────────────────────────
-const SITE_VERSION = '0.6.1';
+const SITE_VERSION = '0.6.2';
 const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
 
 const formatRelative = (isoString) => {
