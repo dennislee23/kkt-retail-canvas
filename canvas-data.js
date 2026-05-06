@@ -69,14 +69,14 @@ window.STAGE_META = {
 
 // ─── PRESSURE → DOMAIN RELEVANCE ─────────────────────────────────────────────
 window.PRESSURE_DOMAINS = {
-  margin:    ['margin', 'stock', 'promos', 'suppliers', 'reporting'],
-  stock:     ['stock', 'stores', 'suppliers', 'margin'],
+  margin:    ['margin', 'stock', 'warehouse_transport', 'promos', 'suppliers', 'reporting'],
+  stock:     ['stock', 'warehouse_transport', 'stores', 'suppliers', 'margin'],
   promos:    ['promos', 'customer', 'margin', 'suppliers'],
   customer:  ['customer', 'promos', 'reporting', 'data_foundation'],
-  stores:    ['stores', 'stock', 'reporting', 'loss_prevention'],
-  reporting: ['reporting', 'data_foundation', 'margin', 'stores'],
-  suppliers: ['suppliers', 'stock', 'promos', 'margin'],
-  labor:     ['workforce_ai', 'stores', 'margin', 'reporting'],
+  stores:    ['stores', 'stock', 'warehouse_transport', 'reporting', 'loss_prevention'],
+  reporting: ['reporting', 'data_foundation', 'margin', 'warehouse_transport', 'stores'],
+  suppliers: ['suppliers', 'stock', 'warehouse_transport', 'promos', 'margin'],
+  labor:     ['workforce_ai', 'warehouse_transport', 'stores', 'margin', 'reporting'],
   fraud:     ['loss_prevention', 'margin', 'stores', 'suppliers'],
   growth:    ['customer', 'promos', 'suppliers', 'expand_monetize'],
 };
@@ -87,6 +87,7 @@ window.DOMAIN_AREAS = {
   customer:        ['marketing', 'commercial'],
   promos:          ['commercial', 'marketing'],
   stock:           ['supply', 'store_ops', 'commercial'],
+  warehouse_transport: ['supply', 'store_ops', 'exec'],
   stores:          ['store_ops', 'exec', 'workforce'],
   margin:          ['finance', 'commercial', 'exec'],
   suppliers:       ['procurement', 'commercial', 'supply'],
@@ -109,6 +110,7 @@ window.DOMAINS = {
       {
         id: 'df-1',
         title: 'One Trusted Retail Data Foundation',
+        kktExperience: true,
         cardText: 'Connect POS, ERP, loyalty, stock, supplier, finance, and master data into one trusted base for retail decisions.',
         shortPain: 'Retail teams often have the data they need somewhere, but not in a form they can use together. Fresh availability sits in one place, promotional activity in another, loyalty behavior somewhere else, supplier claims in finance, and product hierarchies differ across systems. The result is slow analysis, repeated reconciliation, inconsistent answers, and business decisions made from partial views.',
         whatWeDo: 'Connect the highest-priority retail data sources into one governed data layer designed around real business questions, not technical completeness. Clean and align the shared master data it depends on: products, stores, suppliers, customers, categories, pricing, stock, and finance references. Start with the data needed for the first priority use cases, then extend the layer as more decisions depend on it.',
@@ -126,6 +128,7 @@ window.DOMAINS = {
       {
         id: 'df-2',
         title: 'One Version of Key Numbers',
+        kktExperience: true,
         cardText: 'Define the key retail metrics once and make business owners accountable for the data areas behind them.',
         shortPain: 'Metrics like margin, availability, waste, promo ROI, shrinkage, and supplier service often mean different things to different teams. Even when reports exist, people debate the calculation before they debate the decision. Key data areas such as product, supplier, store, customer, pricing, and stock also lack clear business ownership, so quality problems repeat across projects.',
         whatWeDo: 'Define the most important retail KPIs once, in business language, with agreed calculation logic. Connect those definitions to reporting, dashboards, alerts, and analytics outputs so the same logic is reused rather than rebuilt. Assign clear business ownership for key data areas and introduce practical quality checks that catch problems before they reach decisions.',
@@ -143,6 +146,7 @@ window.DOMAINS = {
       {
         id: 'df-3',
         title: 'Data Input and Document Processing',
+        kktExperience: true,
         cardText: 'Turn supplier files, invoices, contracts, forms, emails, photos, and spreadsheets into usable, validated business data.',
         shortPain: 'Retail data often enters the business through messy channels: PDF invoices, supplier price lists, product files, contracts, delivery notes, store audit forms, photos, emails, WhatsApp messages, and manual spreadsheets. Teams spend time copying, checking, reformatting, and chasing information before it can be used. Errors at this stage quietly affect stock, pricing, claims, master data, supplier settlement, and reporting.',
         whatWeDo: 'Automate high-volume data intake and document processing where manual handling creates delay, errors, or hidden cost. Extract key fields, validate them against business rules, flag exceptions, and route items to the right owner for approval or correction. Start with one or two painful document flows, then expand once the validation logic and ownership model are working.',
@@ -170,6 +174,7 @@ window.DOMAINS = {
       {
         id: 'cust-1',
         title: 'Customer Segmentation and Value Targeting',
+        kktExperience: true,
         cardText: 'Segment customers by behavior, value, basket, and response so campaigns target the groups worth growing.',
         shortPain: 'Too many customers receive the same offers despite very different habits, needs, value, and future potential. Marketing budget works harder for some groups than others, but without clear segmentation and value prioritization the business cannot tell where to invest, where to protect relationships, and where it is simply funding low-return discounting.',
         whatWeDo: 'Segment customers by behavior, visit frequency, spend, margin contribution, basket composition, category attachment, lifecycle stage, and promotional response. Link those segments to differentiated offer logic, channel, and timing. Define which customers should be protected, grown, reactivated, developed into broader missions, or excluded from costly campaigns.',
@@ -187,6 +192,7 @@ window.DOMAINS = {
       {
         id: 'cust-2',
         title: 'Retention, Churn Prevention and Win-Back',
+        kktExperience: true,
         cardText: 'Detect customers cooling off early and trigger targeted win-back actions before they are fully lost.',
         shortPain: 'Customers drift before they disappear. They visit less often, buy fewer categories, reduce basket value, and stop responding to campaigns. The business usually notices after they are already lost, when recovery is harder, more expensive, and less likely to work.',
         whatWeDo: 'Detect early behavioral signals that indicate a customer is cooling off: declining visit frequency, narrowing category breadth, falling basket value, and reduced promo response. Score which customers are worth recovering and what intervention is most likely to work. Support automated win-back campaigns and loyalty triggers while the customer is still reachable.',
@@ -221,6 +227,7 @@ window.DOMAINS = {
       {
         id: 'cust-4',
         title: 'Customer Feedback and Service Intelligence',
+        kktExperience: true,
         cardText: 'Turn scattered feedback and service contacts into clear themes, satisfaction drivers, routed cases, and action workflows.',
         shortPain: 'Customer feedback arrives through surveys, app reviews, complaints, social channels, call centers, WhatsApp, and support messages. It is often scattered, processed too slowly, and rarely connected to the operational teams that can fix the root cause. Good customers can leave without the business understanding the repeated issues that pushed them away.',
         whatWeDo: 'Aggregate feedback and service contacts from active channels into one structured view. Use AI to classify by theme, store, category, sentiment, severity, and likely cause. Route recurring issues to the teams that can act on them. For routine inquiries and standard complaints, introduce AI-assisted response drafting or controlled automation so human service teams focus on cases that require judgment.',
@@ -248,6 +255,7 @@ window.DOMAINS = {
       {
         id: 'promo-1',
         title: 'Promotion Performance and Campaign Intelligence',
+        kktExperience: true,
         cardText: 'Separate promotions that create real incremental value from campaigns that mainly subsidize existing demand.',
         shortPain: 'Promotions drive volume but not always value. Too many campaigns discount demand that would have happened anyway, and without clear performance measurement the same mechanics get repeated regardless of whether they created real incremental return. Supplier funding and trade spend can also be judged on activity delivered rather than value created.',
         whatWeDo: 'Evaluate campaigns against uplift, margin effect, mix shift, cannibalization, post-promo dip, store cluster performance, customer segment response, and supplier funding. Build a learning base so the business knows which mechanics work in which categories, for which customer groups, in which store clusters, and at which times of year. Make that intelligence available before the next campaign is planned.',
@@ -265,6 +273,7 @@ window.DOMAINS = {
       {
         id: 'promo-2',
         title: 'Targeted Campaign and Offer Planning',
+        kktExperience: true,
         cardText: 'Plan campaigns by customer segment, store profile, category role, and timing instead of running one broad approach.',
         shortPain: 'Many promotional calendars are built around category rotation, supplier negotiation, and commercial habit rather than customer behavior and demand signals. Campaigns go too broadly, at the wrong time, with the wrong mechanic, spending budget on customers who do not need the incentive and missing the ones who do.',
         whatWeDo: 'Shape campaigns by customer segment, store profile, category role, and seasonal demand rather than applying one approach everywhere. Match mechanics such as discount depth, bundle, multi-buy, loyalty reward, or personalized offer to the behavior the business wants to drive. Build a more disciplined campaign planning process with clearer expected return before budget is committed.',
@@ -360,6 +369,7 @@ window.DOMAINS = {
       {
         id: 'stock-2',
         title: 'Replenishment and Availability Protection',
+        kktExperience: true,
         cardText: 'Improve ordering logic and detect stockout risk early enough to protect availability before customers feel it.',
         shortPain: 'Even with reasonable demand estimates, ordering quality suffers because supplier constraints, pack sizes, lead times, order cycles, and delivery calendars force the business into excess or shortage. Stockouts are often discovered after customers have already felt them, even though signals existed earlier in demand pace, cover, and replenishment timing.',
         whatWeDo: 'Combine forecasts with supplier constraints, lead times, pack sizes, delivery frequency, and store behavior to improve replenishment logic. Adapt rules by product type, store profile, and supplier rather than applying one method everywhere. Surface stockout risk early and prioritize the items where availability matters most. Where the control environment is mature, routine ordering can progress toward autonomous replenishment with human review only for exceptions.',
@@ -411,7 +421,69 @@ window.DOMAINS = {
     ],
   },
 
-  // ── 5. Store Execution ────────────────────────────────────────────────────
+  // ── 5. Warehouse & Transport Operations ──────────────────────────────────
+  warehouse_transport: {
+    id: 'warehouse_transport', stage: 1, tier: 2,
+    title: 'Warehouse & Transport Operations',
+    subtitle: 'Make warehouse and transport execution visible before depot and delivery problems hit stores.',
+    context: 'A retailer can have enough stock on paper and still fail operationally between supplier, warehouse, depot, vehicle, and store. Receiving delays, stock mismatches, pick errors, poor loading discipline, weak route planning, and late delivery visibility create avoidable stockouts, excess buffers, manual escalation, and hidden logistics cost. This domain covers the WMS/TMS-level operating layer between inbound supply and store availability.',
+    plays: [
+      {
+        id: 'wt-1',
+        title: 'Warehouse Stock Accuracy and Flow Control',
+        cardText: 'Make warehouse stock, receiving, put-away, and pick accuracy visible before depot errors become store availability problems.',
+        shortPain: 'Retailers can have enough stock in the ERP while warehouse reality tells a different story. Receiving delays, put-away gaps, location errors, stock mismatches, uncontrolled substitutions, and weak cycle-count discipline create phantom availability, emergency corrections, and avoidable write-offs. Teams often discover the problem only when stores chase missing stock.',
+        whatWeDo: 'Build a control view across receiving, put-away, location accuracy, stock adjustments, cycle counts, pick accuracy, and aging stock inside the warehouse or depot. Identify where records drift from physical reality, where throughput stalls, and where rules need tightening. Where a WMS exists, use its event trail to expose the exceptions that matter. Where it does not, start by creating the minimum transaction visibility needed for control.',
+        helpImprove: 'Stock accuracy, fewer warehouse-driven availability failures, faster root-cause analysis, lower emergency rework, and cleaner replenishment execution.',
+        dataBehind: 'Connects ASNs or purchase orders, goods receipt events, put-away confirmations, location data, stock adjustments, cycle counts, pick confirmations, returns, aging, and exception logs. The analytics show where warehouse stock is wrong, where flow is stalling, and which SKUs, zones, suppliers, or shifts create repeated accuracy or throughput issues.',
+        speed: 'Scoped Project', requirements: 'Moderate Requirements', cost: '$$$',
+        impact: ['Control & Visibility', 'Productivity'],
+        pressureRelevance: ['stock', 'stores', 'margin'],
+        diagnosticQuestions: [
+          'How often do stores, planners, or buyers discover that warehouse stock is wrong only after availability is already affected?',
+          'Can you see where receiving, put-away, pick, or cycle-count failures are concentrated by zone, SKU, shift, or supplier?',
+          'If you have a WMS today, is it mainly recording transactions or actually surfacing the operational exceptions that matter?',
+        ],
+      },
+      {
+        id: 'wt-2',
+        title: 'Picking, Loading and Shift Productivity',
+        cardText: 'Show where warehouse labor, picking, staging, and loading effort is being lost through poor flow, bad slotting, and weak exception control.',
+        shortPain: 'Warehouse labor cost rises quietly when picking paths are inefficient, slotting is outdated, loads are rebuilt repeatedly, and supervisors spend the shift chasing exceptions manually. Productivity debates then get reduced to headcount rather than exposing where flow design, rules, replenishment timing, or loading discipline are actually creating the waste.',
+        whatWeDo: 'Measure warehouse productivity at the level where managers can act: picks per hour, travel time, staging delay, load completion, dock dwell, rework, and exception frequency. Separate structural problems from one-off misses. Show whether the problem sits in slotting logic, order waves, labor deployment, replenishment timing, loading sequence, or weak operating discipline.',
+        helpImprove: 'Warehouse productivity, lower avoidable labor cost, cleaner loading, fewer late departures, and better use of supervisory attention.',
+        dataBehind: 'Connects order waves, pick tasks, travel paths, slotting logic, staging timestamps, loading events, dock usage, labor rosters, exceptions, and departure times. The analytics show where time is being lost, which process steps create rework, and what part of the warehouse flow needs redesign rather than more manual effort.',
+        speed: 'Quick Start', requirements: 'Moderate Requirements', cost: '$$',
+        impact: ['Productivity', 'Margin & Cash'],
+        pressureRelevance: ['labor', 'margin', 'stock'],
+        diagnosticQuestions: [
+          'Can you explain low warehouse productivity through measurable flow losses, or does it usually get described as a generic labor problem?',
+          'Where do late departures really begin: order release, picking, staging, loading, or vehicle readiness?',
+          'Is slotting and wave logic updated based on actual demand and flow patterns, or mainly through operational habit?',
+        ],
+      },
+      {
+        id: 'wt-3',
+        title: 'Transport Planning and Delivery Control',
+        kktExperience: true,
+        cardText: 'Use TMS-style planning and exception control to improve route quality, OTIF delivery, and transport cost.',
+        shortPain: 'Store replenishment and delivery movements often rely on dispatcher memory, fixed habits, and partial visibility. Vehicles leave underfilled, routes change late, unload delays accumulate, and management cannot see which failures come from planning, carrier performance, depot loading, or store readiness. Transport becomes expensive and reactive without a clear control layer.',
+        whatWeDo: 'Build a transport control layer across route planning, vehicle utilization, delivery windows, stop sequence, dwell time, proof of delivery, and route exceptions. Use TMS data where available, or create a lighter control view around dispatch and GPS events where it is not. Separate planning-quality issues from execution failure so the business knows whether to fix routing rules, carrier performance, depot discipline, or store-side readiness.',
+        helpImprove: 'OTIF delivery, transport cost control, route quality, vehicle utilization, earlier exception management, and fewer store-side surprises caused by transport failure.',
+        dataBehind: 'Connects dispatch plans, route plans, GPS or telematics events, loading times, delivery windows, arrival and unload timestamps, proof-of-delivery records, carrier performance, and store readiness signals. The analytics show where routes are inefficient, where dwell time is excessive, where execution deviates from plan, and which transport failures are systemic rather than isolated.',
+        speed: 'Scoped Project', requirements: 'Moderate Requirements', cost: '$$$',
+        impact: ['Control & Visibility', 'Margin & Cash'],
+        pressureRelevance: ['stock', 'margin', 'stores', 'suppliers'],
+        diagnosticQuestions: [
+          'How clearly can you separate route-planning mistakes from late loading, carrier failure, or store-side unload delay?',
+          'Do you have one view of OTIF, vehicle utilization, dwell time, and route exceptions across the network?',
+          'If you already use a TMS, does it give management a usable control view or mainly a transport transaction log?',
+        ],
+      },
+    ],
+  },
+
+  // ── 6. Store Execution ────────────────────────────────────────────────────
   stores: {
     id: 'stores', stage: 1, tier: 2,
     title: 'Store Execution',
@@ -489,7 +561,7 @@ window.DOMAINS = {
     ],
   },
 
-  // ── 6. Margin & Cash ──────────────────────────────────────────────────────
+  // ── 7. Margin & Cash ──────────────────────────────────────────────────────
   margin: {
     id: 'margin', stage: 1, tier: 1,
     title: 'Margin & Cash',
@@ -499,6 +571,7 @@ window.DOMAINS = {
       {
         id: 'margin-1',
         title: 'Margin Visibility and Profitability Analytics',
+        kktExperience: true,
         cardText: 'Show where margin is made or lost across stores, categories, suppliers, campaigns, and trading periods.',
         shortPain: 'Most food retailers can see total sales well enough. What they cannot see clearly or early enough is where margin is being made, where it is eroding, and which combination of commercial decisions, supplier terms, promotional activity, waste, and operating costs is driving the movement. By month-end, many corrective options are already gone.',
         whatWeDo: 'Build a granular, forward-leaning margin view across store, category, supplier, campaign, and trading period. Bring together price realization, discounting, markdowns, supplier funding, waste, shrinkage, and cost pressure so leadership can see where margin is changing while there is still room to respond.',
@@ -567,7 +640,7 @@ window.DOMAINS = {
     ],
   },
 
-  // ── 7. Supplier Performance ───────────────────────────────────────────────
+  // ── 8. Supplier Performance ───────────────────────────────────────────────
   suppliers: {
     id: 'suppliers', stage: 1, tier: 2,
     title: 'Supplier Performance',
@@ -628,7 +701,7 @@ window.DOMAINS = {
     ],
   },
 
-  // ── 8. Reporting & Decisions ──────────────────────────────────────────────
+  // ── 9. Reporting & Decisions ──────────────────────────────────────────────
   reporting: {
     id: 'reporting', stage: 1, tier: 1,
     title: 'Reporting & Decisions',
@@ -638,6 +711,7 @@ window.DOMAINS = {
       {
         id: 'rep-1',
         title: 'Management Reports and Performance Views',
+        kktExperience: true,
         cardText: 'Give every management level one trusted KPI view, automated packs, and comparable performance diagnostics.',
         shortPain: 'Monday meetings start with debating which spreadsheet is right. Different teams produce different answers because metrics are calculated differently across systems and reporting cycles. Management packs take too long to assemble, and store or category comparisons are hard to interpret because structural differences are mixed with genuine underperformance.',
         whatWeDo: 'Define the core KPIs management actually uses and build a consistent reporting layer so those numbers refresh automatically. Deliver the right level of detail to each management tier: executive summary, regional and category views, store and supply chain detail. Add benchmarking logic so similar stores, categories, and regions can be compared in a way that distinguishes genuine performance gaps from structural differences.',
@@ -655,6 +729,7 @@ window.DOMAINS = {
       {
         id: 'rep-2',
         title: 'Alerts and Plain-Language Answers',
+        kktExperience: true,
         cardText: 'Surface the exceptions that need action and let managers ask trusted business questions without waiting for an analyst.',
         shortPain: 'Retail leaders do not need to read everything every day, but most reporting presents everything at equal weight. Important exceptions are buried in dashboards or discovered late. At the same time, managers repeatedly ask similar questions about waste, stock, stores, promotions, suppliers, and margin, but must wait for analysts or search through reports to answer them.',
         whatWeDo: 'Define the exceptions that genuinely deserve attention across sales, stock, margin, waste, supplier performance, labor, and store execution. Route alerts to the right owner with clear priority and context. Provide self-service and conversational access to trusted business data so managers can investigate routine questions during the decision window. Where useful, connect operating documents and process knowledge so the same assistant can answer practical "what do I do next" questions.',
@@ -672,7 +747,7 @@ window.DOMAINS = {
     ],
   },
 
-  // ── 9. Loss Prevention ────────────────────────────────────────────────────
+  // ── 10. Loss Prevention ───────────────────────────────────────────────────
   loss_prevention: {
     id: 'loss_prevention', stage: 1, tier: 2,
     title: 'Loss Prevention',
@@ -682,6 +757,7 @@ window.DOMAINS = {
       {
         id: 'lp-1',
         title: 'Checkout Fraud and Transaction Abuse',
+        kktExperience: true,
         cardText: 'Monitor refunds, voids, discounts, loyalty activity, cashier behavior, and self-checkout patterns for suspicious abuse.',
         shortPain: 'Suspicious activity at checkout often looks like normal retail noise: refunds, voids, discounts, overrides, loyalty adjustments, no-sales, and self-checkout exceptions. Manual spot checks cannot detect repeated low-value patterns across stores, shifts, cashiers, and customer accounts. By the time the pattern is obvious, value has already leaked.',
         whatWeDo: 'Monitor transaction patterns continuously by cashier, store, shift, customer account, payment type, and exception type. Separate normal operating variation from patterns that deserve investigation. Prioritize cases by likelihood and value at risk so audit and control teams focus on meaningful patterns rather than reviewing large volumes of low-value noise.',
@@ -716,7 +792,7 @@ window.DOMAINS = {
     ],
   },
 
-  // ── 10. Workforce & AI Assistants ─────────────────────────────────────────
+  // ── 11. Workforce & AI Assistants ─────────────────────────────────────────
   workforce_ai: {
     id: 'workforce_ai', stage: 1, tier: 2,
     title: 'Workforce & AI Assistants',
@@ -726,6 +802,7 @@ window.DOMAINS = {
       {
         id: 'wai-1',
         title: 'AI Office, Meeting and CRM Assistants',
+        kktExperience: true,
         cardText: 'Capture meetings, extract tasks, draft updates, prepare CRM notes, and reduce routine office administration.',
         shortPain: 'Retail managers and head-office teams lose time to meeting notes, follow-up messages, CRM updates, weekly summaries, action tracking, and routine document drafting. Important decisions and tasks often remain buried in calls, emails, chats, and personal notes. The issue is not lack of work ethic; it is that too much coordination still depends on manual capture and memory.',
         whatWeDo: 'Set up practical AI assistants for everyday management work:\n- meeting transcription, summaries, decisions, tasks, owners, and deadlines;\n- CRM and customer-contact notes, follow-up drafts, and call summaries;\n- weekly update drafts, action trackers, and management note preparation;\n- routine email, memo, presentation, and report drafting under company style rules.',
@@ -760,6 +837,7 @@ window.DOMAINS = {
       {
         id: 'wai-3',
         title: 'HR, Recruitment and Onboarding Assistant',
+        kktExperience: true,
         cardText: 'Support recruitment, onboarding, policy Q&A, training content, and employee communication with AI.',
         shortPain: 'Retail HR teams handle high-volume recruitment, onboarding, policy questions, training materials, schedule communication, and employee documentation. Store managers often repeat the same explanations to new staff, while candidates and employees wait for basic information. This slows hiring, onboarding, and daily workforce support.',
         whatWeDo: 'Set up HR assistants for practical workforce tasks:\n- screen and summarize candidate applications against agreed role criteria;\n- draft job descriptions, interview questions, and candidate communications;\n- answer employee questions from approved policies and onboarding materials;\n- create training summaries, checklists, and store-ready learning content;\n- support manager communication around absence, rota changes, and basic HR processes.',
@@ -777,6 +855,7 @@ window.DOMAINS = {
       {
         id: 'wai-4',
         title: 'Internal Knowledge and Store Operations Assistant',
+        kktExperience: true,
         cardText: 'Give staff fast answers from SOPs, policies, manuals, product guidance, and store operating procedures.',
         shortPain: 'Operational knowledge is often scattered across shared folders, PDFs, chat history, printed manuals, and individual memory. Store teams need quick answers during trading hours: how to run a promotion, handle a refund, check freshness, escalate a maintenance issue, prepare an audit, or follow a safety process. If answers are hard to find, stores improvise and execution becomes inconsistent.',
         whatWeDo: 'Create an internal knowledge assistant connected to approved company content:\n- store SOPs, operating manuals, policies, audit checklists, and process guides;\n- product handling, freshness, hygiene, and safety instructions;\n- escalation paths for maintenance, supplier, customer, HR, and compliance issues;\n- role-specific answers for store teams, field managers, and head-office users.',
@@ -794,6 +873,7 @@ window.DOMAINS = {
       {
         id: 'wai-5',
         title: 'Customer Service and Complaint Assistant',
+        kktExperience: true,
         cardText: 'Answer routine customer questions, draft complaint responses, classify issues, and escalate complex cases with context.',
         shortPain: 'Customer service teams handle repeated questions about opening hours, loyalty points, promotions, refunds, product availability, delivery, store issues, and complaint status. Routine contacts consume capacity, while complex complaints often reach a person without enough context. Slow or inconsistent responses can turn small issues into customer dissatisfaction.',
         whatWeDo: 'Deploy a customer service assistant or controlled service agent across selected channels:\n- answer routine questions from approved content;\n- draft complaint responses in the company tone;\n- classify issues by store, category, severity, and topic;\n- retrieve customer, loyalty, order, or complaint context where available;\n- escalate cases that require human judgement with a prepared summary and recommended next step.',
@@ -947,6 +1027,7 @@ window.ALL_DOMAINS = [
   DOMAINS.customer,
   DOMAINS.promos,
   DOMAINS.stock,
+  DOMAINS.warehouse_transport,
   DOMAINS.stores,
   DOMAINS.margin,
   DOMAINS.suppliers,
@@ -1014,7 +1095,7 @@ window.getRecommendedServices = function(answers) {
     if (svc.speed === 'Strategic Build' && improvement !== 'strategic') score -= 2;
 
     const catalogIndex = allServices.indexOf(svc);
-    score += Math.max(0, (43 - catalogIndex) * 0.1);
+    score += Math.max(0, (46 - catalogIndex) * 0.1);
 
     let reason = '';
     if (pressureHits.length > 0) {
@@ -1065,7 +1146,7 @@ window.sortPlays = function(plays, sortBy = 'default') {
 window.COPILOT_SYSTEM = `You are a retail transformation advisor embedded in the Retail AI Canvas — a strategic tool for senior leaders at mid-sized food retailers.
 
 Stage model:
-- Stage 1 (Strengthen Core Operations): Data Foundation, Stock & Availability, Store Execution, Margin & Cash, Supplier Performance, Reporting & Decisions, Loss Prevention, Workforce & AI Assistants
+- Stage 1 (Strengthen Core Operations): Data Foundation, Stock & Availability, Warehouse & Transport Operations, Store Execution, Margin & Cash, Supplier Performance, Reporting & Decisions, Loss Prevention, Workforce & AI Assistants
 - Stage 2 (Optimize and Grow): Customers & Loyalty, Promotions & Pricing
 - Stage 3 (Expand and Monetize): optional strategic expansion — retail media, supplier activation, paid loyalty, partner ecosystems, new revenue pools — only relevant when the core is mature
 
@@ -1081,21 +1162,4 @@ Tone rules:
 - Stage 3 is optional and strategic. Do not recommend it as a default starting point.
 
 When asked where to start: ask one clarifying question about their biggest pressure, then recommend 2–3 relevant areas with brief rationale.
-When asked about a specific domain or play: explain the business problem first, the improvement second, what would need to be true third.
-
-RESPONSE FORMAT — STRUCTURED OUTPUT
-
-Always respond as valid JSON matching this shape, and nothing else:
-
-{
-  "answer": string,                  // your spoken response, plain text, max ~120 words
-  "cited_card_ids": string[],        // 0–3 card ids you drew on (e.g. "df-1", "cust-2", "promo-3")
-  "cited_roadmap_step": string|null, // one of: "see", "control", "optimize", "scale", "expand"; or null
-  "reasoning_summary": string        // 1–2 sentences explaining why these cards/step, max 40 words
-}
-
-Rules for structured output:
-- Output JSON only. No prose before or after. No code fences.
-- Use card ids exactly as they appear in the canvas (df-1, df-2, cust-1, promo-1, stock-2, etc.).
-- If your answer doesn't naturally cite specific cards (e.g. an abstract methodological question), return cited_card_ids: [] and a roadmap_step that fits.
-- "reasoning_summary" is read by a senior buyer and should be substantive, not "I picked these because they are relevant."`;
+When asked about a specific domain or play: explain the business problem first, the improvement second, what would need to be true third.`;
