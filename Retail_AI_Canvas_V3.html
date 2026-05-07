@@ -1505,12 +1505,41 @@ const SolutionCardPanel = ({ play, domain, onClose, onCopilot }) => {
 // themselves in, not abstract prompts about the canvas. Each one names a
 // scale, a pain point, and asks for a path. Designed to feel like the user
 // pasting their own real question, not picking from a menu of FAQs.
+//
+// Used when the advisor is opened from a generic entry point (Cmd+K, header
+// link, screen-level CopilotNudge). When the advisor is opened FROM a
+// specific service card, the prompts switch to clarifyingPromptsForCard()
+// instead — see below.
 const STARTER_PROMPTS = [
   '200-store grocery, shrinkage rising 0.4 pts/year — where do I start?',
   "Just acquired 60 stores. No clean master data. What's the Stage 1 priority?",
   "BI exists, but management still doesn't trust the numbers. What's broken?",
   'Loyalty program identifies customers but they’re not changing behavior. What now?',
 ];
+
+// Card-specific clarifying questions — what a senior buyer naturally asks
+// the advisor when looking at a specific service: "is this for us?",
+// "what's needed first?", "where does this go wrong?". The card title is
+// woven into the first question so the user sees their current context
+// surfaced; the other three rely on the request's `play` field to anchor
+// the answer.
+//
+// IMPORTANT: don't confuse these with the card's `diagnosticQuestions` array
+// in canvas-data.js — those are SELF-ASSESSMENT questions for the human
+// reader of the card ("can YOU trace a specific customer segment today?").
+// They live inside the card detail panel and stay there. The advisor's
+// starters are different: questions the user asks the advisor ABOUT the
+// service, not questions about the user's own state.
+function clarifyingPromptsForCard(play) {
+  if (!play || !play.title) return STARTER_PROMPTS;
+  const t = play.title;
+  return [
+    `Is "${t}" the right fit for our situation?`,
+    `What needs to be in place before we start this?`,
+    `What's a realistic first step here?`,
+    `Where does this typically go wrong?`,
+  ];
+}
 
 // Retail advisor backend. Self-contained PHP script in the same retail/
 // folder (same-origin → no CORS preflight → no Basic-Auth headaches).
@@ -2039,16 +2068,21 @@ const CopilotPanel = ({ isOpen, onClose, context, prefill, playForStarters, onGo
             )}
 
             {msgs.length === 1 && (() => {
-              // Card-specific starter prompts: when the advisor was opened
-              // from a service card (via the "Tell me more" button on
-              // SolutionCardPanel), use that card's diagnosticQuestions —
-              // they're already curated 3 questions per card targeting the
-              // specific service. When opened from a generic entry point
-              // (Cmd+K, header link, screen nudge), fall back to the four
-              // generic STARTER_PROMPTS.
-              const cardQuestions = playForStarters?.diagnosticQuestions;
-              const usingCardQuestions = Array.isArray(cardQuestions) && cardQuestions.length > 0;
-              const starters = usingCardQuestions ? cardQuestions.slice(0, 4) : STARTER_PROMPTS;
+              // Starter prompts: when the advisor was opened FROM a service
+              // card (via the "Tell me more" button on SolutionCardPanel),
+              // surface clarifying questions about that card — "is this
+              // right for us?", "what's needed first?", "where does this
+              // go wrong?". Anchored to the card title so the user sees
+              // their context. Otherwise (generic Cmd+K / header / nudge),
+              // fall back to the four situated STARTER_PROMPTS.
+              //
+              // Note: we deliberately do NOT use the card's diagnosticQuestions
+              // here — those are self-assessment for the reader, not advisor
+              // prompts. See clarifyingPromptsForCard() above for rationale.
+              const usingCardQuestions = !!(playForStarters && playForStarters.title);
+              const starters = usingCardQuestions
+                ? clarifyingPromptsForCard(playForStarters)
+                : STARTER_PROMPTS;
               const label = usingCardQuestions
                 ? `Questions about "${playForStarters.title}"`
                 : 'Or start with one of these';
@@ -2294,7 +2328,7 @@ function TweakRadio({ label, value, options, onChange }) {
 // first deploy, or local dev), the badge still shows the version label,
 // just without the git-detail tooltip.
 // ──────────────────────────────────────────────────────────────────────────
-const SITE_VERSION = '0.7.1';
+const SITE_VERSION = '0.7.2';
 const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
 
 const formatRelative = (isoString) => {
