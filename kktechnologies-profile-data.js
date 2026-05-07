@@ -406,6 +406,7 @@ window.KKTECH_PROFILE = {
             line: '15+ years in FMCG/Retail, RGM and Commercial Excellence',
             chips: ['PepsiCo', 'Philip Morris', 'Bonduelle', 'Efes'],
             initials: 'PM',
+            photo: 'team/pavel-mityshkin.jpg',
           },
           {
             name: 'Yana Kujrikhina',
