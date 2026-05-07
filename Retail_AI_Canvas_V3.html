@@ -1311,9 +1311,28 @@ const KKProfileScreen = ({ section, onBack }) => {
               {(group.members || []).map(member => (
                 <div key={member.name} style={{ padding:'16px', background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'6px', display:'grid', gap:'12px' }}>
                   <div style={{ display:'flex', gap:'12px', alignItems:'flex-start' }}>
-                    <div style={{ width:'42px', height:'42px', borderRadius:'50%', background:'var(--surface-alt)', border:'1px solid var(--border)', color:'var(--accent)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:700, flexShrink:0 }}>
-                      {member.initials}
-                    </div>
+                    {member.photo ? (
+                      <img src={member.photo} alt={member.name}
+                        style={{ width:'42px', height:'42px', borderRadius:'50%', objectFit:'cover', border:'1px solid var(--border)', flexShrink:0, display:'block' }}
+                        onError={e => {
+                          // Photo missing or 404 — fall back to initials avatar
+                          // so the layout doesn't break with a broken-image icon.
+                          // Replaces the <img> with a div of the same shape.
+                          const fallback = document.createElement('div');
+                          fallback.textContent = member.initials || '';
+                          Object.assign(fallback.style, {
+                            width:'42px', height:'42px', borderRadius:'50%',
+                            background:'var(--surface-alt)', border:'1px solid var(--border)',
+                            color:'var(--accent)', display:'flex', alignItems:'center',
+                            justifyContent:'center', fontSize:'12px', fontWeight:'700', flexShrink:'0',
+                          });
+                          e.currentTarget.replaceWith(fallback);
+                        }} />
+                    ) : (
+                      <div style={{ width:'42px', height:'42px', borderRadius:'50%', background:'var(--surface-alt)', border:'1px solid var(--border)', color:'var(--accent)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:700, flexShrink:0 }}>
+                        {member.initials}
+                      </div>
+                    )}
                     <div>
                       <h3 style={{ fontSize:'16px', color:'var(--text-primary)', fontWeight:600, marginBottom:'6px', lineHeight:1.25 }}>{member.name}</h3>
                       <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.55, fontWeight:300 }}>{member.line}</p>
@@ -2328,7 +2347,7 @@ function TweakRadio({ label, value, options, onChange }) {
 // first deploy, or local dev), the badge still shows the version label,
 // just without the git-detail tooltip.
 // ──────────────────────────────────────────────────────────────────────────
-const SITE_VERSION = '0.7.2';
+const SITE_VERSION = '0.7.3';
 const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
 
 const formatRelative = (isoString) => {

@@ -424,6 +424,7 @@ window.KKTECH_PROFILE = {
             line: '19+ years in enterprise procurement and international supply chains',
             chips: ['SIBUR', 'Rosatom / NovaWind', 'United Wagon Company', 'Bombardier JV'],
             initials: 'PG',
+            photo: 'team/pavel-gabaidullin.jpg',
           },
           {
             name: 'Levan Buachidze',
