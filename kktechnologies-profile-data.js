@@ -418,6 +418,7 @@ window.KKTECH_PROFILE = {
             line: '15+ years in banking, finance operations and digital transformation',
             chips: ['Gazprombank'],
             initials: 'NT',
+            photo: 'team/nikolay-terentyev.png',
           },
           {
             name: 'Pavel Gabaidullin',
