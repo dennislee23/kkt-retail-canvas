@@ -402,7 +402,7 @@ window.KKTECH_PROFILE = {
         title: 'Domain Expertise',
         members: [
           {
-            name: 'Pavel Minyshkin',
+            name: 'Pavel Mityshkin',
             line: '15+ years in FMCG/Retail, RGM and Commercial Excellence',
             chips: ['PepsiCo', 'Philip Morris', 'Bonduelle', 'Efes'],
             initials: 'PM',
@@ -412,6 +412,7 @@ window.KKTECH_PROFILE = {
             line: '10+ years in Oil & Gas, process consulting and digitalization',
             chips: ['EY', 'Gazprom Oil'],
             initials: 'YK',
+            photo: 'team/yana-kujrikhina.jpg',
           },
           {
             name: 'Nikolay Terentyev',
@@ -438,6 +439,7 @@ window.KKTECH_PROFILE = {
             line: '15+ years in technical consulting and operational transformation',
             chips: ['Lukoil', 'DNV', 'TUV Rheinland'],
             initials: 'GS',
+            photo: 'team/george-shevardenidze.jpg',
           },
         ],
       },
@@ -450,18 +452,21 @@ window.KKTECH_PROFILE = {
             line: '20+ years in enterprise data, cloud and AI platforms',
             chips: ['Microsoft', 'Snowflake', 'Cisco', 'Confluent', 'Upbound'],
             initials: 'NR',
+            photo: 'team/nageye-rascid.jpg',
           },
           {
             name: 'Denis Perov',
             line: '15+ years in software engineering and AI/ML solution architecture',
             chips: ['Aviasales'],
             initials: 'DP',
+            photo: 'team/denis-perov.jpg',
           },
           {
             name: 'Igor Trifonov',
             line: '10+ years in data engineering, BI and enterprise data solutions',
             chips: ['Customertimes', 'Sberbank', 'ATON'],
             initials: 'IT',
+            photo: 'team/igor-trifonov.png',
           },
         ],
       },
