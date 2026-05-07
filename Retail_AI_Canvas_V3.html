@@ -1313,7 +1313,7 @@ const KKProfileScreen = ({ section, onBack }) => {
                   <div style={{ display:'flex', gap:'12px', alignItems:'flex-start' }}>
                     {member.photo ? (
                       <img src={member.photo} alt={member.name}
-                        style={{ width:'42px', height:'42px', borderRadius:'50%', objectFit:'cover', border:'1px solid var(--border)', flexShrink:0, display:'block' }}
+                        style={{ width:'42px', height:'42px', borderRadius:'50%', objectFit:'cover', flexShrink:0, display:'block' }}
                         onError={e => {
                           // Photo missing or 404 — fall back to initials avatar
                           // so the layout doesn't break with a broken-image icon.
@@ -2347,7 +2347,7 @@ function TweakRadio({ label, value, options, onChange }) {
 // first deploy, or local dev), the badge still shows the version label,
 // just without the git-detail tooltip.
 // ──────────────────────────────────────────────────────────────────────────
-const SITE_VERSION = '0.7.6';
+const SITE_VERSION = '0.7.7';
 const VERSION_REPO_URL = 'https://github.com/dennislee23/kkt-retail-canvas';
 
 const formatRelative = (isoString) => {
