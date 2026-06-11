@@ -434,6 +434,7 @@ window.KKTECH_PROFILE = {
             line: '5+ years in digital logistics, supply chain and retail category management',
             chips: ['Deutsche Bahn', 'Daily Group'],
             initials: 'LB',
+            photo: 'team/levan-buachidze.jpg',
           },
           {
             name: 'George Shevardenidze',
