@@ -32,6 +32,10 @@ RedirectMatch 403 ^/\.git(/|$)
     <FilesMatch "\.html$">
         Header set Cache-Control "public, max-age=300, must-revalidate"
     </FilesMatch>
+    # device-hint.js changes between versions — keep it fresh.
+    <FilesMatch "^device-hint\.js$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
 </IfModule>
 
 # Compress text assets. Mostly relevant for canvas-data.js (~110 KB) which
