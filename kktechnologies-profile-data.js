@@ -443,6 +443,13 @@ window.KKTECH_PROFILE = {
             initials: 'GS',
             photo: 'team/george-shevardenidze.jpg',
           },
+          {
+            name: 'Dennis Nepomniashy',
+            line: 'Data-driven marketing and software-integration project management, run from the data',
+            chips: ['HP', 'Business IT', 'MCSI'],
+            initials: 'DN',
+            photo: 'team/dennis-nepomniashy.jpg',
+          },
         ],
       },
       {
