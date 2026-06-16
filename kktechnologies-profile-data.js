@@ -6,9 +6,9 @@ window.KKTECH_PROFILE = {
   },
 
   nav: [
-    { id: 'company', label: 'KKTechnologies' },
-    { id: 'how-we-work', label: 'How We Work' },
-    { id: 'team', label: 'Team & Experts' },
+    { id: 'company', label: 'About' },
+    { id: 'how-we-work', label: 'How we work' },
+    { id: 'team', label: 'Team' },
     { id: 'contact', label: 'Contact' },
   ],
 
