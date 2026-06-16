@@ -2491,13 +2491,8 @@ const App = () => {
     const onKey = (e) => {
       // Toggle on Cmd+K (mac) or Ctrl+K (others). Match key case-insensitively
       // so caps-lock doesn't break it.
-      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
-        e.preventDefault();
-        setCopilot(c => !c);
-        return;
-      }
-      // Escape closes only if the copilot is open. We don't read state here
-      // — calling setCopilot with a function lets the component decide.
+      // Cmd/Ctrl+K is owned by the shared advisor.js widget now (the inline
+      // copilot is retired in favour of the main-site advisor panel).
       if (e.key === 'Escape') {
         setCopilot(c => c ? false : c);
       }
@@ -2521,10 +2516,13 @@ const App = () => {
   //             CopilotPanel can render card-specific starter prompts
   //             (the card's diagnosticQuestions). Pass null/undefined for
   //             generic entry points (header link, Cmd+K, screen nudges).
-  const openCopilot = (prefill, forPlay) => {
-    setCopilotPrefill(prefill || null);
-    setCopilotPlay(forPlay || null);
-    setCopilot(true);
+  // Route all in-page entry points (header pill, screen nudges, "Tell me
+  // more" on a card) to the shared advisor.js widget. Clicking the header
+  // "Ask AI Advisor" button is intercepted by advisor.js (capture phase) and
+  // opens its panel — keeping a single advisor across all three sites.
+  const openCopilot = () => {
+    const btn = Array.from(document.querySelectorAll('button')).find(b => /Ask AI Advisor/.test(b.textContent || ''));
+    if (btn) btn.click();
   };
 
   // Navigation helpers triggered from inside the advisor panel — clicking a
@@ -2613,6 +2611,7 @@ const App = () => {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
+<script src="/advisor.js?v=1" defer></script>
 <script src="/device-hint.js?v=2" defer></script>
 </body>
 </html>
