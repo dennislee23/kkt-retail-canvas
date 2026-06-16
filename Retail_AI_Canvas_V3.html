@@ -277,7 +277,7 @@ const ProfileFooter = () => {
 
 const Page = ({ children, header }) => (
   <div style={{ minHeight:'100vh', display:'flex', flexDirection:'column', background:'var(--bg)' }}>
-    <header style={{ padding:'0 clamp(20px,5vw,72px)', height:'58px', display:'flex', alignItems:'center', justifyContent:'space-between', background:'var(--surface)', borderBottom:'1px solid var(--border)', flexShrink:0, position:'sticky', top:0, zIndex:20 }}>
+    <header style={{ height:'58px', background:'var(--surface)', borderBottom:'1px solid var(--border)', flexShrink:0, position:'sticky', top:0, zIndex:20 }}>
       {header}
     </header>
     <main style={{ flex:1, maxWidth:'1080px', margin:'0 auto', width:'100%', padding:'clamp(36px,6vh,64px) clamp(20px,4vw,48px)' }}>
@@ -327,35 +327,48 @@ const IS_MAC = typeof navigator !== 'undefined' &&
   /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent || '');
 
 const AdvisorHeaderLink = ({ onCopilot }) => (
-  <button onClick={onCopilot} aria-label="Open retail advisor"
+  <button onClick={onCopilot} aria-label="Ask AI Advisor"
     style={{
-      fontSize:'12px',
-      color:'var(--text-muted)',
-      background:'none',
-      border:'none',
-      cursor:'pointer',
-      display:'inline-flex',
-      alignItems:'center',
-      gap:'7px',
-      fontFamily:'DM Sans',
-      padding:'6px 8px',
-      borderRadius:'3px',
-      transition:'color .15s',
+      display:'inline-flex', alignItems:'center', gap:'8px',
+      background:'linear-gradient(118deg,#FF9D2E 0%,#FF6A00 52%,#F5481F 100%)',
+      color:'#fff', border:'none', borderRadius:'980px',
+      padding:'8px 16px', fontSize:'13px', fontWeight:600, letterSpacing:'.01em',
+      cursor:'pointer', whiteSpace:'nowrap', fontFamily:'DM Sans, system-ui, sans-serif',
+      boxShadow:'0 2px 10px rgba(255,106,0,0.28)', transition:'opacity .15s, box-shadow .15s',
     }}
-    onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
-    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+    onMouseEnter={e => { e.currentTarget.style.opacity='0.92'; e.currentTarget.style.boxShadow='0 4px 16px rgba(255,106,0,0.34)'; }}
+    onMouseLeave={e => { e.currentTarget.style.opacity='1'; e.currentTarget.style.boxShadow='0 2px 10px rgba(255,106,0,0.28)'; }}>
+    <span aria-hidden="true" style={{ fontSize:'13px' }}>✦</span>
+    <span>Ask AI Advisor</span>
     <kbd style={{
-      fontSize:'10px',
-      fontFamily:'ui-monospace, SFMono-Regular, Menlo, monospace',
-      background:'var(--surface-alt)',
-      border:'1px solid var(--border)',
-      borderRadius:'3px',
-      padding:'1px 5px',
-      color:'var(--text-secondary)',
-      letterSpacing:'.04em',
+      fontSize:'10px', fontFamily:'ui-monospace, SFMono-Regular, Menlo, monospace',
+      background:'rgba(255,255,255,0.22)', border:'1px solid rgba(255,255,255,0.30)',
+      borderRadius:'3px', padding:'1px 5px', color:'#fff', letterSpacing:'.04em',
     }}>{IS_MAC ? '⌘K' : 'Ctrl K'}</kbd>
-    <span>Ask the advisor</span>
   </button>
+);
+
+// Unified header matching fuel-canvas / kittykat.tech: centered 1120 column,
+// cat-mark + KKT, centered profile nav, orange Advisor pill. Optional Back on
+// deep flow screens. Profile nav items come from _KKTECH_PROFILE.nav (same as
+// the footer) — no content invented.
+const CanvasHeader = ({ onCopilot, onBack, backLabel='Back' }) => (
+  <div style={{ maxWidth:'1120px', margin:'0 auto', width:'100%', height:'100%', padding:'0 clamp(20px,4vw,48px)', boxSizing:'border-box', display:'flex', alignItems:'center', gap:'18px' }}>
+    {onBack && <BackBtn onClick={onBack} label={backLabel} />}
+    <Wordmark />
+    <nav style={{ flex:1, display:'flex', justifyContent:'center', gap:'28px', alignItems:'center', flexWrap:'wrap' }}>
+      {(_KKTECH_PROFILE.nav || []).map(item => (
+        <button key={item.id}
+          onClick={() => window.dispatchEvent(new CustomEvent('retail-canvas:profile', { detail:{ section:item.id } }))}
+          style={{ background:'none', border:'none', padding:'4px 0', cursor:'pointer', color:'var(--text-secondary)', fontSize:'13px', fontWeight:500, fontFamily:'DM Sans, system-ui, sans-serif', letterSpacing:'.02em', whiteSpace:'nowrap', transition:'color .15s' }}
+          onMouseEnter={e => e.currentTarget.style.color='var(--text-primary)'}
+          onMouseLeave={e => e.currentTarget.style.color='var(--text-secondary)'}>
+          {item.label}
+        </button>
+      ))}
+    </nav>
+    <AdvisorHeaderLink onCopilot={onCopilot} />
+  </div>
 );
 
 /* ─── STAGE CARD ─────────────────────────────────────────────────── */
@@ -392,15 +405,7 @@ const StageCard = ({ stage, title, desc, cta, clickable, optional, onStage }) =>
 
 /* ─── LANDING ────────────────────────────────────────────────────── */
 const LandingScreen = ({ onStart, onBrowse, onStage, onCopilot }) => (
-  <Page header={
-    <>
-      <Wordmark />
-      <div style={{ display:'flex', alignItems:'center', gap:'14px' }}>
-        <AdvisorHeaderLink onCopilot={onCopilot} />
-        <button onClick={onBrowse} style={{ fontSize:'13px', color:'var(--text-secondary)', background:'none', border:'none', cursor:'pointer' }}>Browse all solutions →</button>
-      </div>
-    </>
-  }>
+  <Page header={<CanvasHeader onCopilot={onCopilot} />}>
     <div className="fade-up" style={{ maxWidth:'660px', marginBottom:'52px' }}>
       <div style={{ fontSize:'11px', letterSpacing:'.12em', color:'var(--accent-text)', textTransform:'uppercase', fontWeight:600, marginBottom:'16px' }}>For mid-sized food retailers</div>
       <h1 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(32px,4.5vw,54px)', fontWeight:600, letterSpacing:'-.02em', lineHeight:1.14, color:'var(--text-primary)', marginBottom:'18px' }}>
@@ -473,23 +478,7 @@ const QuestionsScreen = ({ onDone, onBack, onCopilot }) => {
   };
 
   return (
-    <Page header={
-      <>
-        <BackBtn onClick={onBack} label="Start over" />
-        <Wordmark />
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:'14px' }}>
-          <AdvisorHeaderLink onCopilot={onCopilot} />
-          <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
-            <div style={{ display:'flex', gap:'5px' }}>
-              {QS_DEF.map((_,i) => (
-                <div key={i} style={{ height:'3px', width: i===step?'22px':'7px', borderRadius:'2px', background: i<=step?'var(--text-primary)':'var(--border)', transition:'all .22s ease' }} />
-              ))}
-            </div>
-            <span style={{ fontSize:'12px', color:'var(--text-muted)', minWidth:'36px', textAlign:'right' }}>{step+1} / {QS_DEF.length}</span>
-          </div>
-        </div>
-      </>
-    }>
+    <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} backLabel="Start over" />}>
       <div key={step} className="fade-up" style={{ maxWidth:'720px' }}>
         <p style={{ fontSize:'11px', letterSpacing:'.1em', color:'var(--text-muted)', textTransform:'uppercase', marginBottom:'12px', fontWeight:500 }}>{q.label}</p>
         <h2 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(26px,4vw,42px)', fontWeight:600, letterSpacing:'-.02em', color:'var(--text-primary)', marginBottom:'8px', lineHeight:1.2 }}>{q.text}</h2>
@@ -564,16 +553,7 @@ const RecommendedScreen = ({ answers, onPlay, onDomain, onBrowse, onRoadmap, onB
   const totalOperating = (_ALL_DOMAINS||[]).filter(d => d.stage < 3).reduce((n,d) => n + d.plays.length, 0);
 
   return (
-    <Page header={
-      <>
-        <BackBtn onClick={onBack} label="Change answers" />
-        <Wordmark />
-        <div style={{ display:'flex', alignItems:'center', gap:'14px' }}>
-          <AdvisorHeaderLink onCopilot={onCopilot} />
-          <button onClick={onBrowse} style={{ fontSize:'13px', color:'var(--text-secondary)', background:'none', border:'none', cursor:'pointer' }}>Browse all solutions →</button>
-        </div>
-      </>
-    }>
+    <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} backLabel="Change answers" />}>
       <div className="fade-up" style={{ marginBottom:'36px' }}>
         <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:500, marginBottom:'10px' }}>Based on your answers</p>
         <h2 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(28px,4vw,44px)', fontWeight:600, letterSpacing:'-.02em', color:'var(--text-primary)', marginBottom:'12px', lineHeight:1.18 }}>Recommended services</h2>
@@ -697,13 +677,7 @@ const RoadmapScreen = ({ answers, onBack, onPlay, onCopilot }) => {
   };
 
   return (
-    <Page header={
-      <>
-        <BackBtn onClick={onBack} label="Back to recommendations" />
-        <Wordmark />
-        <AdvisorHeaderLink onCopilot={onCopilot} />
-      </>
-    }>
+    <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} backLabel="Back to recommendations" />}>
       <div className="fade-up" style={{ marginBottom:'34px', maxWidth:'820px' }}>
         <p style={{ fontSize:'11px', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:500, marginBottom:'10px' }}>Progression roadmap</p>
         <h2 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(28px,4vw,44px)', fontWeight:600, letterSpacing:'-.02em', color:'var(--text-primary)', marginBottom:'12px', lineHeight:1.16 }}>Turn selected interests into a practical route</h2>
@@ -1028,7 +1002,7 @@ const DomainsScreen = ({ stageFilter, onClearFilter, onDomain, onBack, onCopilot
   const isStage3View = stageFilter === 3;
 
   return (
-    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><AdvisorHeaderLink onCopilot={onCopilot} /></>}>
+    <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} />}>
       <div className="fade-up" style={{ marginBottom:'28px' }}>
         <h2 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(26px,4vw,38px)', fontWeight:600, letterSpacing:'-.02em', color:'var(--text-primary)', marginBottom:'8px' }}>
           {stageFilter ? <span style={{ color }}>{label}</span> : 'All business areas'}
@@ -1103,7 +1077,7 @@ const BrowseScreen = ({ onPlay, onDomain, onBack, stageFilter, onClearFilter, on
   const totalPlays = domains.reduce((n,d) => n + d.plays.length, 0);
 
   return (
-    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><AdvisorHeaderLink onCopilot={onCopilot} /></>}>
+    <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} />}>
       <div className="fade-up" style={{ marginBottom:'24px' }}>
         <h2 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(26px,4vw,38px)', fontWeight:600, letterSpacing:'-.02em', color:'var(--text-primary)', marginBottom:'8px' }}>
           {stageFilter ? <><span style={{ color:stageColor }}>{stageLabel}</span> — solutions</> : 'All solutions'}
@@ -1158,7 +1132,7 @@ const DomainScreen = ({ domain, onPlay, onBack, onCopilot }) => {
   const isStage3 = domain.stage === 3;
 
   return (
-    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><AdvisorHeaderLink onCopilot={onCopilot} /></>}>
+    <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} />}>
       <div className="fade-up" style={{ marginBottom:'40px', maxWidth:'820px' }}>
         {isStage3 && (
           <div style={{ marginBottom:'10px' }}>
@@ -1203,7 +1177,7 @@ const ProfileChip = ({ label }) => (
 // `retail-canvas:profile` events. Single-component switch on `section`
 // prop. All content lives in window.KKTECH_PROFILE (kktechnologies-profile-data.js)
 // — when content needs editing, change the data file, not this component.
-const KKProfileScreen = ({ section, onBack }) => {
+const KKProfileScreen = ({ section, onBack, onCopilot }) => {
   const profile = _KKTECH_PROFILE || {};
   const company = profile.company || {};
   const how = profile.howWeWork || {};
@@ -1380,7 +1354,7 @@ const KKProfileScreen = ({ section, onBack }) => {
   );
 
   return (
-    <Page header={<><BackBtn onClick={onBack} /><Wordmark /><span style={{ width:'60px' }} /></>}>
+    <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} />}>
       {active === 'how-we-work' && renderHow()}
       {active === 'team' && renderTeam()}
       {active === 'contact' && renderContact()}
@@ -2563,7 +2537,7 @@ const App = () => {
       {screen==='domains'     && <DomainsScreen stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} onDomain={d => d.id === 'expand_monetize' ? goToStage3Domain() : goToDomain(d)} onBack={() => setScreen('landing')} onCopilot={() => openCopilot()} />}
       {screen==='browse'      && <BrowseScreen onPlay={(p,d) => { setDomain(d); setPlay(p); }} onDomain={goToDomain} onBack={() => setScreen('landing')} stageFilter={stageFilter} onClearFilter={() => setStageFilter(null)} onCopilot={() => openCopilot()} />}
       {screen==='domain' && domain && <DomainScreen domain={domain} onPlay={p => setPlay(p)} onBack={fromDomain} onCopilot={openCopilot} />}
-      {screen==='profile'     && <KKProfileScreen section={profileSection} onBack={() => setScreen('landing')} />}
+      {screen==='profile'     && <KKProfileScreen section={profileSection} onBack={() => setScreen('landing')} onCopilot={openCopilot} />}
 
       {play && domain && <SolutionCardPanel play={play} domain={domain} onClose={() => setPlay(null)} onCopilot={msg => { openCopilot(msg, play); setPlay(null); }} />}
 
