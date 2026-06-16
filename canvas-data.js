@@ -62,9 +62,9 @@ window.TAG_TOOLTIPS = {
 
 // ─── STAGE META ──────────────────────────────────────────────────────────────
 window.STAGE_META = {
-  1: { label: 'Strengthen Core Operations', color: '#5B8AF0', dim: 'rgba(91,138,240,0.10)' },
-  2: { label: 'Optimize and Grow',          color: '#C9963E', dim: 'rgba(201,150,62,0.10)'  },
-  3: { label: 'Expand and Monetize',        color: '#3ECDA0', dim: 'rgba(62,205,160,0.10)'  },
+  1: { label: 'Strengthen Core Operations', color: '#C2410C', dim: 'rgba(255,106,0,0.05)' },
+  2: { label: 'Optimize and Grow',          color: '#C2410C', dim: 'rgba(255,106,0,0.10)' },
+  3: { label: 'Expand and Monetize',        color: '#C2410C', dim: 'rgba(255,106,0,0.16)' },
 };
 
 // ─── PRESSURE → DOMAIN RELEVANCE ─────────────────────────────────────────────
