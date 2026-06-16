@@ -193,7 +193,7 @@ const Tooltip = ({ text, children }) => {
 };
 
 const Tag = ({ label, size='sm', tooltip }) => {
-  const st = TAG_STYLES[label] || { bg:'#F0F0F0', color:'#555' };
+  const st = { bg:'#F5F5F7', color:'#515257' };
   const tip = tooltip !== undefined ? tooltip : ((_TAG_TOOLTIPS||{})[label] || '');
   const chip = (
     <span className="tag" style={{ background:st.bg, color:st.color,
@@ -206,7 +206,7 @@ const Tag = ({ label, size='sm', tooltip }) => {
 };
 
 const ImpactTag = ({ label }) => {
-  const st = IMPACT_STYLES[label] || { bg:'#F0F0F0', color:'#555' };
+  const st = { bg:'#F5F5F7', color:'#515257' };
   return (
     <span className="tag" style={{ background:st.bg, color:st.color, fontSize:'11px', padding:'3px 9px' }}>{label}</span>
   );
@@ -215,9 +215,9 @@ const ImpactTag = ({ label }) => {
 const SectionLabel = ({ children, style }) => (
   <div style={{
     fontSize:'11px',
-    color:'var(--accent-text)',
-    fontWeight:600,
-    letterSpacing:'.16em',
+    color:'var(--text-muted)',
+    fontWeight:700,
+    letterSpacing:'.14em',
     textTransform:'uppercase',
     marginBottom:'7px',
     ...style,
@@ -2589,6 +2589,6 @@ const App = () => {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
-<script src="/device-hint.js?v=1" defer></script>
+<script src="/device-hint.js?v=2" defer></script>
 </body>
 </html>

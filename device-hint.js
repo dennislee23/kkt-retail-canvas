@@ -25,8 +25,8 @@
 
   var CSS = `
   .kkt-dh-overlay,.kkt-dh-banner{
-    --bg:#F5F3EF;--surface:#FFFFFF;--border:rgba(30,24,16,.12);
-    --text:#1A1410;--text-sec:#5C5045;--accent:#AD7B25;--brown:#4A3620;
+    --bg:#FFFFFF;--surface:#FFFFFF;--border:rgba(0,0,0,.11);
+    --text:#1D1D1F;--text-sec:#515257;--accent:#FF6A00;--brown:#FF6A00;
     --font:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
     font-family:var(--font);box-sizing:border-box}
   .kkt-dh-overlay *,.kkt-dh-banner *{box-sizing:border-box}
