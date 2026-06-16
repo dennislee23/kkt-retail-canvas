@@ -394,8 +394,8 @@ window.KKTECH_PROFILE = {
 
   team: {
     title: 'Team & Experts',
-    lead: 'We combine a core consulting team with a trusted expert bench across domain expertise, process consulting, data engineering, AI/ML, cloud, and solution architecture.',
-    sublead: 'This allows us to work across the full path from business question to implemented solution.',
+    lead: 'We sit on the owner\'s side of the table.',
+    sublead: 'A senior team with roots in business, not just tech — so the work is shaped by what moves the business, and built to keep running after we leave.',
     groups: [
       {
         id: 'domain',
@@ -410,7 +410,7 @@ window.KKTECH_PROFILE = {
           },
           {
             name: 'Yana Kujrikhina',
-            line: '10+ years in Oil & Gas, process consulting and digitalization',
+            line: '10+ years in Oil & Gas, process consulting and digitalisation',
             chips: ['EY', 'Gazprom Oil'],
             initials: 'YK',
             photo: 'team/yana-kujrikhina.jpg',
@@ -445,7 +445,7 @@ window.KKTECH_PROFILE = {
           },
           {
             name: 'Dennis Nepomniashy',
-            line: 'Data-driven marketing and software-integration project management, run from the data',
+            line: '20+ years in HoReCa and business informatics',
             chips: ['HP', 'Business IT', 'MCSI'],
             initials: 'DN',
             photo: 'team/dennis-nepomniashy.jpg',
@@ -480,7 +480,7 @@ window.KKTECH_PROFILE = {
         ],
       },
     ],
-    benchNote: 'Plus a wider bench of data scientists, ML engineers, data engineers, analysts, domain specialists, and external experts as needed.',
+    benchNote: 'Plus a wider bench of data scientists, ML engineers, data engineers, analysts, domain specialists and external experts as needed.',
   },
 
   contact: {
