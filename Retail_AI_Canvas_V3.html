@@ -1053,7 +1053,7 @@ const DomainsScreen = ({ stageFilter, onClearFilter, onDomain, onBack, onCopilot
     <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} />}>
       <div className="fade-up" style={{ marginBottom:'28px' }}>
         <h2 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(26px,4vw,38px)', fontWeight:600, letterSpacing:'-.02em', color:'var(--text-primary)', marginBottom:'8px' }}>
-          {stageFilter ? <span style={{ color }}>{label}</span> : 'All business areas'}
+          {stageFilter ? <span>{label}</span> : 'All business areas'}
         </h2>
         <div style={{ display:'flex', alignItems:'center', gap:'14px', flexWrap:'wrap' }}>
           <p style={{ fontSize:'15px', color:'var(--text-secondary)', fontWeight:300 }}>
@@ -1128,7 +1128,7 @@ const BrowseScreen = ({ onPlay, onDomain, onBack, stageFilter, onClearFilter, on
     <Page header={<CanvasHeader onCopilot={onCopilot} onBack={onBack} />}>
       <div className="fade-up" style={{ marginBottom:'24px' }}>
         <h2 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(26px,4vw,38px)', fontWeight:600, letterSpacing:'-.02em', color:'var(--text-primary)', marginBottom:'8px' }}>
-          {stageFilter ? <><span style={{ color:stageColor }}>{stageLabel}</span> — solutions</> : 'All solutions'}
+          {stageFilter ? <><span>{stageLabel}</span> — solutions</> : 'All solutions'}
         </h2>
         <div style={{ display:'flex', alignItems:'center', gap:'14px', flexWrap:'wrap' }}>
           <p style={{ fontSize:'15px', color:'var(--text-secondary)', fontWeight:300 }}>
