@@ -348,6 +348,51 @@ const AdvisorHeaderLink = ({ onCopilot }) => (
   </button>
 );
 
+// Language switcher matching fuel-canvas header. Retail is English-only, so
+// this is a display-parity control: shows EN (UK flag) with the same dropdown
+// shell; other languages are marked "soon" and are no-ops.
+const HeaderLang = () => {
+  const [open, setOpen] = useState(false);
+  const LANGS = [{ code:'EN', available:true }, { code:'ES', available:false }, { code:'DE', available:false }, { code:'FR', available:false }];
+  return (
+    <div style={{ position:'relative' }}>
+      <button onClick={() => setOpen(o => !o)} style={{
+        display:'flex', alignItems:'center', gap:'7px',
+        background:'none', border:'1px solid var(--border)', borderRadius:'3px',
+        padding:'6px 10px', cursor:'pointer', fontSize:'12.5px', fontWeight:600,
+        color:'var(--text-primary)', fontFamily:'DM Sans, system-ui, sans-serif', transition:'border-color .13s',
+      }}
+      onMouseEnter={e => e.currentTarget.style.borderColor='var(--border-hover)'}
+      onMouseLeave={e => e.currentTarget.style.borderColor='var(--border)'}>
+        <svg width="18" height="13" viewBox="0 0 60 30" preserveAspectRatio="none" style={{ display:'block', borderRadius:'2px', border:'1px solid var(--border)' }}><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" strokeWidth="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" strokeWidth="4"/><rect x="25" width="10" height="30" fill="#fff"/><rect y="10" width="60" height="10" fill="#fff"/><rect x="27" width="6" height="30" fill="#C8102E"/><rect y="12" width="60" height="6" fill="#C8102E"/></svg>
+        EN
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+      {open && (
+        <>
+          <div onClick={() => setOpen(false)} style={{ position:'fixed', inset:0, zIndex:998 }} />
+          <div style={{ position:'absolute', top:'calc(100% + 6px)', right:0, background:'var(--surface)', border:'1px solid var(--border)', borderRadius:'9px', boxShadow:'0 4px 20px rgba(0,0,0,0.10)', padding:'4px', zIndex:999, minWidth:'130px' }}>
+            {LANGS.map(l => (
+              <button key={l.code} onClick={() => setOpen(false)} style={{
+                display:'flex', alignItems:'center', justifyContent:'space-between',
+                width:'100%', padding:'7px 12px', border:'none', borderRadius:'6px',
+                background: l.code==='EN' ? 'var(--surface-alt)' : 'transparent',
+                cursor:'pointer', fontSize:'12.5px', fontWeight: l.code==='EN' ? 600 : 400,
+                color: l.available ? 'var(--text-primary)' : 'var(--text-muted)', textAlign:'left',
+                fontFamily:'DM Sans, system-ui, sans-serif',
+              }}>
+                <span>{l.code}</span>
+                {!l.available && <span style={{ fontSize:'9px', color:'var(--text-muted)', fontStyle:'italic' }}>soon</span>}
+                {l.code==='EN' && <span style={{ color:'var(--accent)', fontSize:'11px' }}>✓</span>}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 // Unified header matching fuel-canvas / kittykat.tech: centered 1120 column,
 // cat-mark + KKT, centered profile nav, orange Advisor pill. Optional Back on
 // deep flow screens. Profile nav items come from _KKTECH_PROFILE.nav (same as
@@ -367,7 +412,10 @@ const CanvasHeader = ({ onCopilot, onBack, backLabel='Back' }) => (
         </button>
       ))}
     </nav>
-    <AdvisorHeaderLink onCopilot={onCopilot} />
+    <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>
+      <AdvisorHeaderLink onCopilot={onCopilot} />
+      <HeaderLang />
+    </div>
   </div>
 );
 
