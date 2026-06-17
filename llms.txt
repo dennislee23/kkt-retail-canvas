@@ -1,0 +1,17 @@
+# Retail AI Canvas — KKT
+
+> An interactive map of where data and AI deliver measurable results across the retail business, published by Kitty Kat Technologies (KKT). It lays out, domain by domain, the solutions that move retail economics — from a trusted data foundation through analytics, AI, and automation.
+
+The Retail AI Canvas is a working artifact from KKT, a data, AI, and automation delivery firm based in Tallinn, Estonia (EU). It maps the retail business by domain and shows, for each, the solutions that earn their place — sequenced honestly by what they depend on, so the path is clear about prerequisites rather than selling everything at once. It is the retail counterpart to KKT's Fuel AI Transformation Map.
+
+KKT works with mid-enterprise companies in traditional, asset-heavy industries, starting every engagement from the business question rather than the technology. Domain expertise and technical delivery sit in one team, so work runs from the question to a solution that operates in production.
+
+## Pages
+
+- [Retail AI Canvas](https://retail.kittykat.tech/): The interactive map — retail domains and the data, AI, and automation solutions across them.
+
+## About KKT
+
+- [Kitty Kat Technologies](https://kittykat.tech/): The firm behind the canvas — business-first data & AI delivery for mid-enterprise companies in asset-heavy industries.
+- [Retail positioning](https://kittykat.tech/industries/retail/): How KKT approaches retail — mid-enterprise starting points, business question first.
+- [Fuel AI Transformation Map](https://fuelretail.kittykat.tech/): The fuel-retail counterpart canvas.
