@@ -74,19 +74,19 @@
     var overlay = document.createElement('div');
     overlay.className = 'kkt-dh-overlay';
     overlay.setAttribute('role', 'dialog');
-    overlay.setAttribute('aria-label', 'Совет по экрану');
+    overlay.setAttribute('aria-label', 'Screen tip');
     overlay.innerHTML =
       PHONE_SVG +
-      '<h2>Поверните телефон</h2>' +
-      '<p>Карта рассчитана на широкий экран. Поверните телефон горизонтально — ' +
-      'а лучше откройте на компьютере или планшете.</p>' +
-      '<button type="button" class="kkt-dh-go">Всё равно продолжить</button>';
+      '<h2>Rotate your phone</h2>' +
+      '<p>The map is built for a wide screen. Rotate your phone to landscape — ' +
+      'or, better, open it on a computer or tablet.</p>' +
+      '<button type="button" class="kkt-dh-go">Continue anyway</button>';
 
     var banner = document.createElement('div');
     banner.className = 'kkt-dh-banner';
     banner.innerHTML =
-      '<span><strong>Лучше на большом экране.</strong> Карта рассчитана на компьютер или планшет.</span>' +
-      '<button type="button" class="kkt-dh-x" aria-label="Закрыть">&times;</button>';
+      '<span><strong>Better on a big screen.</strong> The map is built for a computer or tablet.</span>' +
+      '<button type="button" class="kkt-dh-x" aria-label="Close">&times;</button>';
 
     document.body.appendChild(overlay);
     document.body.appendChild(banner);
