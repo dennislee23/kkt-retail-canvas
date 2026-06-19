@@ -34,13 +34,28 @@
 declare(strict_types=1);
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-const RETAIL_ADVISOR_DEFAULT_MODEL      = 'claude-sonnet-4-5';
+// Default model is Haiku 4.5 — ~3-4x cheaper per call than Sonnet for a public
+// advisor on the owner's billing. Override per-deploy via CLAUDE_MODEL in .env
+// (e.g. claude-sonnet-4-5) without touching code.
+const RETAIL_ADVISOR_DEFAULT_MODEL      = 'claude-haiku-4-5';
 const RETAIL_ADVISOR_MAX_TOKENS         = 800;   // 120-word answer + ~200 tokens of meta JSON ≈ 350 tokens, 800 is generous
 const RETAIL_ADVISOR_TIMEOUT_SECONDS    = 60;    // streaming can take longer than non-stream
 const RETAIL_ADVISOR_MAX_MESSAGE_LENGTH = 2000;
 const RETAIL_ADVISOR_RATE_LIMIT         = 10;
 const RETAIL_ADVISOR_RATE_WINDOW        = 60;
 const RETAIL_ADVISOR_API_URL            = 'https://api.anthropic.com/v1/messages';
+
+// Cost controls (all .env-overridable so they can be tuned without a redeploy).
+//   ADVISOR_DAILY_CAP   — global cap on live Claude calls/day across all IPs.
+//                         Above it, the advisor serves a friendly "limit reached"
+//                         message and makes NO Claude call. Hard ceiling on the
+//                         daily bill regardless of IP rotation. 0 = disabled.
+//   ADVISOR_CACHE_TTL   — response-cache lifetime in seconds. Identical
+//                         (normalized) question + context → replayed from cache,
+//                         ZERO Claude call. 0 = disabled.
+const RETAIL_ADVISOR_DAILY_CAP_DEFAULT  = 300;
+const RETAIL_ADVISOR_CACHE_TTL_DEFAULT  = 21600; // 6h
+const RETAIL_ADVISOR_ALLOWED_HOSTS      = ['retail.kittykat.tech'];
 
 // Hardcoded fallback prompt — used only if knowledge/ directory is empty
 // or unreadable. The real prompt is assembled at request time from the
@@ -84,6 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Content-Type: application/json');
     respond_error_json(405, 'method_not_allowed', 'Only POST is allowed.');
 }
+
+// ─── Anti-abuse gate: request must originate from the canvas ─────────────────
+// CORS only constrains browsers; a direct curl/bot POST ignores it and would
+// otherwise reach Claude on the owner's key. Reject requests whose Origin/
+// Referer isn't our site BEFORE any Claude call. Still in the pre-echo zone.
+origin_referer_gate();
 
 // ─── Rate limit (per-IP, sliding window, file-based) ─────────────────────────
 // Sets headers + emits a JSON 429 response and exits if the bucket is full.
@@ -148,8 +169,33 @@ if (!$apiKey) {
 try {
     $systemPrompt = load_system_prompt();
     $userMsg      = build_user_message($message, $context);
+    $model        = load_model();
+
+    // ── Response cache ───────────────────────────────────────────────────────
+    // Identical (normalized) question + canvas context + same knowledge base
+    // → replay the stored answer, ZERO Claude call. Keyed by a hash of the
+    // system prompt so editing knowledge/*.md auto-invalidates the cache.
+    $cacheKey = response_cache_key($message, $context, $systemPrompt, $model);
+    $cached   = response_cache_get($cacheKey);
+    if ($cached !== null) {
+        replay_cached_sse($cached);
+        usage_log('cache_hit', $model, []);
+        exit;
+    }
+
+    // ── Daily spend cap ──────────────────────────────────────────────────────
+    // Hard ceiling on live Claude calls/day across all IPs — the backstop
+    // against an IP-rotating bot draining the balance. Counts only real calls
+    // (cache misses). Above the cap: friendly message, no Claude call.
+    if (!daily_budget_reserve()) {
+        sse_emit('text', ['text' => 'The AI advisor has reached today’s usage limit. Please try again tomorrow, or email hello@kittykat.tech.']);
+        sse_emit('done', ['fullText' => '']);
+        usage_log('capped', $model, []);
+        exit;
+    }
 
     $accumulated = '';
+    $usage       = [];
     stream_claude($apiKey, $systemPrompt, $userMsg, function(string $delta) use (&$accumulated) {
         $accumulated .= $delta;
 
@@ -171,9 +217,16 @@ try {
             }
             // Subsequent deltas land entirely after the marker → silent.
         }
-    });
+    }, $usage);
 
     sse_emit('done', ['fullText' => $accumulated]);
+
+    // Store the complete answer for future identical questions, and log token
+    // usage so $/day and cache-hit rate are measurable even on a shared key.
+    if (trim($accumulated) !== '') {
+        response_cache_put($cacheKey, $accumulated);
+    }
+    usage_log('miss', $model, $usage);
 
 } catch (\Throwable $e) {
     error_log('retail-advisor stream error: ' . $e->getMessage());
@@ -207,7 +260,7 @@ function sse_emit(string $type, array $payload): void
  *
  * Throws on network / API errors. Caller handles user-facing fallback.
  */
-function stream_claude(string $apiKey, string $system, string $user, callable $onText): void
+function stream_claude(string $apiKey, string $system, string $user, callable $onText, array &$usageOut = []): void
 {
     $payload = json_encode([
         'model'      => load_model(),
@@ -238,7 +291,7 @@ function stream_claude(string $apiKey, string $system, string $user, callable $o
             'anthropic-zdr: true',
             'Accept: text/event-stream',
         ],
-        CURLOPT_WRITEFUNCTION  => function($ch, string $chunk) use (&$sseBuffer, &$apiError, &$apiHttp, $onText) {
+        CURLOPT_WRITEFUNCTION  => function($ch, string $chunk) use (&$sseBuffer, &$apiError, &$apiHttp, &$usageOut, $onText) {
             // Capture first-chunk HTTP status. If it's an error response
             // (4xx/5xx), the body is JSON not SSE — accumulate and report.
             if ($apiHttp === 0) {
@@ -275,9 +328,20 @@ function stream_claude(string $apiKey, string $system, string $user, callable $o
                     && isset($parsed['delta']['text']) && is_string($parsed['delta']['text'])) {
                     $onText($parsed['delta']['text']);
                 }
-                // We deliberately ignore message_start, content_block_start,
-                // ping, message_delta, message_stop — they don't carry text
-                // and the "done" marker on our side comes from curl finishing.
+                // Capture token usage for cost measurement. message_start carries
+                // input + prompt-cache read/write counts; message_delta carries the
+                // running output_tokens. We keep the latest of each.
+                elseif (($parsed['type'] ?? '') === 'message_start' && isset($parsed['message']['usage'])) {
+                    $u = $parsed['message']['usage'];
+                    $usageOut['input']       = (int)($u['input_tokens'] ?? 0);
+                    $usageOut['cache_write']  = (int)($u['cache_creation_input_tokens'] ?? 0);
+                    $usageOut['cache_read']   = (int)($u['cache_read_input_tokens'] ?? 0);
+                    $usageOut['output']      = (int)($u['output_tokens'] ?? 0);
+                }
+                elseif (($parsed['type'] ?? '') === 'message_delta' && isset($parsed['usage']['output_tokens'])) {
+                    $usageOut['output'] = (int)$parsed['usage']['output_tokens'];
+                }
+                // content_block_start, ping, message_stop carry no text/usage we need.
             }
 
             return strlen($chunk);
@@ -332,6 +396,167 @@ function load_env(string $key): string
         }
     }
     return '';
+}
+
+/** Read an integer .env override, falling back to a default. */
+function load_env_int(string $key, int $default): int
+{
+    $v = load_env($key);
+    return ($v !== '' && ctype_digit($v)) ? (int)$v : $default;
+}
+
+/**
+ * Anti-abuse gate: the request must carry an Origin or Referer from the canvas.
+ * Browsers send these on the advisor's same-origin POST; a bare curl/bot POST
+ * does not, so this blocks the cheap abuse path before any Claude call. Not a
+ * cryptographic control (headers are spoofable) — the daily cap is the hard
+ * backstop; this just stops casual balance-draining.
+ */
+function origin_referer_gate(): void
+{
+    $candidates = [];
+    if (!empty($_SERVER['HTTP_ORIGIN']))  $candidates[] = $_SERVER['HTTP_ORIGIN'];
+    if (!empty($_SERVER['HTTP_REFERER'])) $candidates[] = $_SERVER['HTTP_REFERER'];
+
+    foreach ($candidates as $u) {
+        $host = parse_url($u, PHP_URL_HOST) ?: '';
+        if (in_array($host, RETAIL_ADVISOR_ALLOWED_HOSTS, true)
+            || $host === 'localhost' || $host === '127.0.0.1') {
+            return;
+        }
+    }
+
+    http_response_code(403);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'error'   => 'forbidden',
+        'message' => 'This endpoint is only available from the canvas.',
+    ]);
+    exit;
+}
+
+/** Normalize a question so trivial variants share one cache entry. */
+function normalize_question(string $s): string
+{
+    $s = mb_strtolower(trim($s));
+    $s = preg_replace('/\s+/u', ' ', $s);          // collapse internal whitespace
+    return trim((string)$s, " \t\n\r\0\x0B\"'`.,!?;:—–-");
+}
+
+/**
+ * Response-cache key. Includes the canvas context (it changes the answer) and a
+ * hash of the system prompt, so editing knowledge/*.md auto-invalidates entries.
+ */
+function response_cache_key(string $message, array $context, string $systemPrompt, string $model): string
+{
+    ksort($context);
+    return hash('sha256', implode('|', [
+        normalize_question($message),
+        json_encode($context, JSON_UNESCAPED_UNICODE),
+        substr(sha1($systemPrompt), 0, 16),
+        $model,
+    ]));
+}
+
+function response_cache_path(string $key): string
+{
+    return sys_get_temp_dir() . '/kkt_advcache_retail_' . $key . '.json';
+}
+
+function response_cache_get(string $key): ?string
+{
+    if (load_env_int('ADVISOR_CACHE_TTL', RETAIL_ADVISOR_CACHE_TTL_DEFAULT) <= 0) return null;
+    $path = response_cache_path($key);
+    $raw  = @file_get_contents($path);
+    if ($raw === false) return null;
+    $row = json_decode($raw, true);
+    if (!is_array($row) || (int)($row['exp'] ?? 0) < time()) {
+        @unlink($path);
+        return null;
+    }
+    return is_string($row['t'] ?? null) ? $row['t'] : null;
+}
+
+function response_cache_put(string $key, string $text): void
+{
+    $ttl = load_env_int('ADVISOR_CACHE_TTL', RETAIL_ADVISOR_CACHE_TTL_DEFAULT);
+    if ($ttl <= 0) return;
+    @file_put_contents(
+        response_cache_path($key),
+        json_encode(['t' => $text, 'exp' => time() + $ttl], JSON_UNESCAPED_UNICODE),
+        LOCK_EX
+    );
+    if (random_int(1, 50) === 1) response_cache_gc(); // opportunistic cleanup
+}
+
+function response_cache_gc(): void
+{
+    $now = time();
+    foreach (glob(sys_get_temp_dir() . '/kkt_advcache_retail_*.json') ?: [] as $f) {
+        $row = json_decode((string)@file_get_contents($f), true);
+        if (!is_array($row) || (int)($row['exp'] ?? 0) < $now) @unlink($f);
+    }
+}
+
+/** Replay a cached answer over SSE — the answer portion as text, then done. */
+function replay_cached_sse(string $fullText): void
+{
+    $metaPos = strpos($fullText, '<<<META>>>');
+    $answer  = $metaPos === false ? $fullText : substr($fullText, 0, $metaPos);
+    if ($answer !== '') sse_emit('text', ['text' => $answer]);
+    sse_emit('done', ['fullText' => $fullText]);
+}
+
+/**
+ * Daily global cap on live Claude calls (cache misses), across all IPs. The hard
+ * ceiling on the daily bill regardless of IP rotation. File-based, per UTC day.
+ * Returns true if a slot was reserved, false if the cap is already reached.
+ * Fails open on infra error — never blocks a legit user over a file glitch.
+ */
+function daily_budget_reserve(): bool
+{
+    $cap = load_env_int('ADVISOR_DAILY_CAP', RETAIL_ADVISOR_DAILY_CAP_DEFAULT);
+    if ($cap <= 0) return true; // disabled
+
+    $day  = gmdate('Y-m-d');
+    $path = sys_get_temp_dir() . '/kkt_advbudget_retail.json';
+    $fp = @fopen($path, 'c+');
+    if (!$fp) return true;
+    try {
+        if (!flock($fp, LOCK_EX)) return true;
+        $raw   = stream_get_contents($fp);
+        $data  = ($raw === '' || $raw === false) ? [] : (json_decode($raw, true) ?: []);
+        $count = (($data['day'] ?? '') === $day) ? (int)($data['count'] ?? 0) : 0;
+        if ($count >= $cap) return false;
+        ftruncate($fp, 0); rewind($fp);
+        fwrite($fp, json_encode(['day' => $day, 'count' => $count + 1]));
+        fflush($fp);
+        return true;
+    } finally {
+        if (is_resource($fp)) { flock($fp, LOCK_UN); fclose($fp); }
+    }
+}
+
+/**
+ * Append one usage line per request so $/day and cache-hit rate are measurable
+ * from the server even while the API key is shared. Best-effort; never throws.
+ * Columns: iso_time, mode, model, input, cache_read, cache_write, output.
+ */
+function usage_log(string $mode, string $model, array $usage): void
+{
+    $line = implode("\t", [
+        gmdate('c'),
+        $mode,
+        $model,
+        (int)($usage['input']       ?? 0),
+        (int)($usage['cache_read']  ?? 0),
+        (int)($usage['cache_write'] ?? 0),
+        (int)($usage['output']      ?? 0),
+    ]) . "\n";
+    @file_put_contents(
+        sys_get_temp_dir() . '/kkt_advisor_usage_retail_' . gmdate('Y-m-d') . '.log',
+        $line, FILE_APPEND | LOCK_EX
+    );
 }
 
 /**
