@@ -1,14 +1,80 @@
 # Retail AI Canvas — KKT
 
-> An interactive map of where data and AI deliver measurable results across the retail business, published by Kitty Kat Technologies (KKT). It lays out, domain by domain, the solutions that move retail economics — from a trusted data foundation through analytics, AI, and automation.
+> An interactive map of where data and AI deliver measurable results across the retail business, published by Kitty Kat Technologies (KKT). It lays out, domain by domain, the solutions that move retail economics — from a trusted data foundation through analytics, AI, and automation. This file mirrors the full catalog as text (the canvas itself renders client-side).
 
-The Retail AI Canvas is a working artifact from KKT, a data, AI, and automation delivery firm based in Tallinn, Estonia (EU). It maps the retail business by domain and shows, for each, the solutions that earn their place — sequenced honestly by what they depend on, so the path is clear about prerequisites rather than selling everything at once. It is the retail counterpart to KKT's Fuel AI Transformation Map.
+The Retail AI Canvas is a working artifact from KKT, a data, AI, and automation delivery firm based in Tallinn, Estonia (EU). KKT works with mid-enterprise companies in traditional, asset-heavy industries, starting every engagement from the business question rather than the technology. It is the retail counterpart to KKT's Fuel AI Transformation Map.
 
-KKT works with mid-enterprise companies in traditional, asset-heavy industries, starting every engagement from the business question rather than the technology. Domain expertise and technical delivery sit in one team, so work runs from the question to a solution that operates in production.
+## The catalog — 12 domains, 46 services
 
-## Pages
+### Data Foundation
+- **One Trusted Retail Data Foundation** — Connect POS, ERP, loyalty, stock, supplier, finance, and master data into one trusted base for retail decisions.
+- **One Version of Key Numbers** — Define the key retail metrics once and make business owners accountable for the data areas behind them.
+- **Data Input and Document Processing** — Turn supplier files, invoices, contracts, forms, emails, photos, and spreadsheets into usable, validated business data.
 
-- [Retail AI Canvas](https://retail.kittykat.tech/): The interactive map — retail domains and the data, AI, and automation solutions across them.
+### Customers & Loyalty
+- **Customer Segmentation and Value Targeting** — Segment customers by behavior, value, basket, and response so campaigns target the groups worth growing.
+- **Retention, Churn Prevention and Win-Back** — Detect customers cooling off early and trigger targeted win-back actions before they are fully lost.
+- **Basket Growth and Loyalty Economics** — Use basket patterns and loyalty economics to grow visits, category trial, and personalized next-best offers.
+- **Customer Feedback and Service Intelligence** — Turn scattered feedback and service contacts into clear themes, satisfaction drivers, routed cases, and action workflows.
+
+### Promotions & Pricing
+- **Promotion Performance and Campaign Intelligence** — Separate promotions that create real incremental value from campaigns that mainly subsidize existing demand.
+- **Targeted Campaign and Offer Planning** — Plan campaigns by customer segment, store profile, category role, and timing instead of running one broad approach.
+- **Price Decisions and Competitor Response** — Use price sensitivity, cost changes, and competitor signals to respond faster without giving away margin.
+- **Markdown, Clearance and Range Optimization** — Flag weak sell-through and range complexity early enough to recover value before markdowns become waste.
+- **Competitive and Market Intelligence** — Track competitor prices, promotions, range moves, and market signals so commercial teams are not reacting from memory.
+
+### Stock & Availability
+- **Demand Forecasting and Event Planning** — Forecast demand by SKU, store, and period while accounting for seasons, promotions, events, and local demand shifts.
+- **Replenishment and Availability Protection** — Improve ordering logic and detect stockout risk early enough to protect availability before customers feel it.
+- **Inventory Health and Cash Release** — Identify overstock, slow movers, aging stock, and frozen cash before they become markdown or write-off problems.
+- **Freshness and Waste Control** — Track shelf-life risk and slow sell-through early enough to guide markdowns, transfers, and order changes.
+
+### Warehouse & Transport Operations
+- **Warehouse Stock Accuracy and Flow Control** — Make warehouse stock, receiving, put-away, and pick accuracy visible before depot errors become store availability problems.
+- **Picking, Loading and Shift Productivity** — Show where warehouse labor, picking, staging, and loading effort is being lost through poor flow, bad slotting, and weak exception control.
+- **Transport Planning and Delivery Control** — Use TMS-style planning and exception control to improve route quality, OTIF delivery, and transport cost.
+
+### Store Execution
+- **Store Execution Control** — Build a network-wide view of where stores are drifting from standards and where management attention matters most.
+- **Field Tasks and Issue Escalation** — Turn store and field tasks into owned workflows with deadlines, evidence, escalation, status, and closure.
+- **Shelf, Price Label and Planogram Checks** — Detect shelf gaps, planogram deviations, wrong placements, and price label issues faster than manual audits alone.
+- **Labor Planning and Productivity** — Align staffing to traffic, transactions, deliveries, and task pressure instead of relying on fixed rota templates.
+
+### Margin & Cash
+- **Margin Visibility and Profitability Analytics** — Show where margin is made or lost across stores, categories, suppliers, campaigns, and trading periods.
+- **Rolling Financial Forecasting** — Turn current trading signals and known plans into a rolling view of where profit and cash are heading.
+- **Decision Scenarios Before Committing** — Compare the financial consequences of major commercial and operating choices before leadership commits.
+- **Working Capital and Cost Efficiency** — Show where cash and cost are being absorbed through stock, payments, labor, energy, waste, and logistics.
+
+### Supplier Performance
+- **Supplier Performance and Inbound Risk** — Build a consistent view of supplier reliability and detect inbound risk before stores feel the failure.
+- **Claims, Disputes and Value Recovery** — Turn supplier claims and disputes into a structured recovery process that captures what the business is owed.
+- **Supplier Funding and Joint Planning** — Track agreed supplier support, segment key relationships, and focus joint planning where it creates real return.
+
+### Reporting & Decisions
+- **Management Reports and Performance Views** — Give every management level one trusted KPI view, automated packs, and comparable performance diagnostics.
+- **Alerts and Plain-Language Answers** — Surface the exceptions that need action and let managers ask trusted business questions without waiting for an analyst.
+
+### Loss Prevention
+- **Checkout Fraud and Transaction Abuse** — Monitor refunds, voids, discounts, loyalty activity, cashier behavior, and self-checkout patterns for suspicious abuse.
+- **Shrinkage and Stock Loss Control** — Detect unusual stock adjustments, unexplained losses, and shrinkage patterns by store, category, and process.
+
+### Workforce & AI Assistants
+- **AI Office, Meeting and CRM Assistants** — Capture meetings, extract tasks, draft updates, prepare CRM notes, and reduce routine office administration.
+- **Legal, Contract and Compliance Assistant** — Support legal, contract, policy, and compliance work with AI review, drafting, comparison, and issue spotting.
+- **HR, Recruitment and Onboarding Assistant** — Support recruitment, onboarding, policy Q&A, training content, and employee communication with AI.
+- **Internal Knowledge and Store Operations Assistant** — Give staff fast answers from SOPs, policies, manuals, product guidance, and store operating procedures.
+- **Customer Service and Complaint Assistant** — Answer routine customer questions, draft complaint responses, classify issues, and escalate complex cases with context.
+- **Supplier Communication and Claims Follow-Up Agent** — Draft supplier follow-ups, chase open claims, request credit notes, and escalate disputes before value is lost.
+
+### Expand and Monetize
+- **Retail Media and Supplier-Funded Activation** — Turn supplier funding, loyalty audiences, app reach, and campaign measurement into controlled retail media pilots.
+- **Supplier Insight Products** — Package category, basket, promotion, launch, and shopper insight into supplier-facing products or premium collaboration tools.
+- **In-Store and Digital Channel Monetization** — Monetize high-traffic stores, screens, receipts, checkout, circulars, and digital touchpoints without damaging customer trust.
+- **Paid Loyalty and Member Benefits** — Turn loyalty from discount distribution into paid benefits, supplier-funded privileges, and stronger customer commitment.
+- **Partner Ecosystem and Lifecycle Offers** — Use local trust and loyalty access to connect customers with relevant partner services and lifecycle offers.
+- **Selective Platform and Partnership Models** — Explore marketplace, embedded finance, fulfillment monetization, and data collaboration only where maturity and demand justify it.
 
 ## About KKT
 
