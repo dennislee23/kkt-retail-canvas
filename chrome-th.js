@@ -129,5 +129,6 @@ window.RETAIL_CHROME_TH = {
  "How we work": "วิธีการทำงาน",
  "Team": "ทีมงาน",
  "Contact": "ติดต่อ",
- "Back": "กลับ"
+ "Back": "กลับ",
+ "Ask AI Advisor": "ถาม AI Advisor"
 };
