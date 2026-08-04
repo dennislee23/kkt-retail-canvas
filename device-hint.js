@@ -71,21 +71,31 @@
     style.textContent = CSS;
     document.head.appendChild(style);
 
+    // Language-aware copy — reads the canvas language persisted in localStorage
+    // (retail or fuel key), falls back to EN.
+    var _lang = 'EN';
+    try { _lang = localStorage.getItem('kkt-retail-lang') || localStorage.getItem('kkt-fuel-lang') || 'EN'; } catch (e) {}
+    var T = {
+      EN: { h:'Rotate your phone', p:'The map is built for a wide screen. Rotate your phone to landscape — or, better, open it on a computer or tablet.', go:'Continue anyway', b:'<strong>Better on a big screen.</strong> The map is built for a computer or tablet.' },
+      RU: { h:'Поверните телефон', p:'Карта рассчитана на широкий экран. Поверните телефон горизонтально — или, лучше, откройте на компьютере или планшете.', go:'Всё равно продолжить', b:'<strong>Лучше на большом экране.</strong> Карта рассчитана на компьютер или планшет.' },
+      TH: { h:'หมุนโทรศัพท์ของคุณ', p:'แผนผังนี้ออกแบบมาสำหรับหน้าจอกว้าง หมุนโทรศัพท์เป็นแนวนอน — หรือดีกว่านั้น เปิดบนคอมพิวเตอร์หรือแท็บเล็ต', go:'ดำเนินการต่อ', b:'<strong>ดูได้ดีกว่าบนจอใหญ่</strong> แผนผังนี้ออกแบบมาสำหรับคอมพิวเตอร์หรือแท็บเล็ต' },
+    };
+    var t = T[_lang] || T.EN;
+
     var overlay = document.createElement('div');
     overlay.className = 'kkt-dh-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-label', 'Screen tip');
     overlay.innerHTML =
       PHONE_SVG +
-      '<h2>Rotate your phone</h2>' +
-      '<p>The map is built for a wide screen. Rotate your phone to landscape — ' +
-      'or, better, open it on a computer or tablet.</p>' +
-      '<button type="button" class="kkt-dh-go">Continue anyway</button>';
+      '<h2>' + t.h + '</h2>' +
+      '<p>' + t.p + '</p>' +
+      '<button type="button" class="kkt-dh-go">' + t.go + '</button>';
 
     var banner = document.createElement('div');
     banner.className = 'kkt-dh-banner';
     banner.innerHTML =
-      '<span><strong>Better on a big screen.</strong> The map is built for a computer or tablet.</span>' +
+      '<span>' + t.b + '</span>' +
       '<button type="button" class="kkt-dh-x" aria-label="Close">&times;</button>';
 
     document.body.appendChild(overlay);
