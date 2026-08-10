@@ -1,0 +1,160 @@
+{
+ "plays": {
+  "df-1": {
+   "title": "Eine verlässliche Datenbasis für den Handel",
+   "cardText": "POS, ERP, Kundenbindung, Bestand, Lieferanten, Finanzen und Stammdaten zu einer verlässlichen Basis für Handelsentscheidungen zusammenführen.",
+   "shortPain": "Handelsteams haben die benötigten Daten meist irgendwo, aber nicht in einer Form, in der sie sich gemeinsam nutzen lassen. Die Verfügbarkeit von Frischware liegt an einer Stelle, die Aktionsaktivität an einer anderen, das Kundenbindungsverhalten wieder woanders, Lieferantenbelastungen in der Finanzbuchhaltung, und die Artikelhierarchien unterscheiden sich zwischen den Systemen. Die Folge sind langsame Analysen, ständiger Abgleich, widersprüchliche Antworten und Geschäftsentscheidungen auf Basis von Teilsichten.",
+   "whatWeDo": "Die wichtigsten Datenquellen des Handels in einer gesteuerten Datenschicht zusammenführen, die sich an realen Geschäftsfragen orientiert und nicht an technischer Vollständigkeit. Die zugrunde liegenden gemeinsamen Stammdaten bereinigen und angleichen: Artikel, Filialen, Lieferanten, Kunden, Warengruppen, Preise, Bestände und Finanzreferenzen. Mit den Daten beginnen, die für die ersten priorisierten Use Cases nötig sind, und die Schicht erweitern, sobald weitere Entscheidungen darauf aufbauen.",
+   "helpImprove": "Verlässliches Reporting, schnellere Analytics-Lieferung, saubere Basis für Prognose, Preisgestaltung, Segmentierung, Lieferantensteuerung, Filialumsetzung und KI sowie weniger wiederholter Neuaufbau derselben Logik für jede neue Initiative.",
+   "dataBehind": "Verbindet POS-, ERP-, Kundenbindungs-, Bestands-, Lieferanten-, Finanz-, Artikel-, Filial- und Kundendaten zu einer wiederverwendbaren Geschäftsschicht. Die Analytik gleicht die zentralen Handelsobjekte ab, erkennt fehlende oder widersprüchliche Datensätze und macht denselben Artikel, dieselbe Filiale, denselben Lieferanten und denselben Kunden systemübergreifend einheitlich sichtbar. Damit erhält jedes künftige Dashboard, jede Prognose, jedes Kampagnenmodell, jedes Nachschub-Tool und jeder KI-Assistent eine sauberere Arbeitsgrundlage.",
+   "diagnosticQuestions": [
+    "Lassen sich Artikel, Filiale, Lieferant und Kunde über POS, ERP, Kundenbindung, Bestand und Finanzen hinweg einheitlich zuordnen?",
+    "Wie viel Zeit fließt vor Management-Meetings in den Abgleich von Daten statt in das Handeln danach?",
+    "Welche wichtige Entscheidung leidet heute am stärksten darunter, dass die benötigten Daten in getrennten Systemen liegen?"
+   ]
+  },
+  "df-2": {
+   "title": "Eine Version der wichtigsten Kennzahlen",
+   "cardText": "Die zentralen Handelskennzahlen einmal definieren und die Fachbereiche für die dahinterliegenden Datenbereiche verantwortlich machen.",
+   "shortPain": "Kennzahlen wie Marge, Verfügbarkeit, Verderb, Promotion-ROI, Schwund und Lieferantenservice bedeuten für verschiedene Teams oft Unterschiedliches. Selbst wenn Berichte vorliegen, wird über die Berechnung diskutiert, bevor über die Entscheidung diskutiert wird. Auch für zentrale Datenbereiche wie Artikel, Lieferant, Filiale, Kunde, Preis und Bestand fehlt eine klare fachliche Verantwortung, sodass sich Qualitätsprobleme über Projekte hinweg wiederholen.",
+   "whatWeDo": "Die wichtigsten Handels-KPIs einmalig in Geschäftssprache und mit abgestimmter Berechnungslogik definieren. Diese Definitionen mit Reporting, Dashboards, Alerts und Analyseergebnissen verbinden, sodass dieselbe Logik wiederverwendet und nicht neu gebaut wird. Für zentrale Datenbereiche eine klare fachliche Verantwortung festlegen und praxistaugliche Qualitätsprüfungen einführen, die Probleme erkennen, bevor sie in Entscheidungen einfließen.",
+   "helpImprove": "Weniger Diskussionen über Zahlen, schnellere Managemententscheidungen, klarere Verantwortung für Datenqualität, stärkeres Self-Service-Reporting und eine verlässlichere Basis für KI-gestützte Analysen.",
+   "dataBehind": "Verbindet KPI-Definitionen, Berechnungslogik, Quelldaten, fachliche Verantwortliche und Qualitätsprüfungen zu einer kontrollierten Betriebsschicht. Die Analytik zeigt, wenn eine Zahl abweichend berechnet wird, wenn kritische Daten fehlen oder veraltet sind, und wer für die Korrektur zuständig ist. So wird Datenqualität von der wiederkehrenden Projektklage zu einem sichtbaren Managementprozess.",
+   "diagnosticQuestions": [
+    "Gibt es für Ihre wichtigsten KPIs eine einzige abgestimmte Definition, die alle Teams gleich berechnen?",
+    "Gibt es bei einem Datenqualitätsproblem einen benannten fachlichen Verantwortlichen, von dem die Lösung erwartet wird?",
+    "Werden Datenqualitätsprobleme dauerhaft behoben, oder tauchen sie in jedem neuen Analytics-Projekt erneut auf?"
+   ]
+  },
+  "df-3": {
+   "title": "Dateneingang und Dokumentenverarbeitung",
+   "cardText": "Lieferantendateien, Rechnungen, Verträge, Formulare, E-Mails, Fotos und Tabellen in nutzbare, geprüfte Geschäftsdaten überführen.",
+   "shortPain": "Handelsdaten gelangen oft über unsaubere Kanäle ins Unternehmen: PDF-Rechnungen, Lieferantenpreislisten, Artikeldateien, Verträge, Lieferscheine, Filial-Auditformulare, Fotos, E-Mails, WhatsApp-Nachrichten und manuelle Tabellen. Teams verbringen Zeit mit Kopieren, Prüfen, Umformatieren und Nachfassen, bevor die Informationen nutzbar sind. Fehler an dieser Stelle wirken sich unbemerkt auf Bestand, Preisgestaltung, Belastungsanzeigen, Stammdaten, Lieferantenabrechnung und Reporting aus.",
+   "whatWeDo": "Datenerfassung und Dokumentenverarbeitung dort automatisieren, wo manuelle Bearbeitung Verzögerung, Fehler oder versteckte Kosten verursacht. Schlüsselfelder auslesen, gegen Geschäftsregeln prüfen, Ausnahmen kennzeichnen und Vorgänge an den richtigen Verantwortlichen zur Freigabe oder Korrektur weiterleiten. Mit ein oder zwei besonders aufwendigen Dokumentenflüssen beginnen und erst erweitern, wenn Prüflogik und Verantwortungsmodell funktionieren.",
+   "helpImprove": "Manueller Bearbeitungsaufwand, Datengenauigkeit, Handhabung von Lieferantendateien, Belegerfassung für Rechnungen und Reklamationen, Qualität der Artikeldaten, Tempo administrativer Abläufe und die Verlässlichkeit nachgelagerter Berichte und Analysen.",
+   "dataBehind": "Verbindet Dokumente, Formulare, E-Mails, Bilder, Tabellen, Stammdaten, Bestellungen, Rechnungen, Lieferbelege, Verträge und Freigabeprozesse. KI liest Informationen aus und klassifiziert sie, während Prüfregeln kontrollieren, ob Felder vollständig, konsistent und plausibel sind. Der Ablauf leitet saubere Datensätze automatisch weiter und übergibt Ausnahmen nur dann an Menschen, wenn Beurteilung oder Korrektur nötig ist.",
+   "diagnosticQuestions": [
+    "Welche wiederkehrenden Dokumente oder Dateien binden heute die meiste manuelle Bearbeitungszeit?",
+    "Wo führen Erfassungsfehler zu Folgeproblemen in Preisgestaltung, Bestand, Lieferantenreklamationen, Rechnungen oder Reporting?",
+    "Werden Dokumentenausnahmen an klare Verantwortliche geleitet, oder bleiben sie in E-Mail-Ketten und Tabellen liegen?"
+   ]
+  },
+  "cust-1": {
+   "title": "Kundensegmentierung und Wertsteuerung",
+   "cardText": "Kunden nach Verhalten, Wert, Warenkorb und Reaktion segmentieren, damit Kampagnen die Gruppen ansprechen, deren Ausbau sich lohnt.",
+   "shortPain": "Zu viele Kunden erhalten dieselben Angebote, obwohl sich Gewohnheiten, Bedürfnisse, Wert und Zukunftspotenzial stark unterscheiden. Das Marketingbudget wirkt bei manchen Gruppen deutlich stärker als bei anderen, doch ohne klare Segmentierung und Wertpriorisierung kann das Unternehmen nicht erkennen, wo es investieren, wo es Beziehungen schützen und wo es lediglich renditeschwache Rabatte finanzieren sollte.",
+   "whatWeDo": "Kunden nach Verhalten, Besuchsfrequenz, Ausgaben, Margenbeitrag, Warenkorbzusammensetzung, Warengruppenbindung, Lebenszyklusphase und Reaktion auf Aktionen segmentieren. Diese Segmente mit differenzierter Angebotslogik, passendem Kanal und Timing verknüpfen. Festlegen, welche Kunden geschützt, ausgebaut, reaktiviert, zu breiteren Einkaufsanlässen entwickelt oder von kostspieligen Kampagnen ausgenommen werden sollen.",
+   "helpImprove": "Kampagnenrelevanz, Konversionsraten, Marketing-ROI, Kundenprofitabilität, weniger vergeudete Rabatte und eine stärkere kommerzielle Nutzung der Kundenbindungsdaten.",
+   "dataBehind": "Verbindet Transaktionen aus der Kundenbindung, Besuchsfrequenz, Warenkorbverhalten, Warengruppenbreite, Kundenwert, Margenbeitrag und Kampagnenreaktion, um zu zeigen, worin sich Kundengruppen tatsächlich unterscheiden. Die Analytik übersetzt diese Unterschiede in nutzbare kommerzielle Segmente und hilft CRM-, Kundenbindungs- und Kampagnenteams zu entscheiden, wer welches Angebot über welchen Kanal und mit welchem erwarteten Ertrag erhalten soll.",
+   "diagnosticQuestions": [
+    "Behandeln Sie Kunden heute nach Kaufverhalten und Wert unterschiedlich, oder geht der Großteil der Aktionen an alle?",
+    "Lässt sich die Kampagnenreaktion auf einzelne Kunden und Segmente zurückverfolgen?",
+    "Wissen Sie, bei welchen Kunden sich Investitionen lohnen und welche vor allem Rabatte auf ohnehin geplante Käufe erhalten?"
+   ]
+  },
+  "cust-2": {
+   "title": "Kundenbindung, Abwanderungsprävention und Rückgewinnung",
+   "cardText": "Nachlassende Kundenaktivität früh erkennen und gezielte Rückgewinnungsmaßnahmen auslösen, bevor Kunden endgültig verloren sind.",
+   "shortPain": "Kunden entfernen sich schrittweise, bevor sie ganz verschwinden. Sie kommen seltener, kaufen weniger Warengruppen, senken den Warenkorbwert und reagieren nicht mehr auf Kampagnen. Meist fällt das erst auf, wenn sie bereits verloren sind, und dann ist die Rückgewinnung schwerer, teurer und weniger aussichtsreich.",
+   "whatWeDo": "Frühe Verhaltenssignale erkennen, die auf nachlassendes Interesse hindeuten: sinkende Besuchsfrequenz, schrumpfende Warengruppenbreite, fallender Warenkorbwert und geringere Reaktion auf Aktionen. Bewerten, welche Kunden eine Rückgewinnung wert sind und welche Maßnahme am ehesten wirkt. Automatisierte Rückgewinnungskampagnen und Trigger im Kundenbindungsprogramm unterstützen, solange der Kunde noch erreichbar ist.",
+   "helpImprove": "Kundenbindung, wiedergewonnene Besuchsfrequenz, geringere Reaktivierungskosten, Schutz wertvoller Kundenbeziehungen und eine bessere Wirtschaftlichkeit des Kundenbindungsprogramms.",
+   "dataBehind": "Verbindet Veränderungen bei Besuchsfrequenz, Warenkorbwert, Warengruppenbreite und Kampagnenreaktion, um nachlassendes Engagement zu erkennen. Die Analytik priorisiert gefährdete Kunden nach Wert und wahrscheinlicher Reaktion und hilft, die passende Rückgewinnungsmaßnahme über CRM, App, Kundenbindungsprogramm, E-Mail oder Serviceprozesse auszulösen, bevor der Kunde vollständig verloren ist.",
+   "diagnosticQuestions": [
+    "Erkennen Sie Kunden, die seltener kommen, bevor sie ganz ausbleiben?",
+    "Gibt es ein definiertes Verhalten, das automatisch eine Bindungs- oder Rückgewinnungsmaßnahme auslöst?",
+    "Ist Ihr Kundenbindungsprogramm darauf ausgelegt, auf nachlassendes Engagement zu reagieren, oder belohnt es vor allem bereits aktive Kunden?"
+   ]
+  },
+  "cust-3": {
+   "title": "Warenkorbwachstum und Ökonomie der Kundenbindung",
+   "cardText": "Warenkorbmuster und die Ökonomie der Kundenbindung nutzen, um Besuche, Warengruppentests und personalisierte Next-Best-Offers zu steigern.",
+   "shortPain": "Ein großer Teil des Wachstums kann von bestehenden Kunden kommen, die mehr kaufen, über mehr Warengruppen hinweg kaufen oder auf relevantere Angebote reagieren. Kundenbindungsprogramme setzen jedoch häufig auf pauschale Rabatte, die Kunden belohnen, die ohnehin gekauft hätten. Das Warenkorbpotenzial bleibt ungenutzt, weil die Angebotslogik nicht personalisiert ist und die Ökonomie der Prämien nicht klar gemessen wird.",
+   "whatWeDo": "Warenkorbzusammensetzung, Warengruppennähe, Kaufmuster und Reaktion auf Bindungsmaßnahmen analysieren, um zu erkennen, welche Artikel und Warengruppen für welche Kundengruppen natürlich zusammengehören. Angebots-, Prämien- und Kontaktlogik so umgestalten, dass sie gezielte Verhaltensweisen fördert: Besuchsfrequenz, Warengruppentest, Warenkorbwachstum und Wiederkauf. Personalisierte Next-Best-Offer-Logik über App, Kundenbindungsprogramm, E-Mail und Kontaktpunkte in der Filiale ausspielen.",
+   "helpImprove": "Durchschnittlicher Warenkorbwert, Warengruppenbindung, Wiederkaufhäufigkeit, ROI des Kundenbindungsprogramms, Effizienz des Marketingbudgets und weniger pauschale Rabatte.",
+   "dataBehind": "Verbindet Warenkorbinhalte, Produktaffinitäten, Warengruppenbeziehungen, Bindungsverhalten, Angebotsannahme, Prämienkosten und Kundenreaktion, um zu zeigen, wo sich bestehende Kunden profitabel ausbauen lassen. Die Analytik identifiziert, welche Kombinationen zusätzliches Verhalten auslösen, welche Prämien Kaufentscheidungen verändern und welche personalisierten Angebote über welchen Kanal versendet werden sollten.",
+   "diagnosticQuestions": [
+    "Wissen Sie, welche Produktkombinationen den Warenkorb bestimmter Kundengruppen am zuverlässigsten vergrößern?",
+    "Ist Ihr Kundenbindungsprogramm auf Verhaltensziele wie Besuche, Warengruppen, Warenkorbgröße und Wiederkauf ausgerichtet?",
+    "Können Sie den zusätzlichen Wert Ihres Kundenbindungsprogramms gegenüber dem messen, was Kunden ohnehin gekauft hätten?"
+   ]
+  },
+  "cust-4": {
+   "title": "Kundenfeedback und Service-Intelligenz",
+   "cardText": "Verstreutes Feedback und Servicekontakte in klare Themen, Zufriedenheitstreiber, zugeordnete Fälle und Maßnahmenprozesse überführen.",
+   "shortPain": "Kundenfeedback kommt über Umfragen, App-Bewertungen, Beschwerden, Social-Kanäle, Callcenter, WhatsApp und Support-Nachrichten. Es ist oft verstreut, wird zu langsam bearbeitet und selten mit den operativen Teams verbunden, die die Ursache beheben können. Gute Kunden können abwandern, ohne dass das Unternehmen die wiederkehrenden Probleme versteht, die sie vertrieben haben.",
+   "whatWeDo": "Feedback und Servicekontakte aus den aktiven Kanälen in einer strukturierten Sicht zusammenführen. Mit KI nach Thema, Filiale, Warengruppe, Stimmung, Schweregrad und wahrscheinlicher Ursache klassifizieren. Wiederkehrende Probleme an die Teams weiterleiten, die handeln können. Für Standardanfragen und übliche Beschwerden KI-gestützte Antwortentwürfe oder kontrollierte Automatisierung einführen, damit sich die Serviceteams auf Fälle konzentrieren, die Urteilsvermögen erfordern.",
+   "helpImprove": "Kundenzufriedenheit, Bearbeitungsgeschwindigkeit bei Problemen, Bindung gefährdeter Kunden, Priorisierung operativer Verbesserungen und Produktivität der Serviceteams.",
+   "dataBehind": "Verbindet Umfragen, Beschwerden, App-Bewertungen, Support-Nachrichten, Kundenbindungsdaten, Kundenprofile und Filialkontext zu einer strukturierten Sicht auf die Kundenstimme. Die Analytik gruppiert Feedback nach Thema, Filiale, Warengruppe, Stimmung, Schweregrad und wahrscheinlicher operativer Ursache und leitet wiederkehrende Probleme an die richtigen Teams. KI kann Standardantworten entwerfen, den Beschwerdeverlauf zusammenfassen und den Eskalationskontext für Mitarbeitende aufbereiten.",
+   "diagnosticQuestions": [
+    "Ist Kundenfeedback aus App, Umfragen, Beschwerden, Social-Kanälen und Servicekontakten heute in einer Sicht zusammengeführt?",
+    "Wie schnell wird eine wiederkehrende Beschwerde für das Team sichtbar, das etwas ändern kann?",
+    "Wissen Sie, welche operativen Themen wie Verfügbarkeit, Wartezeit an der Kasse, Frische oder Sauberkeit der Filiale die Unzufriedenheit am stärksten treiben?"
+   ]
+  },
+  "promo-1": {
+   "title": "Promotionleistung und Kampagnen-Intelligenz",
+   "cardText": "Aktionen mit echtem Zusatzwert von Kampagnen trennen, die vor allem bestehende Nachfrage subventionieren.",
+   "shortPain": "Promotions treiben Menge, aber nicht immer Wert. Zu viele Kampagnen rabattieren Nachfrage, die ohnehin entstanden wäre, und ohne klare Erfolgsmessung werden dieselben Mechaniken wiederholt, unabhängig davon, ob sie echten Zusatzertrag gebracht haben. Auch Lieferantenmittel und Trade Spend werden häufig an der umgesetzten Aktivität statt am geschaffenen Wert gemessen.",
+   "whatWeDo": "Kampagnen anhand von Uplift, Margeneffekt, Mixverschiebung, Kannibalisierung, Nachlaufdelle, Leistung der Filial-Cluster, Reaktion der Kundensegmente und Lieferantenfinanzierung bewerten. Eine Wissensbasis aufbauen, damit das Unternehmen weiß, welche Mechanik in welcher Warengruppe, für welche Kundengruppe, in welchem Filial-Cluster und zu welcher Jahreszeit funktioniert. Diese Erkenntnisse verfügbar machen, bevor die nächste Kampagne geplant wird.",
+   "helpImprove": "Promotion-ROI, Margenschutz, weniger vergeudete Rabatte, stärkere Disziplin beim Trade Spend und Sicherheit darüber, was wiederholt, überarbeitet oder eingestellt werden sollte.",
+   "dataBehind": "Verbindet Promotionaufwand, Lieferantenfinanzierung, Rückvergütungen, Kampagnenmechaniken, POS-Ergebnisse, Kundenreaktion, Leistung der Filial-Cluster, Warengruppenmarge und Verhalten nach der Aktion, um zu zeigen, welche kommerziellen Investitionen sich wirklich rechnen. Die Analytik trennt echten inkrementellen Uplift von subventionierter Nachfrage, vergleicht Mechaniken über Warengruppen und Segmente hinweg und macht vergangene Kampagnen zur Entscheidungsgrundlage für den nächsten Planungszyklus.",
+   "diagnosticQuestions": [
+    "Können Sie unterscheiden, welche Aktionen wirklich zusätzlichen Umsatz gebracht haben und welche Nachfrage ohnehin entstanden wäre?",
+    "Prüfen die kommerziellen Teams die Kampagnenleistung nach Kundensegment und Filial-Cluster, bevor sie dieselbe Mechanik wiederholen?",
+    "Werden lieferantenfinanzierte Aktivitäten an Abverkauf, Marge und inkrementeller Reaktion gemessen, oder vor allem an gesicherten Mitteln und gelieferter Menge?"
+   ]
+  },
+  "promo-2": {
+   "title": "Gezielte Kampagnen- und Angebotsplanung",
+   "cardText": "Kampagnen nach Kundensegment, Filialprofil, Warengruppenrolle und Timing planen statt mit einem breiten Ansatz für alle.",
+   "shortPain": "Viele Promotionkalender entstehen aus Warengruppenrotation, Lieferantenverhandlung und kommerzieller Gewohnheit statt aus Kundenverhalten und Nachfragesignalen. Kampagnen laufen zu breit, zum falschen Zeitpunkt und mit der falschen Mechanik, geben Budget für Kunden aus, die den Anreiz nicht brauchen, und verfehlen jene, die ihn brauchen.",
+   "whatWeDo": "Kampagnen nach Kundensegment, Filialprofil, Warengruppenrolle und saisonaler Nachfrage zuschneiden, statt überall denselben Ansatz zu verwenden. Mechaniken wie Rabatttiefe, Bundle, Mehrstückaktion, Bindungsprämie oder personalisiertes Angebot auf das gewünschte Verhalten abstimmen. Einen disziplinierteren Planungsprozess aufbauen, der den erwarteten Ertrag klärt, bevor Budget gebunden wird.",
+   "helpImprove": "Kampagnenkonversion, Effizienz des Marketingbudgets, Angebotsrelevanz nach Segment und Filiale, weniger pauschale Rabatte und eine stärkere Verbindung zwischen Kundendaten und kommerzieller Planung.",
+   "dataBehind": "Verbindet Kundensegmente, Filial-Cluster, Warengruppenrollen, Einkaufsanlässe, Promotionkalender und historische Reaktionen, um zu steuern, wer wann welches Angebot erhalten sollte. Die Analytik schätzt die Reaktion nach Segment und Mechanik, zeigt, wo breite Kampagnen voraussichtlich Marge verschwenden, und hilft den kommerziellen Teams, Kampagnen mit klarerer Zielgruppenlogik und erwarteten Ergebnissen zu briefen.",
+   "diagnosticQuestions": [
+    "Erhalten unterschiedliche Kundengruppen oder Filial-Cluster heute differenzierte Promotionmechaniken?",
+    "Ist Ihr Promotionkalender an Kunden- und Filialverhaltensdaten ausgerichtet oder vor allem an Warengruppenrotation und Zyklen der Lieferantenfinanzierung?",
+    "Können Sie das wahrscheinliche finanzielle Ergebnis einer geplanten Kampagne abschätzen, bevor sie startet?"
+   ]
+  },
+  "promo-3": {
+   "title": "Preisentscheidungen und Wettbewerbsreaktion",
+   "cardText": "Preissensibilität, Kostenveränderungen und Wettbewerbssignale nutzen, um schneller zu reagieren, ohne Marge zu verschenken.",
+   "shortPain": "Langsame Preisreaktion kostet Marge und Kundenfrequenz. Häufig ist unklar, welche Artikel echte Preisschlachtfelder sind und welche relativ preisunempfindlich, sodass das Unternehmen entweder über das gesamte Sortiment überreagiert oder Wettbewerbsdruck dort übersieht, wo er zählt. Kostenveränderungen bei Lieferanten und Schritte des Wettbewerbs schlagen zu langsam auf Preisentscheidungen durch.",
+   "whatWeDo": "Bestimmen, bei welchen Artikeln Kunden besonders preissensibel reagieren und welche kaum Preisrisiko tragen. Wettbewerbspreise, Kostenveränderungen bei Lieferanten und Nachfragesignale beobachten. Diese Erkenntnisse in Preisentscheidungen einfließen lassen, die die Preiswahrnehmung schützen, ohne unnötig Marge abzugeben oder dort zu spät zu reagieren, wo es am meisten zählt.",
+   "helpImprove": "Preisdisziplin, Margenschutz, Reaktionsfähigkeit im Wettbewerb, Preiswahrnehmung der Kunden und Tempo der Reaktion auf Kosten- und Marktdruck.",
+   "dataBehind": "Verbindet SKU-Preise, Warengruppenmarge, Nachfragereaktion, Wettbewerbspreise, Kostenveränderungen bei Lieferanten und das Verhalten der Filial-Cluster, um zu zeigen, wo Preisschritte kommerziell sensibel sind. Die Analytik unterscheidet Eckartikel von risikoärmeren Sortimentsteilen, schätzt den Kompromiss zwischen Marge und Menge bei Preisänderungen ab und stößt eine Prüfung an, wenn Bewegungen bei Wettbewerb oder Lieferanten Handeln erfordern.",
+   "diagnosticQuestions": [
+    "Wissen Sie, an welchen Artikeln Kunden Ihre Preislage am stärksten messen?",
+    "Wie schnell führt eine Preisänderung des Wettbewerbs oder eine Kostenerhöhung eines Lieferanten zu einer Preisentscheidung?",
+    "Können Sie die wahrscheinliche Wirkung eines Preisschritts auf Marge und Menge vorab modellieren?"
+   ]
+  },
+  "promo-4": {
+   "title": "Abschriften, Abverkauf und Sortimentsoptimierung",
+   "cardText": "Schwachen Abverkauf und Sortimentskomplexität früh genug erkennen, um Wert zu sichern, bevor aus Abschriften Verderb wird.",
+   "shortPain": "Späte Abschriften vernichten Wert bei Frischware, Saisonware und Langsamdrehern. Gleichzeitig zehrt die SKU-Vielfalt unbemerkt an Marge und operativer Kapazität. Fläche und kommerzielle Aufmerksamkeit fließen in Artikel, die das nicht rechtfertigen, während stärkere Artikel zu wenig Unterstützung erhalten.",
+   "whatWeDo": "Bestände mit näher rückendem Verfallsdatum, schlechter Rotation oder ausbleibendem Abverkauf so früh kennzeichnen, dass ein Eingriff noch Wert sichert. Zeitpunkt und Tiefe von Abschriften anhand von Nachfragetempo, Margenrückgewinnung sowie Frische- oder Alterungsrisiko steuern. Die Produktivität von Warengruppe, Sortiment und SKU über Umsatz, Marge, Lagerumschlag, Warenkorbrolle und lokale Nachfrage analysieren, um zu erkennen, wo sich Komplexität nicht auszahlt.",
+   "helpImprove": "Abverkauf, weniger Verderb, Wertrückgewinnung bei Abschriften, Sortimentsdisziplin, Warengruppenmarge und weniger operative Komplexität durch schwache SKUs.",
+   "dataBehind": "Verbindet Abverkaufsquoten, Bestandsalter, Haltbarkeit, Marge, Reaktion auf Abschriften, Warengruppenrolle, Warenkorbbeitrag und filialbezogene Nachfrage, um zu zeigen, welche Artikel wann Handlung erfordern. Die Analytik empfiehlt frühere Abschriften, wo sich Wert noch sichern lässt, und weist auf SKUs hin, die Komplexität erzeugen, ohne genug Umsatz, Marge oder Kundennutzen für ihren Platz zu liefern.",
+   "diagnosticQuestions": [
+    "Werden Abschriften nach systematischen Regeln ausgelöst oder überwiegend nach Einschätzung der Filiale, wenn das Problem bereits sichtbar ist?",
+    "Wissen Sie, welche SKUs operative und margenseitige Komplexität ohne ausreichenden kommerziellen Ertrag erzeugen?",
+    "Wird die Sortimentsleistung gemeinsam über Umsatz, Marge, Lagerumschlag und Warenkorbrolle betrachtet oder vor allem über die Absatzmenge?"
+   ]
+  },
+  "promo-5": {
+   "title": "Wettbewerbs- und Marktbeobachtung",
+   "cardText": "Wettbewerbspreise, Aktionen, Sortimentsschritte und Marktsignale verfolgen, damit kommerzielle Teams nicht aus dem Gedächtnis reagieren.",
+   "shortPain": "Schritte des Wettbewerbs wirken auf Preiswahrnehmung, Aktionsdruck, Kundenfrequenz und Erwartungen in der Warengruppe. Marktbeobachtung läuft jedoch oft informell: Filialbesuche, Screenshots, das Gedächtnis der Einkäufer, Hinweise von Lieferanten und späte Reaktionen, wenn sich der Markt längst bewegt hat. Es fehlt eine systematische Sicht auf Wettbewerbspreise, Aktionen, Sortimentsänderungen, Neueinführungen und Konsumsignale.",
+   "whatWeDo": "Einen strukturierten Prozess zur Wettbewerbs- und Marktbeobachtung über die wichtigsten Wettbewerber, Warengruppen, Preise, Aktionen, Sortimente und externen Signale aufsetzen. Verstreute Beobachtungen in vergleichbare Erkenntnisse überführen, die kommerzielle Teams in Preisgestaltung, Kampagnenplanung, Sortimentsprüfung und Lieferantengesprächen nutzen können. Auf die Warengruppen und Wettbewerber konzentrieren, die Kundenentscheidung und Margenrisiko tatsächlich beeinflussen.",
+   "helpImprove": "Reaktionsfähigkeit im Wettbewerb, Sicherheit bei der Preisgestaltung, Aktionsplanung, Sortimentsentscheidungen, Qualität der Lieferantenverhandlung und Transparenz der Marktbewegung für die Führung.",
+   "dataBehind": "Verbindet Preiserhebungen beim Wettbewerb, Aktionsbeobachtungen, Online-Sortimentsdaten, Filialaudits, Markthinweise von Lieferanten, öffentliche Nachrichten und Konsumtrendsignale zu einer strukturierten Sicht. Die Analytik hebt wesentliche Veränderungen hervor, vergleicht Wettbewerbspositionen nach Warengruppe und Artikel und fasst Marktbewegungen zusammen, damit kommerzielle Teams bewusst reagieren, statt auf Anekdoten oder späte Entdeckungen zu bauen.",
+   "diagnosticQuestions": [
+    "Wie verfolgen Ihre kommerziellen Teams heute Wettbewerbspreise, Aktionen und Sortimentsänderungen?",
+    "Welche Schritte des Wettbewerbs verändern Ihre Preis-, Aktions- oder Sortimentsentscheidungen wesentlich?",
+    "Wird Marktwissen in einem wiederverwendbaren System erfasst, oder lebt es überwiegend im Gedächtnis der Einkäufer und in Ad-hoc-Dateien?"
+   ]
+  }
+ }
+}

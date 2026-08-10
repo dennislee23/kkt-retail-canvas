@@ -1,0 +1,350 @@
+{
+ "roadmapNodes": {
+  "trusted-retail-facts": {
+   "title": "Verlässliche Retail-Kennzahlen",
+   "shortRole": "Schaffen Sie eine verlässliche Sicht auf die Zahlen, auf deren Basis die Führung entscheidet.",
+   "executiveWhy": "Ohne verlässliche Zahlen beschleunigt jede spätere Optimierung nur die Uneinigkeit.",
+   "readinessSignals": [
+    "Zentrale KPIs haben benannte fachliche Verantwortliche.",
+    "Die Führung muss vor Entscheidungen keine widersprüchlichen Versionen mehr abgleichen.",
+    "Priorisierte Berichte sind mit Quelllogik und Qualitätsprüfungen verknüpft."
+   ]
+  },
+  "margin-stock-waste-visibility": {
+   "title": "Transparenz über Marge, Bestand und Verderb",
+   "shortRole": "Zeigen Sie, wo Bestand, Verderb, Marge und Working Capital verdeckten wirtschaftlichen Druck erzeugen.",
+   "executiveWhy": "Ein großer Teil des praktischen Wertbeitrags im Lebensmitteleinzelhandel beginnt damit, sichtbar zu machen, wo Bestand, Verderb und Marge Wert verlieren.",
+   "readinessSignals": [
+    "Die Führung sieht Langsamdreher, Verderbrisiko und Margendruck je Warengruppe oder Filiale.",
+    "Teams können wertrelevante Ausnahmen vom Rauschen unterscheiden.",
+    "Finanz- und Vertriebsbereich sprechen auf Basis derselben Fakten über im Bestand gebundenes Kapital."
+   ]
+  },
+  "customer-market-signal-visibility": {
+   "title": "Transparenz über Kunden- und Marktsignale",
+   "shortRole": "Machen Sie Kundenverhalten, Feedback, Marktbewegungen und Promotionwirkung sichtbar, bevor Sie schwerer optimieren.",
+   "executiveWhy": "Kommerzielle Optimierung braucht echte Signale zu Kunden, Kampagnen, Wettbewerbern und Filialen.",
+   "readinessSignals": [
+    "Das Management sieht, welche Kunden, Kampagnen, Filialen, Warengruppen und Wettbewerber sich bewegen.",
+    "Feedback-Themen werden an Verantwortliche weitergeleitet.",
+    "Promotionergebnisse werden über den reinen Umsatzeffekt hinaus gemessen."
+   ]
+  },
+  "supplier-inbound-visibility": {
+   "title": "Transparenz über Lieferanten und Wareneingang",
+   "shortRole": "Zeigen Sie, wo Lieferantenservice, Reklamationen, Konditionen, Wareneingangsrisiken und Warengruppenabhängigkeiten den Wert beeinflussen.",
+   "executiveWhy": "Der Wertbeitrag von Lieferanten ist häufig über Einkauf, Finanzen, Supply Chain und Filialen verstreut.",
+   "readinessSignals": [
+    "Lieferantenleistung ist je Lieferant, Warengruppe und Filialwirkung sichtbar.",
+    "Reklamationen und Abzüge werden über Verantwortung und Klärungsstand nachverfolgt.",
+    "Lieferantenkonditionen werden mit dem verglichen, was vereinbart und tatsächlich realisiert wurde."
+   ]
+  },
+  "exception-led-control": {
+   "title": "Ausnahmegesteuerte Betriebssteuerung",
+   "shortRole": "Kommen Sie vom Erkennen von Problemen dahin, die richtigen Ausnahmen schnell an die richtigen Verantwortlichen zu leiten.",
+   "executiveWhy": "Dashboards schaffen keinen Wert, solange die Organisation nicht verlässlich auf Ausnahmen reagieren kann.",
+   "readinessSignals": [
+    "Ausnahmen werden nach wirtschaftlicher Bedeutung und Dringlichkeit priorisiert.",
+    "Wiederkehrende Probleme sind Verantwortlichen zugeordnet.",
+    "Die Führung erkennt, ob aus Erkenntnissen tatsächlich Ergebnisse wurden."
+   ]
+  },
+  "stock-freshness-availability-control": {
+   "title": "Steuerung von Bestand, Frische und Verfügbarkeit",
+   "shortRole": "Steuern Sie Verfügbarkeit, Verderb, Nachschub-Ausnahmen und Frischerisiken, bevor Sie den Nachschub weiter automatisieren.",
+   "executiveWhy": "Optimierung bei Bestand und Frische funktioniert erst, wenn das Unternehmen die grundlegenden Ausnahmen beherrscht.",
+   "readinessSignals": [
+    "Out-of-Stock- und Verderbrisiken werden sichtbar, bevor Kunden- oder Margenschaden entsteht.",
+    "Disponenten erkennen, ob die Ursache in Nachfrage, Lieferant, Bestellung, Filialumsetzung oder Preisgestaltung liegt.",
+    "Für Ausnahmen gibt es klare Handlungsregeln."
+   ]
+  },
+  "supplier-value-control": {
+   "title": "Steuerung des Lieferantenwerts",
+   "shortRole": "Steuern Sie Wertverluste auf Lieferantenseite über Service, Reklamationen, Streitfälle, Konditionen und gemeinsame Planung.",
+   "executiveWhy": "Lieferantenkonditionen, Reklamationen und Serviceprobleme werden erst steuerbar, wenn sie nicht mehr verstreut sind.",
+   "readinessSignals": [
+    "Reklamationen hängen nicht mehr vom Gedächtnis Einzelner ab.",
+    "Die Lieferantennachverfolgung hat Verantwortliche und einen Status.",
+    "Einkauf, Finanzen und Supply Chain teilen eine gemeinsame Sicht auf den Lieferantenwert."
+   ]
+  },
+  "risk-loss-compliance-control": {
+   "title": "Steuerung von Risiko, Verlust und Compliance",
+   "shortRole": "Steuern Sie Transaktionsmissbrauch, Schwund, Bestandsverluste, Rechts- und Compliance-Unterstützung sowie HR-Risiken, bevor Sie die Automatisierung ausweiten.",
+   "executiveWhy": "KI-Unterstützung in risikosensiblen Bereichen soll Disziplin und Prüfqualität erhöhen, nicht unkontrollierte Antworten erzeugen.",
+   "readinessSignals": [
+    "Risikosignale werden nach Wert und Schweregrad priorisiert.",
+    "Sensible Entscheidungen bleiben an eine menschliche Prüfung gebunden.",
+    "Ausnahmen gehen evidenzbasiert an den richtigen Kontrollverantwortlichen."
+   ]
+  },
+  "commercial-optimization": {
+   "title": "Kommerzielle Optimierung",
+   "shortRole": "Verbessern Sie Promotions, Preisgestaltung, Abschriften, Sortimentsentscheidungen und kommerzielle Mittelverteilung auf besserer Faktenbasis.",
+   "executiveWhy": "Dies ist häufig einer der größeren Wertpools der Stufe 2, weil er unmittelbar auf Margenqualität und Wachstum wirkt.",
+   "readinessSignals": [
+    "Kommerzielle Teams können Uplift, Marge, Warenkorb, Kannibalisierung und Bestandseffekte vergleichen.",
+    "Preis- und Promotionentscheidungen folgen nicht allein Gewohnheit oder Lieferantendruck.",
+    "Empfehlungen lassen sich an der Unternehmensstrategie überprüfen."
+   ]
+  },
+  "customer-value-growth": {
+   "title": "Wachstum des Kundenwerts",
+   "shortRole": "Verbessern Sie Kundenansprache, Bindung, Warenkorbwachstum, die Ökonomie der Kundenbindung und Service-Intelligenz.",
+   "executiveWhy": "Kundenwachstum wird profitabler, sobald der Händler weiß, welche Kunden er schützen, ausbauen oder reaktivieren sollte.",
+   "readinessSignals": [
+    "Kundengruppen sind mit unterschiedlichen Maßnahmen verknüpft.",
+    "Investitionen in Kundenbindung werden an Verhalten und Marge gemessen.",
+    "Bindungs- und Rückgewinnungsmaßnahmen werden priorisiert statt breit gestreut."
+   ]
+  },
+  "forecast-planning-replenishment-quality": {
+   "title": "Prognosegestützte Planung und Nachschubqualität",
+   "shortRole": "Nutzen Sie Prognose, Aktionsplanung, Nachschublogik, Personalplanung und rollierende Finanzsichten für bessere Entscheidungen im Voraus.",
+   "executiveWhy": "Vorausschauende Analytik ist nur dann wertvoll, wenn sie Entscheidungen ändert, bevor die Ergebnisse feststehen.",
+   "readinessSignals": [
+    "Prognosen sind mit Maßnahmen verknüpft, nicht nur mit Berichten.",
+    "Teams verstehen, wo Restriktionen zu Überbestand oder Unterdeckung führen.",
+    "Finanzielle Risiken werden früh genug sichtbar, um gegenzusteuern."
+   ]
+  },
+  "scenario-led-decisions": {
+   "title": "Szenariogestützte Entscheidungen",
+   "shortRole": "Machen Sie große Entscheidungen überprüfbar, bevor sie auf Filialen, Warengruppen, Lieferanten oder Kundengruppen ausgerollt werden.",
+   "executiveWhy": "Szenariodisziplin hilft der Führung, keine Entscheidungen auszurollen, die wirtschaftlich nicht tragen.",
+   "readinessSignals": [
+    "Optionen lassen sich direkt nebeneinander vergleichen.",
+    "Pläne werden auf Ergebnis-, Liquiditäts- und Risikofolgen geprüft.",
+    "Attraktive Ideen werden hinterfragt, bevor teuer ausgerollt wird."
+   ]
+  },
+  "controlled-assistant-operating-model": {
+   "title": "Kontrolliertes Betriebsmodell für Assistenten",
+   "shortRole": "Verankern Sie KI-Assistenten und Agenten im Tagesgeschäft – mit freigegebenem Wissen, Prüfregeln und klaren Eskalationsgrenzen.",
+   "executiveWhy": "Assistenten steigern die Produktivität nur, wenn sie an kontrollierte Quellen und Geschäftsprozesse angebunden sind.",
+   "readinessSignals": [
+    "Assistenten nutzen freigegebene Quellen.",
+    "Wo Urteilsvermögen oder Verantwortung gefragt ist, bleibt der Mensch in der Kontrolle.",
+    "Entwurf, Suche, Nachverfolgung und Eskalation sind Teil wiederkehrender Abläufe."
+   ]
+  },
+  "store-field-execution-scale": {
+   "title": "Filial- und Flächenumsetzung in der Breite",
+   "shortRole": "Machen Sie Betriebsroutinen, Aufgaben in der Fläche, Regalprüfungen, Personalplanung und Problemeskalation im gesamten Netz einheitlich.",
+   "executiveWhy": "Verbesserungen im Handel skalieren nur, wenn die Filialumsetzung dem Plan so weit folgt, dass Entscheidungen beim Kunden ankommen.",
+   "readinessSignals": [
+    "Regional- und Filialteams sehen, was erledigt, versäumt, wiederkehrend und gelöst ist.",
+    "Aktivitäten in der Fläche sind mit geschäftlichen Ergebnissen verknüpft.",
+    "Lücken bei Personal und Umsetzung werden früh genug sichtbar, um zu handeln."
+   ]
+  },
+  "supplier-monetization-options": {
+   "title": "Optionen zur Lieferantenmonetarisierung",
+   "shortRole": "Nutzen Sie Lieferantenrelevanz, Kampagnenmessung, Kundenaufmerksamkeit und Warengruppenwissen, um kontrollierte, lieferantenfinanzierte Wertpools zu schaffen.",
+   "executiveWhy": "Lieferantenmonetarisierung sollte dort beginnen, wo der Händler bereits glaubwürdige Aufmerksamkeit, Lieferantennachfrage und Messdisziplin hat.",
+   "readinessSignals": [
+    "Priorisierte Lieferanten würden die Erkenntnisse oder Aktivierung spürbar wertschätzen.",
+    "Die Kampagnenmessung ist belastbar genug, um sie extern zu vermarkten.",
+    "Das Kundenerlebnis bleibt steuerbar."
+   ]
+  },
+  "customer-ownership-monetization": {
+   "title": "Monetarisierung der Kundenbeziehung",
+   "shortRole": "Nutzen Sie stärkeren Kundenzugang und die Ökonomie der Kundenbindung, um kostenpflichtige Vorteile, Partnerangebote und Lifecycle-Wertpools zu testen.",
+   "executiveWhy": "Kundenmonetarisierung wird erst realistisch, wenn der Händler versteht, was Kunden tatsächlich schätzen.",
+   "readinessSignals": [
+    "Kundensegmente haben klar erkennbare Wertbedürfnisse.",
+    "Die Ökonomie der Vorteile lässt sich gegen eine Kontrollgruppe messen.",
+    "Der Händler kann Vertrauen schützen und generische Abo-Ideen vermeiden."
+   ]
+  },
+  "selective-platform-partnership-models": {
+   "title": "Selektive Plattform- und Partnerschaftsmodelle",
+   "shortRole": "Prüfen Sie weitergehende Ideen zu Plattform, Marktplatz, Embedded Finance, Fulfillment oder Datenkooperation nur dort, wo Reife und Nachfrage es rechtfertigen.",
+   "executiveWhy": "Plattformartige Wetten sollten selektiv, evidenzbasiert und diszipliniert sein.",
+   "readinessSignals": [
+    "Das Unternehmen kann begründen, was es bewusst nicht verfolgt.",
+    "Expansionsoptionen werden an Nachfrage, operativer Leistungsfähigkeit und Wirtschaftlichkeit geprüft.",
+    "Die Führung kennt die notwendigen Voraussetzungen und Lücken vor der Investition."
+   ]
+  }
+ },
+ "roadmapSteps": {
+  "see": {
+   "label": "Sehen",
+   "executiveQuestion": "Was muss sichtbar werden, bevor wir entscheiden, wo wir ansetzen?",
+   "purpose": "Eine gemeinsame Faktenbasis schaffen und Wertverluste aufdecken.",
+   "typicalOutputs": [
+    "KPI-Abstimmung",
+    "verlässliche Sichten",
+    "Diagnose der Wertverluste"
+   ],
+   "maturitySignal": "Die Führung sieht dasselbe Problem, aus denselben Zahlen, früh genug zum Handeln.",
+   "avoid": "Eine breite Datenplattform bauen, bevor die ersten fachlichen Fragen klar sind."
+  },
+  "control": {
+   "label": "Steuern",
+   "executiveQuestion": "Was braucht Verantwortung, Regeln und Reaktion, bevor optimiert wird?",
+   "purpose": "Konsistenz, Ausnahmebehandlung und Managementreaktion verbessern.",
+   "typicalOutputs": [
+    "Eskalationswege für Ausnahmen",
+    "klare Verantwortlichkeiten",
+    "operative Kontrollen"
+   ],
+   "maturitySignal": "Teams handeln bei sichtbaren Problemen, bevor daraus Margen-, Bestands- oder Kundenschaden wird.",
+   "avoid": "Dashboards als Wertbeitrag verbuchen, obwohl niemand die Maßnahme verantwortet."
+  },
+  "optimize": {
+   "label": "Optimieren",
+   "executiveQuestion": "Welche Entscheidungen lassen sich jetzt mit besserer Analytik verbessern?",
+   "purpose": "Evidenz, Prognose, Segmentierung und Entscheidungsunterstützung nutzen, um die Wirtschaftlichkeit zu verbessern.",
+   "typicalOutputs": [
+    "bessere Prognosen",
+    "gezielte Entscheidungen",
+    "kommerzielle Optimierung"
+   ],
+   "maturitySignal": "Analytik verändert Entscheidungen, bevor die Ergebnisse feststehen.",
+   "avoid": "Zu fortgeschrittenen Modellen springen, bevor das Unternehmen den Daten vertraut und Ausnahmen beherrscht."
+  },
+  "scale": {
+   "label": "Skalieren",
+   "executiveQuestion": "Was lässt sich zu einer wiederholbaren Betriebsroutine machen?",
+   "purpose": "Bessere Entscheidungen in wiederkehrende Arbeit einbetten und manuelle Abhängigkeit verringern.",
+   "typicalOutputs": [
+    "eingebettete Empfehlungen",
+    "kontrollierte Assistenten",
+    "Szenario-Routinen"
+   ],
+   "maturitySignal": "Bessere Entscheidungen werden wiederholt über Teams hinweg genutzt, nicht nur in Einzelanalysen.",
+   "avoid": "Einen Prozess ausrollen, bevor das Betriebsmodell in einem klar abgegrenzten Bereich funktioniert."
+  },
+  "expand": {
+   "label": "Erweitern",
+   "executiveQuestion": "Welche optionalen neuen Wertpools werden später realistisch?",
+   "purpose": "Stärkeren Kundenzugang, Lieferantenrelevanz und operative Intelligenz als strategische Vermögenswerte nutzen.",
+   "typicalOutputs": [
+    "Lieferantenmonetarisierung",
+    "Ansätze zur Kundenbeziehung",
+    "selektive Partnerschaften"
+   ],
+   "maturitySignal": "Neue Erlösmodelle stützen sich auf verlässliche Messung, Kundenzugang und operative Leistungsfähigkeit.",
+   "avoid": "Strategische Expansion als selbstverständlichen nächsten Schritt für jeden Händler darstellen."
+  }
+ },
+ "roadmapPathways": {
+  "margin-cash-path": {
+   "title": "Margen- und Liquiditätsdisziplin",
+   "executiveUseCase": "Verstehen, wo Marge, im Bestand gebundenes Kapital, Lieferantenwert und kommerzielle Entscheidungen Wert verlieren.",
+   "readinessQuestions": [
+    "Vertrauen Führung, Finanzen und Vertrieb denselben Margenzahlen?",
+    "Sehen Sie Marge, im Bestand gebundenes Kapital, Verderb und Working-Capital-Druck je Warengruppe, Filiale oder Lieferant?",
+    "Sind wesentliche Margenverluste Verantwortlichen mit klarer Nachverfolgung zugeordnet?",
+    "Können Sie Promotion-, Preis-, Bestands- und Lieferantenentscheidungen gegen ihre Margenwirkung stellen?",
+    "Testen Sie größere kommerzielle oder bestandsbezogene Entscheidungen, bevor Sie sie ausrollen?"
+   ],
+   "diagnosticNote": "Ausgangspunkt sollte der Wertverlust sein, der am größten und derzeit am wenigsten gesteuert ist: Margentransparenz, im Bestand gebundenes Kapital, Verderb, Lieferantenwert oder Promotionökonomie."
+  },
+  "stock-freshness-path": {
+   "title": "Bestand, Frische und Verfügbarkeit",
+   "executiveUseCase": "Out-of-Stock-Situationen, Überbestände, Frischeverderb, Working-Capital-Druck und Verfügbarkeitsüberraschungen reduzieren.",
+   "readinessQuestions": [
+    "Sehen Sie Out-of-Stock, Überbestand, Altbestand und Frischeverderb früh genug, um zu handeln?",
+    "Verstehen Sie die wahrscheinlichen Ursachen: Nachfrage, Bestellung, Lieferantenrestriktionen, Filialumsetzung, Haltbarkeit oder Preisgestaltung?",
+    "Werden Nachschub-Ausnahmen an klare Verantwortliche geleitet?",
+    "Werden Abschriften, Umlagerungen und Verderbmaßnahmen im Frischebereich erledigt, bevor Wert verloren geht?",
+    "Fließen Filialumsetzung und Lieferantenrestriktionen in die Nachschubentscheidungen ein?"
+   ],
+   "diagnosticNote": "Springen Sie nicht zu autonomem Nachschub, bevor Ausnahmen, Wiederbeschaffungszeiten, Lieferantenrestriktionen und das Umsetzungsverhalten in den Filialen beherrscht sind."
+  },
+  "promotions-pricing-path": {
+   "title": "Promotions, Preisgestaltung und kommerzielles Wachstum",
+   "executiveUseCase": "Promotionwirkung, Preissicherheit, Abschriftendisziplin, gezielte Angebote und kommerzielle Margenqualität verbessern.",
+   "readinessQuestions": [
+    "Können Sie Promotionergebnisse über den reinen Umsatzeffekt hinaus messen?",
+    "Verstehen Sie nach Kampagnen die Wirkung auf Marge, Kannibalisierung, Bestand und Warenkorb?",
+    "Nutzen Preisentscheidungen Wettbewerbs- und Kundensignale statt nur Gewohnheit oder Lieferantendruck?",
+    "Können Sie Angebote auf relevante Kundengruppen zuschneiden?",
+    "Lassen sich kommerzielle Pläne testen, bevor sie breit ausgerollt werden?"
+   ],
+   "diagnosticNote": "Preis- und Promotionarbeit braucht eine saubere Margenlogik und belastbare Kampagnenmessung, bevor fortgeschrittener Optimierung zu trauen ist."
+  },
+  "customer-loyalty-path": {
+   "title": "Kunden- und Kundenbindungswert",
+   "executiveUseCase": "Kundenverständnis nutzen, um Bindung, Warenkorbwachstum, die Ökonomie der Kundenbindung, Servicequalität und künftige kundeneigene Modelle zu verbessern.",
+   "readinessQuestions": [
+    "Verfügen Sie über nutzbare Kunden-, Kundenbindungs-, Warenkorb- und Kampagnendaten?",
+    "Können Sie erkennen, welche Kunden Sie schützen, ausbauen, reaktivieren oder nicht länger übersubventionieren sollten?",
+    "Sind Kundenfeedback und Serviceprobleme je Filiale, Warengruppe oder Thema sichtbar?",
+    "Lassen sich Angebote nach Kundenverhalten und Kundenwert differenzieren?",
+    "Können Sie messen, ob Bindungs- oder Servicemaßnahmen Verhalten und Marge verändern?"
+   ],
+   "diagnosticNote": "Die Kundenreife hängt an nutzbaren Kundenbindungs- und Kundendaten, Reichweite in der Kommunikation, Einwilligungen, Angebotsdisziplin und einer klaren Wertökonomie."
+  },
+  "store-execution-path": {
+   "title": "Filialumsetzung und Steuerung in der Fläche",
+   "executiveUseCase": "Filialkonformität, Regalumsetzung, Eskalation von Problemen in der Fläche, Personalproduktivität und Managementreaktion verbessern.",
+   "readinessQuestions": [
+    "Sehen Zentrale und Flächenteams, welche Filialen vom Plan abweichen und warum?",
+    "Werden Themen zu Regal, Preisauszeichnung, Aktion, Frische und Compliance an Verantwortliche geleitet?",
+    "Sehen Führungskräfte, ob Aufgaben in der Fläche erledigt und abgeschlossen wurden?",
+    "Bilden Personalpläne die Filialnachfrage und die Betriebsbedingungen ab?",
+    "Können Filialteams ohne manuelles Nachfassen auf freigegebene Arbeitsanweisungen zugreifen?"
+   ],
+   "diagnosticNote": "Wege zur Filialumsetzung sollten eng an der Handlungsverantwortung bleiben. Eine reine Transparenzschicht ohne Aufgabensteuerung und Abschlussverfolgung verändert das operative Verhalten nicht."
+  },
+  "supplier-value-path": {
+   "title": "Lieferantenleistung und Lieferantenwert",
+   "executiveUseCase": "Zuverlässigkeit im Wareneingang, Reklamationsrückflüsse, Lieferantenkonditionen, gemeinsame Planung und künftige Lieferantenmonetarisierung verbessern.",
+   "readinessQuestions": [
+    "Sehen Sie Lieferantenservice, Wareneingangsrisiko, Reklamationen, Konditionen und Streitfälle in einer Managementsicht?",
+    "Werden Reklamationen und Abzüge über Verantwortung, Status und Rückfluss nachverfolgt?",
+    "Teilen Einkauf, Finanzen und Supply Chain dasselbe Bild vom Lieferantenwert?",
+    "Lassen sich lieferantenfinanzierte Promotions glaubwürdig messen?",
+    "Haben priorisierte Lieferanten genug Größe oder Interesse für Insight-Produkte oder finanzierte Aktivierung?"
+   ],
+   "diagnosticNote": "Lieferantenmonetarisierung ist verfrüht, solange Reklamationen, Konditionen, Service und Kampagnenmessung intern noch nicht belastbar sind."
+  },
+  "workforce-ai-path": {
+   "title": "Belegschaft und Einführung von KI-Assistenten",
+   "executiveUseCase": "Sichtbare Produktivitätsgewinne erzielen und den KI-Einsatz dabei kontrolliert, geschäftsrelevant und an freigegebene Quellen gebunden halten.",
+   "readinessQuestions": [
+    "Welche tägliche Arbeit ist am mühsamsten: Meetings, Dokumente, HR, Recht, Filialsupport, Kundenservice oder Lieferantennachverfolgung?",
+    "Stehen dem Assistenten freigegebene Quellen zur Verfügung?",
+    "Sind Prüfung, Freigabe, Datenschutz und Eskalationsgrenzen klar geregelt?",
+    "Handelt es sich um risikoarme Entwurfs- und Suchunterstützung, oder werden Fragen von Kunden, Lieferanten, HR, Recht oder Finanzen beantwortet?",
+    "Lässt sich das Ergebnis des Assistenten an einen realen Arbeitsablauf oder Verantwortlichen anbinden?"
+   ],
+   "diagnosticNote": "Assistenten lassen sich schnell starten, doch die Roadmap muss risikoarme Entwurfs- und Suchunterstützung von Assistenten unterscheiden, die aus Unternehmensdaten antworten, mit Kunden sprechen, Rechts- oder HR-Inhalte bearbeiten oder Folgeaktionen auslösen."
+  }
+ },
+ "roadmapOptions": {
+  "missing": {
+   "label": "Nein / schwach",
+   "meaning": "Die Fähigkeit fehlt, ist uneinheitlich oder überwiegend manuell."
+  },
+  "partial": {
+   "label": "Teilweise",
+   "meaning": "Ansätze sind vorhanden, aber fragmentiert, zu spät oder für Entscheidungen nicht belastbar genug."
+  },
+  "working": {
+   "label": "Ja / funktioniert",
+   "meaning": "Die Fähigkeit ist verlässlich genug, um regelmäßiges Handeln des Managements zu tragen."
+  }
+ },
+ "roadmapStates": {
+  "interesting": {
+   "label": "Interessant"
+  },
+  "already_exists": {
+   "label": "Vorhanden"
+  },
+  "not_relevant": {
+   "label": "Nicht relevant"
+  },
+  "later": {
+   "label": "Später"
+  }
+ }
+}

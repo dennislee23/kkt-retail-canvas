@@ -1,0 +1,160 @@
+{
+ "plays": {
+  "stock-1": {
+   "title": "Absatzprognose und Aktionsplanung",
+   "cardText": "Prognostizieren Sie die Nachfrage je SKU, Filiale und Zeitraum und berücksichtigen Sie dabei Saisonalität, Promotions, Events und lokale Nachfrageverschiebungen.",
+   "shortPain": "Bestellentscheidungen stützen sich noch immer zu stark auf feste Regeln, historische Durchschnittswerte und das Bauchgefühl der Disponenten. Die Nachfrage verschiebt sich mit Saison, Feiertagen, Promotions, Wetter, lokalen Events und Wettbewerbsaktivitäten, doch die Planungsmethoden halten damit oft nicht Schritt. Zudem arbeiten Vertrieb und Supply Chain für dasselbe Event häufig mit unterschiedlichen Nachfrageerwartungen.",
+   "whatWeDo": "Wir bauen Absatzprognosen je SKU, Filiale und Zeitraum auf, die Verkaufshistorie, Saisonalität, Promotion-Uplift, lokale Events, Wettereffekte und Trendsignale einbeziehen. Wir verbinden die kommerziellen Kalender mit der Supply-Planung, sodass Promotions und saisonale Spitzen vorbereitet sind, bevor die Nachfrage eintrifft. Die Prognose wird zur Standardgrundlage des Nachschubs statt zu einer separaten analytischen Übung.",
+   "helpImprove": "Bestellgenauigkeit, weniger Out-of-Stock-Situationen und Überbestände, bessere Vorbereitung auf saisonale und promotionale Spitzen sowie eine engere Abstimmung zwischen Vertrieb und Supply Chain.",
+   "dataBehind": "Verbindet Verkaufshistorie, Bestandsstände, Promotion-Kalender, saisonale Muster, lokale Events, Wetter, Filial-Cluster und kommerzielle Pläne, um die Nachfrage genau auf der Ebene zu prognostizieren, auf der Bestellentscheidungen fallen. Die Analytik lernt aus Prognosefehlern, trennt normale Saisonalität von Ausnahmeereignissen und speist die erwartete Nachfrage in Nachschub und Supply-Vorbereitung ein, bevor die Spitzen eintreten.",
+   "diagnosticQuestions": [
+    "Werden Nachschubentscheidungen von Absatzprognosen gesteuert oder überwiegend von festen Regeln und historischen Bestellmustern?",
+    "Berücksichtigt Ihre heutige Planungsmethode Promotion-Uplift, Wetter, lokale Events und Unterschiede zwischen einzelnen Filialen?",
+    "Arbeiten Vertrieb und Supply Chain bei der Planung großer Events mit demselben Nachfragebild?"
+   ]
+  },
+  "stock-2": {
+   "title": "Nachschub und Sicherung der Verfügbarkeit",
+   "cardText": "Verbessern Sie die Bestelllogik und erkennen Sie Out-of-Stock-Risiken früh genug, um die Verfügbarkeit zu sichern, bevor Kunden sie spüren.",
+   "shortPain": "Selbst bei plausiblen Nachfrageschätzungen leidet die Bestellqualität, weil Lieferantenrestriktionen, Gebindegrößen, Vorlaufzeiten, Bestellzyklen und Lieferkalender das Geschäft in Überschuss oder Unterdeckung drängen. Out-of-Stock-Situationen fallen häufig erst auf, wenn Kunden sie bereits erlebt haben, obwohl es früher Signale in Nachfragetempo, Reichweite und Nachschubtiming gab.",
+   "whatWeDo": "Wir kombinieren Prognosen mit Lieferantenrestriktionen, Vorlaufzeiten, Gebindegrößen, Lieferfrequenz und Filialverhalten, um die Nachschublogik zu verbessern. Die Regeln werden nach Warentyp, Filialprofil und Lieferant differenziert statt überall gleich angewendet. Out-of-Stock-Risiken werden früh sichtbar, und die Artikel mit der größten Verfügbarkeitsrelevanz erhalten Priorität. Wo das Steuerungsumfeld reif ist, kann sich das Routinebestellen in Richtung autonomen Nachschubs entwickeln, mit menschlicher Prüfung nur noch für Ausnahmen.",
+   "helpImprove": "Bestellqualität, Regalverfügbarkeit, weniger durch Bestellrestriktionen verursachte Überbestände, Produktivität der Disponenten und eine bessere Nutzung der Lieferantenbeziehungen zur Lösung wiederkehrender Restriktionsprobleme.",
+   "dataBehind": "Verbindet Prognosen, aktuelle Reichweite, Vorlaufzeiten, Lieferkalender der Lieferanten, Gebindegrößen, Mindestbestellmengen, Filialnachfrage und kommerzielle Priorität, um bessere Bestellungen zu empfehlen und Verfügbarkeitsrisiken zu markieren. Die Analytik zeigt, wo Restriktionen vermeidbaren Bestandsaufbau erzwingen, wo vor der nächsten Lieferung ein Out-of-Stock droht und welche Ausnahmen ein Eingreifen von Disposition oder Lieferant erfordern. KI-Agenten können später Routinebestellungen innerhalb vereinbarter Regeln ausführen und nur ungewöhnliche Fälle eskalieren.",
+   "diagnosticQuestions": [
+    "Zwingen Mindestbestellmengen oder Gebindegrößen Sie regelmäßig dazu, mehr Bestand zu führen, als die Nachfrage rechtfertigt?",
+    "Können Sie ein Produkt erkennen, das auf einen Out-of-Stock zuläuft, bevor das Regal tatsächlich leer ist?",
+    "Wie viel Zeit der Disponenten fließt in das routinemäßige Zusammenstellen von Bestellungen statt in die Bearbeitung echter Ausnahmen?"
+   ]
+  },
+  "stock-3": {
+   "title": "Bestandsgesundheit und Freisetzung von Kapital",
+   "cardText": "Erkennen Sie Überbestände, Langsamdreher, überalterte Ware und gebundenes Kapital, bevor daraus Abschriften oder Ausbuchungen werden.",
+   "shortPain": "Überbestände bauen sich über Tausende von SKUs unbemerkt auf, bevor jemand merkt, dass daraus ein Kapital- oder Margenproblem geworden ist. Wenn es im Finanzbericht auftaucht, sind die Handlungsspielräume bereits enger. Gleichzeitig fehlt dem Unternehmen ein klarer Blick darauf, wo Bestand tatsächlich den Servicegrad schützt und wo Kapital in unproduktiver Ware gebunden ist.",
+   "whatWeDo": "Wir bauen kontinuierliche Signale zur Bestandsgesundheit über Reichweite, Alterung, Umschlag und Bestandsaufbau je SKU, Filiale und Warengruppe auf. Gesunder Sicherheitsbestand wird von Ware getrennt, die sich ohne ausreichende Nachfrage anhäuft. Wir zeigen, wo sich durch klügere Bestandspolitik Kapital freisetzen lässt, ohne die Verfügbarkeit an anderer Stelle zu gefährden.",
+   "helpImprove": "Effizienz des Working Capital, Bestandsproduktivität, Kapitaldisziplin, frühere Erkennung von Bestandsproblemen und eine bessere Balance zwischen Servicesicherung und Kosten.",
+   "dataBehind": "Verbindet Bestandstiefe, Abverkaufsgeschwindigkeit, Reichweitentage, Alterung, Umschlag, prognostizierte Nachfrage, Rolle der Warengruppe und Filialprofil, um zu zeigen, wo Bestand produktiv ist und wo er Kapital bindet. Die Analytik priorisiert Ausnahmen nach Risikowert, identifiziert Langsamdreher und übermäßig abgesicherte Bestände und modelliert, wo sich Bestandsparameter anpassen lassen, ohne den Servicegrad zu beschädigen.",
+   "diagnosticQuestions": [
+    "Haben Sie einen tagesaktuellen Blick auf Artikel, die Überbestand aufbauen, bevor daraus Abschriften oder Ausbuchungen werden?",
+    "Wie viel Sicherheitsbestand schützt tatsächlich den Servicegrad und wie viel liegt nur da, weil die Parameter nie aktualisiert wurden?",
+    "Wird der Bestand auch als Working-Capital-Thema betrachtet und nicht nur als Supply-Thema?"
+   ]
+  },
+  "stock-4": {
+   "title": "Frische und Verderbkontrolle",
+   "cardText": "Verfolgen Sie Haltbarkeitsrisiken und schleppenden Abverkauf früh genug, um Abschriften, Umlagerungen und Bestellanpassungen zu steuern.",
+   "shortPain": "In Frische- und verderblichen Warengruppen summieren sich die Margenfolgen schnell. Späte Abschriften vernichten Wert, schlechte Bestellungen erzeugen Verderb, und manuelle Routinen können das Frischerisiko über Hunderte von SKUs nicht nachhalten. Lebensmittelverschwendung ist zudem ein Thema für Regulatorik, ESG und Kundenvertrauen, nicht nur eine finanzielle Ausbuchung.",
+   "whatWeDo": "Wir verfolgen Frische, Haltbarkeitsrisiko und Abverkaufstempo, bevor der Wert bereits verloren ist. Frühere Abschriften, Bestellanpassungen, Umlagerungen oder Filialmaßnahmen für gefährdete Ware werden auf Basis der Restlaufzeit und des Nachfragetempos ausgelöst. Wir verbessern die Bestellpräzision in den Frischegruppen, sodass Verderb an der Quelle reduziert und nicht nur nachgelagert verwaltet wird.",
+   "helpImprove": "Weniger Verderb bei Frischware, besserer Abverkauf, höhere Wiedergewinnung über Abschriften, Schutz der Frischemarge, Transparenz zur Lebensmittelsicherheit und ESG-Berichterstattung zur Lebensmittelverschwendung.",
+   "dataBehind": "Verbindet Wareneingangsdaten, Haltbarkeitsregeln, Abverkaufstempo, Bestandsstand, Verderbaufzeichnungen, Abschriftenhistorie, Filialbedingungen und Nachfragesignale, um Frischerisiken zu erkennen, solange Handeln noch möglich ist. Die Analytik empfiehlt früheres Eingreifen, zeigt Ursachen je SKU und Filiale und führt Verderbmuster auf Bestellung, Präsentation, Preisgestaltung und Absatzprognose zurück.",
+   "diagnosticQuestions": [
+    "Werden Abschriften in den Frischegruppen durch Haltbarkeits- und Abverkaufsregeln ausgelöst oder überwiegend durch die Einschätzung der Filiale?",
+    "Wissen Sie, welche Frischegruppen den meisten Verderb verursachen und ob die Ursache in Bestellung, Präsentation, Preisgestaltung oder Nachfrage liegt?",
+    "Wird Lebensmittelverschwendung als verantwortete Geschäfts-KPI verfolgt oder erst im Nachhinein als Ausbuchung sichtbar?"
+   ]
+  },
+  "wt-1": {
+   "title": "Bestandsgenauigkeit und Flusskontrolle im Lager",
+   "cardText": "Machen Sie Lagerbestand, Wareneingang, Einlagerung und Kommissioniergenauigkeit sichtbar, bevor Fehler im Lager zu Verfügbarkeitsproblemen in den Filialen werden.",
+   "shortPain": "Händler können im ERP ausreichend Bestand ausweisen, während die Realität im Lager eine andere Geschichte erzählt. Verzögerungen im Wareneingang, Lücken bei der Einlagerung, Platzfehler, Bestandsabweichungen, unkontrollierte Substitutionen und schwache Inventurdisziplin erzeugen Phantomverfügbarkeit, Notkorrekturen und vermeidbare Ausbuchungen. Oft entdecken die Teams das Problem erst, wenn Filialen fehlender Ware hinterherlaufen.",
+   "whatWeDo": "Wir bauen eine Steuerungssicht über Wareneingang, Einlagerung, Platzgenauigkeit, Bestandskorrekturen, Zählungen, Kommissioniergenauigkeit und überalterte Ware im Lager oder Depot auf. Wir zeigen, wo die Bücher von der physischen Realität abweichen, wo der Durchsatz stockt und wo Regeln geschärft werden müssen. Wo ein WMS vorhanden ist, nutzen wir dessen Ereignisspur, um die relevanten Ausnahmen offenzulegen. Wo keines existiert, schaffen wir zunächst die minimale Transaktionstransparenz, die für Kontrolle nötig ist.",
+   "helpImprove": "Bestandsgenauigkeit, weniger vom Lager verursachte Verfügbarkeitsausfälle, schnellere Ursachenanalyse, geringere Notfallnacharbeit und eine sauberere Ausführung des Nachschubs.",
+   "dataBehind": "Verbindet Lieferavise oder Bestellungen, Wareneingangsereignisse, Einlagerungsbestätigungen, Platzdaten, Bestandskorrekturen, Zählungen, Kommissionierbestätigungen, Retouren, Alterung und Ausnahmeprotokolle. Die Analytik zeigt, wo der Lagerbestand falsch ist, wo der Fluss stockt und welche SKUs, Zonen, Lieferanten oder Schichten wiederholt Genauigkeits- oder Durchsatzprobleme erzeugen.",
+   "diagnosticQuestions": [
+    "Wie oft stellen Filialen, Disponenten oder Einkäufer erst dann fest, dass der Lagerbestand falsch ist, wenn die Verfügbarkeit bereits betroffen ist?",
+    "Können Sie erkennen, wo sich Fehler in Wareneingang, Einlagerung, Kommissionierung oder Zählung nach Zone, SKU, Schicht oder Lieferant häufen?",
+    "Falls Sie heute ein WMS einsetzen: Zeichnet es überwiegend Transaktionen auf oder legt es tatsächlich die relevanten operativen Ausnahmen offen?"
+   ]
+  },
+  "wt-2": {
+   "title": "Kommissionierung, Verladung und Schichtproduktivität",
+   "cardText": "Zeigen Sie, wo Lagerpersonal, Kommissionierung, Bereitstellung und Verladung Leistung durch schlechten Fluss, veraltete Platzvergabe und schwache Ausnahmesteuerung verlieren.",
+   "shortPain": "Die Personalkosten im Lager steigen unbemerkt, wenn Kommissionierwege ineffizient sind, die Platzvergabe veraltet ist, Ladungen wiederholt umgebaut werden und Vorgesetzte die Schicht damit verbringen, Ausnahmen manuell hinterherzulaufen. Produktivitätsdebatten verengen sich dann auf die Personalstärke, statt offenzulegen, wo Flussdesign, Regeln, Nachschubtiming oder Verladedisziplin die Verschwendung tatsächlich erzeugen.",
+   "whatWeDo": "Wir messen die Lagerproduktivität auf der Ebene, auf der Führungskräfte handeln können: Picks pro Stunde, Wegezeiten, Bereitstellungsverzug, Ladungsfertigstellung, Rampenstandzeit, Nacharbeit und Ausnahmehäufigkeit. Strukturelle Probleme werden von einmaligen Ausrutschern getrennt. Wir zeigen, ob das Problem in der Platzvergabelogik, den Auftragswellen, dem Personaleinsatz, dem Nachschubtiming, der Verladereihenfolge oder in schwacher operativer Disziplin liegt.",
+   "helpImprove": "Lagerproduktivität, geringere vermeidbare Personalkosten, sauberere Verladung, weniger verspätete Abfahrten und ein besserer Einsatz der Aufmerksamkeit der Führungskräfte.",
+   "dataBehind": "Verbindet Auftragswellen, Kommissionieraufträge, Wegstrecken, Platzvergabelogik, Zeitstempel der Bereitstellung, Verladeereignisse, Rampennutzung, Personaleinsatzpläne, Ausnahmen und Abfahrtszeiten. Die Analytik zeigt, wo Zeit verloren geht, welche Prozessschritte Nacharbeit erzeugen und welcher Teil des Lagerflusses ein Redesign statt zusätzlichen manuellen Aufwands braucht.",
+   "diagnosticQuestions": [
+    "Können Sie eine niedrige Lagerproduktivität über messbare Flussverluste erklären, oder wird sie üblicherweise als allgemeines Personalproblem beschrieben?",
+    "Wo beginnen verspätete Abfahrten wirklich: bei der Auftragsfreigabe, der Kommissionierung, der Bereitstellung, der Verladung oder der Fahrzeugbereitschaft?",
+    "Werden Platzvergabe und Wellenlogik anhand tatsächlicher Nachfrage- und Flussmuster aktualisiert oder überwiegend aus operativer Gewohnheit?"
+   ]
+  },
+  "wt-3": {
+   "title": "Transportplanung und Liefersteuerung",
+   "cardText": "Nutzen Sie TMS-artige Planung und Ausnahmesteuerung, um Tourenqualität, OTIF-Lieferungen und Transportkosten zu verbessern.",
+   "shortPain": "Filialbelieferung und Transportbewegungen stützen sich häufig auf das Gedächtnis der Disponenten, eingefahrene Gewohnheiten und lückenhafte Transparenz. Fahrzeuge fahren unterausgelastet los, Touren ändern sich kurzfristig, Entladeverzögerungen summieren sich, und das Management kann nicht erkennen, welche Ausfälle aus Planung, Frachtführerleistung, Verladung im Depot oder Filialbereitschaft stammen. Ohne klare Steuerungsebene wird der Transport teuer und reaktiv.",
+   "whatWeDo": "Wir bauen eine Steuerungsebene für den Transport über Tourenplanung, Fahrzeugauslastung, Lieferzeitfenster, Stoppreihenfolge, Standzeiten, Liefernachweise und Tourenausnahmen auf. Wo TMS-Daten vorliegen, nutzen wir sie; wo nicht, schaffen wir eine leichtere Steuerungssicht rund um Disposition und GPS-Ereignisse. Planungsqualität wird von Ausführungsfehlern getrennt, sodass klar ist, ob Tourenregeln, Frachtführerleistung, Depotdisziplin oder die Bereitschaft auf Filialseite zu korrigieren sind.",
+   "helpImprove": "OTIF-Lieferungen, Transportkostenkontrolle, Tourenqualität, Fahrzeugauslastung, frühere Ausnahmesteuerung und weniger Überraschungen auf Filialseite durch Transportausfälle.",
+   "dataBehind": "Verbindet Dispositionspläne, Tourenpläne, GPS- oder Telematikereignisse, Verladezeiten, Lieferzeitfenster, Ankunfts- und Entladezeitstempel, Liefernachweise, Frachtführerleistung und Signale zur Filialbereitschaft. Die Analytik zeigt, wo Touren ineffizient sind, wo Standzeiten überhöht sind, wo die Ausführung vom Plan abweicht und welche Transportausfälle systemisch statt isoliert auftreten.",
+   "diagnosticQuestions": [
+    "Wie klar können Sie Fehler in der Tourenplanung von später Verladung, Frachtführerausfall oder Entladeverzug auf Filialseite trennen?",
+    "Haben Sie eine gemeinsame Sicht auf OTIF, Fahrzeugauslastung, Standzeiten und Tourenausnahmen über das gesamte Netz?",
+    "Falls Sie bereits ein TMS nutzen: Liefert es dem Management eine nutzbare Steuerungssicht oder überwiegend ein Transaktionsprotokoll des Transports?"
+   ]
+  },
+  "store-1": {
+   "title": "Steuerung der Filialumsetzung",
+   "cardText": "Bauen Sie eine netzweite Sicht darauf auf, wo Filialen von den Standards abweichen und wo die Aufmerksamkeit des Managements am meisten bewirkt.",
+   "shortPain": "Pläne schaffen erst dann Wert, wenn die Filialen sie konsistent umsetzen. Standards für Promotions, Regal, Preise, Frische und Compliance variieren über das Netz, die Zentrale erfährt es zu spät, und Managementzeit wird davon aufgezehrt, der Umsetzung hinterherzulaufen, statt sie zu verbessern. Häufig sieht das Unternehmen die Umsatzfolge früher als den Umsetzungsfehler.",
+   "whatWeDo": "Wir bauen eine kontinuierliche Sicht auf die Umsetzungsleistung nach Filiale, Region und Problemtyp auf, gestützt auf Aufgabenerledigung, Auditbefunde, Umsatzsignale und Compliance-Prüfungen. Die wichtigsten Standards werden definiert und Abweichungen sichtbar, vergleichbar und priorisiert gemacht. So kann sich das Management auf die Filialen konzentrieren, in denen die Abweichung kommerziell relevant ist, statt seine Aufmerksamkeit gleichmäßig zu verteilen.",
+   "helpImprove": "Konsistenz der Umsetzung, schnellere Identifikation schwacher Filialen, besserer Einsatz der Aufmerksamkeit von Management und Außendienst und eine stärkere Verbindung zwischen den Plänen der Zentrale und der Realität in der Filiale.",
+   "dataBehind": "Verbindet Aufgabenerledigung, Auditergebnisse, Compliance-Prüfungen, Filialleistung, Promotion-Umsetzung, Umsatzanomalien und Vorfallhistorie zu einer netzweiten Umsetzungssicht. Die Analytik vergleicht Filialen mit relevanten Peers, unterscheidet einmalige Ausrutscher von wiederholter Abweichung und priorisiert die Umsetzungslücken, die Umsatz, Marge, Verfügbarkeit oder Compliance am ehesten beeinträchtigen.",
+   "diagnosticQuestions": [
+    "Haben Sie eine objektive Sicht darauf, welche Filialen die Umsetzungsstandards erfüllen und welche abdriften?",
+    "Wie erfährt die Zentrale heute von Umsetzungsfehlern: über Audit, Umsatzdaten, Außendienstbesuch oder Beschwerde?",
+    "Richtet sich die Aufmerksamkeit des Managements nach den größten Umsetzungslücken oder überwiegend nach Geografie und Gewohnheit?"
+   ]
+  },
+  "store-2": {
+   "title": "Aufgaben im Außendienst und Eskalation von Vorfällen",
+   "cardText": "Machen Sie Filial- und Außendienstaufgaben zu verantworteten Workflows mit Fristen, Nachweisen, Eskalation, Status und Abschluss.",
+   "shortPain": "Filial- und Außendienstaufgaben wie Promotions, Frischeroutinen, Compliance-Prüfungen und Merchandising scheitern häufig, weil die Verantwortung unklar ist, der Erledigungsstand unsichtbar bleibt und Nachfassen über Anrufe und Nachrichten läuft. Vorfälle, die lokal gelöst werden sollten, wandern langsam nach oben, und wiederkehrende Probleme wiederholen sich über Standorte hinweg, ohne dass jemand das Muster erkennt.",
+   "whatWeDo": "Wir überführen zentrale Filial- und Außendienstaufgaben in strukturierte Workflows mit Verantwortlichkeit, Fristen, Nachweispflichten, Erledigungsbestätigung und Ausnahmebehandlung. Außendienstteams erhalten einen einheitlichen, mobil ausgelegten Weg, Besuche zu erfassen, Fotos aufzunehmen, Befunde zu dokumentieren und Vorfälle zu melden. Versäumte oder unvollständige Maßnahmen werden Vorgesetzten früh genug sichtbar, um einzugreifen.",
+   "helpImprove": "Verlässlichkeit der Aufgabenerledigung, Verantwortlichkeit der Außendienstteams, Transparenz für Vorgesetzte, weniger manuelles Hinterherlaufen, schnellere Eskalation und eine stärkere Verbindung zwischen Außendienstaktivität und Managementhandeln.",
+   "dataBehind": "Verbindet Aufgabenpläne, Besuchsprotokolle, Geotags, Zeitstempel, Fotonachweise, Vorfallkategorien, Erledigungsnachweise und Eskalationsstatus zu einem durchgängigen Arbeitsablauf. Die Analytik zeigt, was erledigt wurde, was ausgeblieben ist, welche Vorfälle über Filialen hinweg wiederkehren und ob aus einer Erkenntnis tatsächlich Verantwortlicher, Maßnahme, Status und Ergebnis geworden sind.",
+   "diagnosticQuestions": [
+    "Können Sie netzweit erkennen, welche Filialaufgaben erledigt wurden, von wem und wann?",
+    "Wenn derselbe Vorfall in mehreren Filialen auftritt, wie schnell wird dieses Muster sichtbar?",
+    "Gelangen Erkenntnisse aus Außendienstbesuchen über strukturierte Daten und Workflows zum Management oder über informelle Berichte?"
+   ]
+  },
+  "store-3": {
+   "title": "Regal-, Preisschild- und Planogrammprüfungen",
+   "cardText": "Erkennen Sie Regallücken, Planogrammabweichungen, falsche Platzierungen und Preisschildfehler schneller, als es manuelle Audits allein leisten.",
+   "shortPain": "Regallücken, falsche Platzierungen, fehlende Preisschilder und Planogrammabweichungen kosten Umsatz und untergraben das Kundenvertrauen. Manuelle Audits decken zu jedem Zeitpunkt nur einen Bruchteil des Filialnetzes ab. Manche teuren Regalfehler bleiben für die Bestandssysteme unsichtbar, weil die Bestandsführung Ware ausweist, obwohl das Regal leer ist.",
+   "whatWeDo": "Wir setzen Computer Vision und Analytik von Verkaufsmustern gemeinsam ein, um Regalprobleme schneller zu erkennen als über Auditzyklen allein. Wo Kamerainfrastruktur vorhanden ist, kann CV-gestützte Überwachung Regallücken, Planogrammabweichungen und Preisschildfehler identifizieren. Die Anomalieerkennung im Abverkauf liefert ein ergänzendes Signal, wenn Artikel deutlich unter dem erwarteten Muster verkaufen. Bestätigte Vorfälle werden in die Aufgaben-Workflows der Filiale eingesteuert.",
+   "helpImprove": "Regalverfügbarkeit, Planogramm-Compliance, Genauigkeit der Preisschilder, schnellere Erkennung von Umsetzungsfehlern und weniger Umsatzverlust durch Regallücken oder Phantombestände.",
+   "dataBehind": "Verbindet Regalbilder, Planogramme, Preisschildreferenzen, Verkaufsmuster je SKU und Filiale, Bestandsdaten, Promotion-Kalender und Vergleiche mit ähnlichen Filialen, um wahrscheinliche Umsetzungsfehler am Regal zu identifizieren. Die Analytik verbindet das, was Kameras sehen können, mit dem, was das Kaufverhalten nahelegt, und steuert bestätigte Vorfälle zur physischen Korrektur an die Filialteams.",
+   "diagnosticQuestions": [
+    "Wie erkennen Sie heute Regallücken oder Planogrammabweichungen: über Audit, Beschwerde, Kamera oder Verkaufsdaten?",
+    "Weisen die Bestandsdaten manchmal Ware aus, während das Regal tatsächlich leer ist?",
+    "Wird die Regal-Compliance kontinuierlich überwacht oder hängt sie von Auditfrequenz und Filialdisziplin ab?"
+   ]
+  },
+  "store-4": {
+   "title": "Personaleinsatzplanung und Produktivität",
+   "cardText": "Richten Sie die Besetzung an Kundenfrequenz, Transaktionen, Lieferungen und Aufgabenlast aus, statt sich auf feste Dienstplanvorlagen zu verlassen.",
+   "shortPain": "Personal ist eine der größten beeinflussbaren Kostenpositionen im Lebensmitteleinzelhandel, und dennoch bleibt die gute Planung schwierig. Filialen sind in ruhigen Stunden überbesetzt und in Spitzenzeiten unterbesetzt. Dienstpläne entstehen aus Gewohnheit, Überstunden schleichen sich ein, und Produktivitätsunterschiede im Netz werden nicht früh genug sichtbar.",
+   "whatWeDo": "Wir richten die Besetzung an der tatsächlichen Nachfrage aus, indem wir Kundenfrequenz, Transaktionen, Lieferpläne und operative Arbeitslast zu einem klaren Bild des stündlichen und täglichen Personalbedarfs verbinden. Feste Dienstplanvorlagen werden durch eine nachfragegetriebene Planungslogik ersetzt. Die Personalproduktivität wird über Filialen, Abteilungen und Zeitfenster sichtbar, ergänzt um eine Frühwarnung zu Überstunden- und Abwesenheitsmustern.",
+   "helpImprove": "Effizienz der Personalkosten, Servicequalität in Spitzenzeiten, weniger vermeidbare Überstunden, mehr Zeit für die Filialleitung und netzweite Transparenz zur Produktivität.",
+   "dataBehind": "Verbindet Kundenfrequenz, Transaktionen, Warenkorbmengen, Lieferpläne, Aufgabenlast, Öffnungszeiten, Abwesenheiten, Überstunden und Arbeitsstunden, um zu zeigen, wo die Besetzung zur Nachfrage passt und wo nicht. Die Analytik prognostiziert die Arbeitslast je Zeitfenster, vergleicht die Produktivität ähnlicher Filialen und markiert strukturelle Überstunden- oder Abwesenheitsmuster, bevor sie zu festen Kosten werden.",
+   "diagnosticQuestions": [
+    "Entsteht die Schichtplanung aus tatsächlichen Nachfragesignalen oder aus festen Vorlagen, die nach Einschätzung der Filialleitung angepasst werden?",
+    "Können Sie die Personalproduktivität über Filialen, Abteilungen und Zeitfenster hinweg vergleichen?",
+    "Werden Überstunden- und Abwesenheitsprobleme früh genug als Muster sichtbar, um die Ursache anzugehen?"
+   ]
+  },
+  "margin-1": {
+   "title": "Margentransparenz und Profitabilitätsanalytik",
+   "cardText": "Zeigen Sie, wo Marge entsteht oder verloren geht: über Filialen, Warengruppen, Lieferanten, Kampagnen und Handelsperioden.",
+   "shortPain": "Die meisten Lebensmittelhändler sehen ihren Gesamtumsatz hinreichend gut. Was sie nicht klar oder nicht früh genug sehen, ist, wo Marge entsteht, wo sie erodiert und welche Kombination aus kommerziellen Entscheidungen, Lieferantenkonditionen, Promotion-Aktivität, Verderb und Betriebskosten die Bewegung treibt. Zum Monatsende sind viele Korrekturmöglichkeiten bereits vergeben.",
+   "whatWeDo": "Wir bauen eine granulare, vorausschauende Margensicht über Filiale, Warengruppe, Lieferant, Kampagne und Handelsperiode auf. Preisrealisierung, Rabattierung, Abschriften, Lieferantenfinanzierung, Verderb, Schwund und Kostendruck werden zusammengeführt, sodass die Führung sieht, wie sich die Marge verändert, solange noch Spielraum zum Reagieren besteht.",
+   "helpImprove": "Frühere Erkennung von Margendruck, klarerer Fokus des Managements, schnellere Korrekturmaßnahmen und eine stärkere Verbindung zwischen kommerziellen Entscheidungen und finanziellen Konsequenzen.",
+   "dataBehind": "Verbindet Preisrealisierung, Rabattierung, Abschriften, Lieferantenfinanzierung, Verderb, Schwund, Warenkosten und Betriebskosten über Filialen, Warengruppen, Lieferanten und Kampagnen hinweg. Die Analytik zerlegt die Margenbewegung nach Treibern, sodass die Führung noch vor Periodenabschluss erkennt, ob die Ursache in der Preisgestaltung, der Aktionsmechanik, den Lieferantenkonditionen, der Kosteninflation, dem Verderb oder der Umsetzung liegt.",
+   "diagnosticQuestions": [
+    "Sehen Sie die Marge nach Warengruppe, Filiale, Lieferant und Kampagne kontinuierlich oder überwiegend zum Monatsende?",
+    "Können Sie bei einer Margenveränderung schnell den Treiber benennen: Preis, Rabattierung, Verderb, Lieferantenkonditionen oder Kosten?",
+    "Gibt es eine gemeinsame Sicht, die kommerzielle Aktivität und operative Entscheidungen mit der Margenwirkung verbindet?"
+   ]
+  }
+ }
+}

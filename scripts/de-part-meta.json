@@ -1,0 +1,133 @@
+{
+ "domains": {
+  "data_foundation": {
+   "title": "Datenfundament",
+   "subtitle": "Schaffen Sie die verlässliche Basis, auf der jede Entscheidung im Handel beruht.",
+   "context": "Im Lebensmitteleinzelhandel sind Datenprobleme keine abstrakten IT-Themen: Sie zeigen sich als unklarer Promotion-ROI, uneinheitliche Margensicht, schwache Frischebestellung, Streitfälle mit Lieferanten, Kundendaten, die nie beim Einkauf ankommen, und Filialberichte, denen niemand wirklich traut. Diese Domäne schafft die gemeinsamen Daten, Stammdaten, Kennzahlendefinitionen, Verantwortlichkeiten und Qualitätsprüfungen, die für wiederholbare Analytik und KI nötig sind."
+  },
+  "customer": {
+   "title": "Kunden & Kundenbindung",
+   "subtitle": "Nutzen Sie Kundenbindungs-, Transaktions-, Warenkorb-, Kampagnen- und Feedbackdaten, um Kunden als unterschiedliche Gruppen mit unterschiedlichem Wert, Bedarf und Risiko zu verstehen.",
+   "context": "Das Ziel ist nicht Personalisierung um ihrer selbst willen. Es geht um mehr kommerzielle Disziplin bei der Frage, wen man ansprechen, wen man halten, was man anbieten, wann man eingreifen sollte und welche Kundenthemen wirklich Handlung verdienen."
+  },
+  "promos": {
+   "title": "Promotions & Preisgestaltung",
+   "subtitle": "Setzen Sie kommerzielles Budget dort ein, wo es echten Ertrag bringt, und nicht dort, wo es nur Nachfrage subventioniert, die ohnehin entstanden wäre.",
+   "context": "Promotions, Preise, Abschriften, Lieferantenzuschüsse, Wettbewerbsschritte und Marktsignale wirken alle auf Marge und Kundenwahrnehmung. Diese Domäne hilft kommerziellen Teams, schärfere Entscheidungen zu treffen, bevor Geld gebunden wird, und nach Kampagnen schneller zu lernen."
+  },
+  "stock": {
+   "title": "Bestand & Verfügbarkeit",
+   "subtitle": "Schluss damit, zu viel vom falschen Bestand zu tragen und zugleich Umsatz bei den richtigen Artikeln zu verlieren.",
+   "context": "Zu hoher Bestand bindet Kapital, und trotzdem leidet die Verfügbarkeit. Manche Artikel sind zu früh ausverkauft, andere liegen zu lange, und Frischwarenkategorien erzeugen dauernden Druck bei Verderb, Abschriften und Bestellqualität. Ein besseres Verständnis der Nachfrage, klügere Nachschublogik und frühere Ausnahmesignale senken Verderb, Out-of-Stock und Working-Capital-Bindung gemeinsam."
+  },
+  "warehouse_transport": {
+   "title": "Lager- & Transportbetrieb",
+   "subtitle": "Machen Sie Lager- und Transportausführung sichtbar, bevor Depot- und Lieferprobleme die Filialen treffen.",
+   "context": "Ein Händler kann auf dem Papier genug Bestand haben und operativ trotzdem zwischen Lieferant, Lager, Depot, Fahrzeug und Filiale scheitern. Verzögerungen im Wareneingang, Bestandsabweichungen, Kommissionierfehler, mangelnde Verladedisziplin, schwache Tourenplanung und späte Liefertransparenz erzeugen vermeidbare Out-of-Stock-Situationen, überhöhte Puffer, manuelle Eskalation und versteckte Logistikkosten. Diese Domäne umfasst die operative Ebene auf WMS-/TMS-Niveau zwischen eingehender Ware und Verfügbarkeit in der Filiale."
+  },
+  "stores": {
+   "title": "Filialausführung",
+   "subtitle": "Bringen Sie das Filialnetz näher an den Plan.",
+   "context": "Promotions, Regalstandards, Preisauszeichnung, Frischeroutinen, Personalpläne und Compliance-Prozesse schaffen erst dann Wert, wenn die Filialen sie konsequent umsetzen. Diese Domäne gibt Zentrale, Regionalleitung, Außendienst und Filialteams bessere Transparenz darüber, wo die Ausführung abrutscht, was zu tun ist, wer verantwortlich ist und ob das Thema erledigt wurde."
+  },
+  "margin": {
+   "title": "Marge & Cash",
+   "subtitle": "Geben Sie der Führung eine klarere vorausschauende Sicht darauf, wohin sich Ertrag und Liquidität bewegen.",
+   "context": "Die Ökonomie des Lebensmitteleinzelhandels wird von Preisgestaltung, Promotions, Lieferantenkonditionen, Verderb, Bestand, Personal, Energie, Logistik und Zahlungszeitpunkten geprägt. Der übliche Monatsabschluss erklärt das Ergebnis oft erst, wenn das Entscheidungsfenster bereits geschlossen ist. Diese Domäne hilft CFOs, CEOs und kommerziellen Verantwortlichen, Margendruck, Liquiditätsfolgen und finanzielle Zielkonflikte früher zu erkennen."
+  },
+  "suppliers": {
+   "title": "Lieferantenleistung",
+   "subtitle": "Machen Sie Lieferantenleistung, Ansprüche und kommerziellen Wert sichtbar, bevor Probleme die Filialen treffen oder Geld liegen bleibt.",
+   "context": "Lieferanten beeinflussen Verfügbarkeit, Frischequalität, Verlässlichkeit von Promotions und Marge stärker, als die meisten Händler klar genug erkennen. Wenn die Lieferantenleistung nachlässt, spüren es die Filialen. Wenn sich Ansprüche hinziehen, bleibt Geld liegen. Wenn Lieferantenunterstützung nur lose nachgehalten wird, versickert Wert still durch mangelnde Nachverfolgung."
+  },
+  "reporting": {
+   "title": "Reporting & Entscheidungen",
+   "subtitle": "Machen Sie aus verlässlichen Daten schnellere Managemententscheidungen.",
+   "context": "Den meisten Händlern fehlen keine Daten, sondern schnelle, belastbare Antworten. Zu viel Managementzeit fließt in das Nachbauen von Berichten, das Abgleichen von Tabellen, die Suche nach Ausnahmen und das Warten darauf, dass jemand anderes eine Frage beantwortet. Diese Domäne schafft die Managementebene über dem Datenfundament: KPI-Sichten, automatisierte Berichtspakete, Benchmarking, Alerts, Self-Service-Antworten und Entscheidungsunterstützung."
+  },
+  "loss_prevention": {
+   "title": "Verlustkontrolle",
+   "subtitle": "Erkennen Sie Abflüsse früher und richten Sie die Prüfung dorthin, wo Wert tatsächlich gefährdet ist.",
+   "context": "Verluste im Lebensmitteleinzelhandel kommen selten als ein einziges offensichtliches Ereignis. Sie entstehen durch wiederholte Retouren, Stornos, Rabatte, Auffälligkeiten an der Kasse, Missbrauch von Kundenkarten, Missbrauch an Selbstbedienungskassen, Bestandskorrekturen, unerklärten Schwund und Prozesslücken. Diese Domäne hilft Risiko-, Finanz-, Betriebs- und Filialteams, normales Betriebsrauschen von Mustern zu trennen, die eine Prüfung verdienen."
+  },
+  "workforce_ai": {
+   "title": "Mitarbeitende & KI-Assistenten",
+   "subtitle": "Geben Sie Filial-, Außendienst-, Zentral-, HR-, Rechts-, Vertriebs- und Serviceteams praktische KI-Unterstützung für die Arbeit, die sie ohnehin täglich leisten.",
+   "context": "Diese Domäne unterscheidet sich bewusst von schweren Analytikprojekten. Sie setzt auf reibungsarme Assistenten und kontrollierte Agenten, die entwerfen, zusammenfassen, suchen, klassifizieren, nachfassen und Arbeit zur menschlichen Freigabe vorbereiten. Ziel sind schnellere tägliche Abläufe, weniger manuelle Verwaltung, mehr Konsistenz und ein sichtbarer erster Schritt in die KI, ohne zuerst eine vollständige Datenplattform zu benötigen."
+  },
+  "expand_monetize": {
+   "title": "Erweitern und monetarisieren",
+   "subtitle": "Nutzen Sie stärkeren Kundenzugang, Lieferantenbeziehungen, Kundenfrequenz, Kundenbindungsdaten, digitale Kanäle und lokales Vertrauen, um neue Erlösquellen jenseits der klassischen Warenmarge zu erschließen.",
+   "context": "Für einen mittelständischen Lebensmittelhändler heißt das nicht, eine Bank, einen Marktplatz oder eine Ad-Tech-Plattform von Grund auf zu bauen. Der praktikable Weg führt meist über Partner, ist lieferantenfinanziert, wird sauber gemessen und nur dort aufgebaut, wo er das Kerngeschäft stärkt statt davon abzulenken."
+  }
+ },
+ "pressures": {
+  "margin": "Marge und Liquiditätssteuerung verbessern",
+  "stock": "Out-of-Stock, Verderb und Überbestand senken",
+  "promos": "Promotions und Preisgestaltung profitabler machen",
+  "customer": "Kundenwert und Kundenbindung steigern",
+  "stores": "Filialausführung und Außendienststeuerung verbessern",
+  "reporting": "Reporting und Entscheidungen beschleunigen",
+  "suppliers": "Lieferantenleistung und Anspruchsabwicklung verbessern",
+  "labor": "Personalproduktivität und Einsatzplanung verbessern",
+  "fraud": "Betrug, Verluste und Kontrolllücken reduzieren",
+  "growth": "Neue Erlösquellen jenseits des klassischen Handels erschließen"
+ },
+ "businessAreas": {
+  "commercial": "Vertrieb, Category Management & Einkauf",
+  "marketing": "Marketing, Kundenbindung & Kunde",
+  "store_ops": "Filialbetrieb",
+  "supply": "Supply Chain & Logistik",
+  "finance": "Finanzen & Reporting",
+  "procurement": "Einkauf & Lieferantenmanagement",
+  "workforce": "Personal & HR-Prozesse",
+  "risk": "Risiko & Verlustkontrolle",
+  "exec": "Geschäftsführung / unternehmensweit"
+ },
+ "improvementTypes": {
+  "quick": "Schnelle praktische Erfolge in den nächsten 90 Tagen",
+  "deep": "Tiefere Optimierung über 6–12 Monate",
+  "strategic": "Strategisches Wachstum und neue Erlöse",
+  "unsure": "Noch unklar — zeigen Sie mir die Optionen"
+ },
+ "stageMeta": {
+  "1": "Kerngeschäft stärken",
+  "2": "Optimieren und wachsen",
+  "3": "Erweitern und monetarisieren"
+ },
+ "tagTooltips": {
+  "Quick Start": "Kann mit begrenzter Vorbereitung starten, oft über Konfiguration, gezielte Analyse oder einen kleinen Pilot.",
+  "Scoped Project": "Benötigt ein definiertes Projekt, fachliche Verantwortliche, Datenaufbereitung sowie etwas Prozess- oder Systemarbeit.",
+  "Strategic Build": "Größerer mehrstufiger Aufbau mit höheren Abhängigkeiten, breiterem Adoptionsbedarf oder strategischer Komplexität.",
+  "Light Requirements": "Kann mit vorhandenen Dokumenten, Standardwerkzeugen, wenigen Daten oder einem eng gefassten Ablauf starten.",
+  "Moderate Requirements": "Benötigt gut verfügbare Daten, abgestimmte Geschäftsregeln und eine gewisse bereichsübergreifende Abstimmung.",
+  "High Requirements": "Setzt höhere Datenqualität, Integrationen, Governance oder tiefere Prozessveränderungen voraus.",
+  "$": "Leichter Einstieg. Überwiegend fertige Werkzeuge, Konfiguration, Vorlagen, Schulung und kontrollierter Rollout.",
+  "$$": "Fokussierter Aufbau. Begrenzte Integration, Analyse, Prozesseinrichtung oder Pilotumsetzung.",
+  "$$$": "Integrierter Aufbau. Mehrere Systeme, Geschäftsregeln, Analysemodelle oder Adoptionsarbeit.",
+  "$$$$": "Strategisches Programm. Domänenübergreifend, stark abhängig, plattformartig oder mit fortgeschrittener Automatisierung."
+ },
+ "speedOptions": {
+  "Quick Start": "Schnellstart",
+  "Scoped Project": "Abgegrenztes Projekt",
+  "Strategic Build": "Strategischer Aufbau"
+ },
+ "reqOptions": {
+  "Light Requirements": "Geringe Anforderungen",
+  "Moderate Requirements": "Mittlere Anforderungen",
+  "High Requirements": "Hohe Anforderungen"
+ },
+ "impactOptions": {
+  "Margin & Cash": "Marge & Cash",
+  "Control & Visibility": "Kontrolle & Transparenz",
+  "Decision Speed": "Entscheidungstempo",
+  "Customer Growth": "Kundenwachstum",
+  "Risk & Loss Reduction": "Risiko- & Verlustsenkung",
+  "Productivity": "Produktivität",
+  "Scalable Foundation": "Skalierbare Basis",
+  "New Revenue": "Neue Erlöse",
+  "Supplier Monetization": "Lieferanten-Monetarisierung",
+  "Customer Ownership": "Eigene Kundenbeziehung",
+  "Strategic Expansion": "Strategische Expansion"
+ }
+}

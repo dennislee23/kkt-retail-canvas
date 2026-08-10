@@ -45,6 +45,20 @@
         'โปรแกรมลอยัลตี้ระบุตัวลูกค้าได้ แต่พฤติกรรมไม่เปลี่ยน — ต้องทำอย่างไรต่อ?',
       ],
     },
+    DE: {
+      eyebrow: 'Advisor', send: 'Senden', you: 'Sie', advisor: 'Advisor',
+      status: 'Fragen Sie zur Canvas', close: 'Schließen', footClose: 'zum Schließen', footOpen: 'zum Öffnen',
+      placeholder: 'Frage eingeben und mit Enter senden', inputAria: 'Frage an den Berater',
+      openAria: 'Berater öffnen (Cmd+K)', panelAria: 'KKT Berater',
+      emptyH: 'Wo fangen wir an?',
+      emptyP: 'Ich denke Fragestellungen im Einzelhandel so durch wie unser Beraterteam — über die gesamte Canvas der Lösungen, das Stufenmodell und die Roadmap hinweg: welche Initiativen zu welchem betrieblichen Druck passen, wo ein schneller Erfolg möglich ist, was zuerst ein Fundament braucht und wo ein realistischer Einstieg liegt.',
+      suggested: [
+        '200 Lebensmittelfilialen, Schwund steigt um 0,4 Punkte pro Jahr — wo fange ich an?',
+        'Gerade 60 Filialen übernommen. Keine sauberen Stammdaten. Was hat in Stufe 1 Priorität?',
+        'BI ist vorhanden, aber das Management traut den Zahlen weiterhin nicht. Was läuft schief?',
+        'Das Kundenbindungsprogramm erkennt Kunden, aber ihr Verhalten ändert sich nicht. Was jetzt?',
+      ],
+    },
   };
   var T = TX[LANG] || TX.EN;
   var SUGGESTED = T.suggested;
@@ -204,7 +218,7 @@
 
     var trigger = el('button', 'kkt-advisor-trigger');
     trigger.type = 'button';
-    trigger.innerHTML = (LANG === 'TH' ? 'ถาม AI Advisor' : LANG === 'RU' ? 'Спросить AI Советника' : 'Ask AI Advisor') + ' <span class="kc"><kbd>⌘</kbd><kbd>K</kbd></span>';
+    trigger.innerHTML = (LANG === 'TH' ? 'ถาม AI Advisor' : LANG === 'RU' ? 'Спросить AI Советника' : LANG === 'DE' ? 'KI-Berater fragen' : 'Ask AI Advisor') + ' <span class="kc"><kbd>⌘</kbd><kbd>K</kbd></span>';
     trigger.setAttribute('aria-label', T.openAria);
 
     var backdrop = el('div', 'kkt-advisor-backdrop'); backdrop.style.display = 'none';
@@ -232,7 +246,7 @@
     // overlaps the language switcher. Older (RU-only) canvases have no such
     // button, so we fall back to placing our trigger in the nav, then to a
     // fixed top-right pill. The canvas is React-rendered, so poll for it.
-    var NATIVE_RE = /Ask AI Advisor|Спросить AI Советника|ถาม AI Advisor/;
+    var NATIVE_RE = /Ask AI Advisor|Спросить AI Советника|ถาม AI Advisor|KI-Berater fragen/;
     function nativeAdvisorBtn() {
       var bs = document.querySelectorAll('header button, nav button, button');
       for (var i = 0; i < bs.length; i++) {

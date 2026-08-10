@@ -1,0 +1,160 @@
+{
+ "plays": {
+  "margin-2": {
+   "title": "Rollierende Finanzprognose",
+   "cardText": "Aktuelle Handelssignale und bekannte Planungen werden zu einer rollierenden Sicht darauf, wohin sich Ergebnis und Liquidität entwickeln.",
+   "shortPain": "Die Führung im Einzelhandel sollte nicht bis zum Monatsabschluss warten, um zu verstehen, wie sich das laufende Geschäft finanziell entwickeln wird. Statische Budgets und rückwärtsgerichtete Ist-Zahlen erklären, was passiert ist, geben aber nicht genug Vorlauf zum Gegensteuern. Die finanzielle Sicht hinkt der Handelsrealität häufig hinterher.",
+   "whatWeDo": "Wir bauen eine rollierende Finanzprognose auf, die sich aktualisiert, sobald sich Verkaufstempo, Margenentwicklung, Promotion-Zusagen, Bestandsbewegungen, Lieferantenkonditionen und Kostenannahmen verändern. Bewegungen in der Prognose werden erklärbar, sodass die Führung versteht, was sich verändert hat, warum es sich verändert hat und welche Maßnahme noch möglich ist.",
+   "helpImprove": "Prognosegüte, frühere Sichtbarkeit finanzieller Risiken, bessere Vorbereitung von Korrekturmaßnahmen, Vertrauen der Führung in das Zukunftsbild und ein besserer Einsatz der Zeit des Finanzteams.",
+   "dataBehind": "Verbindet aktuelles Verkaufstempo, Promotionpläne, Margenentwicklung, Kostenveränderungen, Bestandsverpflichtungen, Lieferantenkonditionen und Zahlungsmuster zu einer laufend aktualisierten Vorausschau. Die Analytik übersetzt aktuelle Handelssignale in erwartete Ergebnis- und Liquiditätswirkungen, erklärt Prognosebewegungen in betriebswirtschaftlicher Sprache und reduziert die manuelle Zusammenstellung, die Finanz-Updates verzögert.",
+   "diagnosticQuestions": [
+    "Verfügt die Führung über eine vorausschauende Finanzsicht, die sich mit dem laufenden Geschäft aktualisiert?",
+    "Können Sie bei einer Prognoseänderung schnell erklären, welcher Treiber die Bewegung verursacht hat?",
+    "Wie viel Zeit im Finanzbereich fließt in das Zusammenstellen der Prognose statt in deren Interpretation und in bessere Entscheidungen?"
+   ]
+  },
+  "margin-3": {
+   "title": "Entscheidungsszenarien vor der Festlegung",
+   "cardText": "Vergleichen Sie die finanziellen Folgen wichtiger kommerzieller und operativer Optionen, bevor die Führung sich festlegt.",
+   "shortPain": "Große Entscheidungen wie Preisschritte, Promotion-Investitionen, Sortimentsänderungen, Lieferantenverhandlungen, Änderungen der Bestandspolitik und Kostenprogramme bringen finanzielle Zielkonflikte mit sich, die sich nur schwer schnell bewerten lassen. Die Führung entscheidet oft aus dem Bauch heraus, weil belastbare Szenarien im verfügbaren Entscheidungsfenster zu lange dauern.",
+   "whatWeDo": "Wir machen Szenariomodellierung schnell genug, um die Entscheidung zu stützen statt sie nachträglich zu rechtfertigen. Kommerzielle und operative Optionen werden mit ihren wahrscheinlichen Folgen für GuV, Liquidität und Risiko verknüpft. Optionen lassen sich direkt nebeneinander vergleichen, und kommerziell attraktive Pläne, die wirtschaftlich nicht tragen, werden markiert, bevor sie skaliert werden.",
+   "helpImprove": "Qualität wichtiger Entscheidungen, weniger finanziell schwache Optionen, stärkere kritische Prüfung durch die Führung, bessere Verbindung zwischen Handelsplänen und finanzieller Realität sowie ein klarerer Umgang mit Zielkonflikten.",
+   "dataBehind": "Verbindet Preisschritte, Kampagnenzusagen, Lieferantenverhandlungen, Sortimentsentscheidungen, Bestandspolitik, Personalveränderungen und Kostenannahmen mit ihren wahrscheinlichen Wirkungen auf Marge, Liquidität und Risiko. Die Analytik vergleicht Szenarien nebeneinander, legt verdeckte Zielkonflikte offen und macht die finanzielle Prüfung sichtbar, bevor Entscheidungen fixiert werden.",
+   "diagnosticQuestions": [
+    "Können Sie die finanzielle Folge einer wichtigen Preis-, Promotion-, Lieferanten- oder Bestandsentscheidung modellieren, bevor sie getroffen wird?",
+    "Werden Wachstumspläne vor der Freigabe regelmäßig auf Liquiditäts- und Margenwirkung geprüft?",
+    "Wie lange dauert es, ein belastbares Szenario zu erstellen, und ist das schnell genug für das Entscheidungsfenster?"
+   ]
+  },
+  "margin-4": {
+   "title": "Working Capital und Kosteneffizienz",
+   "cardText": "Zeigt, wo Liquidität und Kosten gebunden werden: über Bestand, Zahlungen, Personal, Energie, Verderb und Logistik.",
+   "shortPain": "Liquiditäts- und Kostendruck im Lebensmitteleinzelhandel entsteht aus vielen operativen Entscheidungen: Bestandshöhen, Zahlungszielen, dem Zeitpunkt von Abschriften, Bestandszusagen für Aktionen, Personal, Energie, Logistik und Verderb. Diese Entscheidungen werden häufig getrennt gesteuert, sodass das Working Capital aus dem Ruder läuft und Kostenprogramme sich so breit verteilen, dass keine spürbare Wirkung entsteht.",
+   "whatWeDo": "Wir übersetzen operative Entscheidungen in eine Working-Capital- und Kostensicht. Sichtbar wird, wo Liquidität durch Bestandsaufbau, Zahlungszeitpunkte und Handelszusagen gebunden ist. Wesentliche Kostentreiber werden über Filialen, Formate und Warengruppen hinweg verglichen, um vermeidbare Ineffizienz von echtem Marktdruck zu trennen. So kann die Führung die Verbesserungsansätze mit dem höchsten Ertrag priorisieren.",
+   "helpImprove": "Disziplin beim Working Capital, Transparenz über den Cashflow, Kostenkontrolle, frühere Erkennung von Liquiditätsdruck und eine bessere Einbindung der Liquiditätsfolgen in kommerzielle und operative Entscheidungen.",
+   "dataBehind": "Verbindet Bestandstiefe, Zahlungsziele der Lieferanten, Abschriftszusagen, Aktionsbestände, Verbindlichkeiten, Forderungen, Personalstunden sowie Energie-, Verderb- und Logistikkosten. Die Analytik zeigt, wo Liquidität gebunden ist, wo Kosten über dem liegen, was Umsatzvolumen und Filialprofil rechtfertigen, und wo Verbesserungsaufwand am meisten Wert freisetzt.",
+   "diagnosticQuestions": [
+    "Wird Working Capital aktiv als Hebel gesteuert oder ist es vor allem als Bilanzposition sichtbar?",
+    "Verstehen Vertriebs- und Supply-Teams die Liquiditätsfolge von Bestands- und Lieferantenentscheidungen im Moment der Entscheidung?",
+    "Können Sie erkennen, welche Filialen oder Warengruppen höhere Kosten haben, als ihr Geschäftsprofil rechtfertigt?"
+   ]
+  },
+  "sup-1": {
+   "title": "Lieferantenleistung und Beschaffungsrisiko",
+   "cardText": "Schafft eine konsistente Sicht auf die Zuverlässigkeit der Lieferanten und erkennt Risiken im Wareneingang, bevor die Filialen den Ausfall spüren.",
+   "shortPain": "Die Leistung der Lieferanten wirkt sich auf Verfügbarkeit, Frischequalität, Aktionssicherheit und das aus, was Kunden im Regal vorfinden. Viele Händler steuern Lieferantenleistung jedoch reaktiv. Probleme zeigen sich über Beschwerden aus den Filialen, Unterlieferungen, verspätete Anlieferungen, Substitutionen und Lücken in der Verfügbarkeit statt über eine systematische Überwachung, die Muster früh erkennt.",
+   "whatWeDo": "Wir bauen eine vergleichbare Sicht auf die Lieferantenleistung über Lieferquote, Termintreue, Qualitätskonstanz, Substitutionsraten, Unterlieferungen, Schwankungen der Vorlaufzeit und Reaktionszeit bei Reklamationen auf. Einzelne Ausrutscher werden von chronischer Minderleistung getrennt. Kombinationen aus Lieferant und SKU, die auf einen Serviceausfall zusteuern, werden markiert, bevor die Verfügbarkeit leidet.",
+   "helpImprove": "Verbindlichkeit der Lieferanten, Zuverlässigkeit im Wareneingang, frühere Erkennung wiederkehrender Probleme, weniger Verfügbarkeitsausfälle durch lieferantenseitige Ursachen und eine belastbarere Faktenbasis für Lieferantengespräche.",
+   "dataBehind": "Verbindet Bestellungen, Auftragsbestätigungen, Lieferbelege, Wareneingangsdaten, Qualitätsprüfungen, Unterlieferungen, Substitutionen, Schwankungen der Vorlaufzeit und die Reklamationshistorie über die gesamte Lieferantenbasis. Die Analytik unterscheidet einmalige Ausfälle von struktureller Minderleistung, priorisiert Lieferanten nach Service- und Geschäftsrisiko und löst frühe Warnungen aus, wenn Muster auf eine Störung im Wareneingang hindeuten.",
+   "diagnosticQuestions": [
+    "Haben Sie eine konsistente Sicht auf Lieferquote, Liefertreue und Qualität über die gesamte Lieferantenbasis?",
+    "Können Sie einen Lieferanten erkennen, der auf einen Lieferausfall zusteuert, bevor die Verfügbarkeit betroffen ist?",
+    "Werden Sicherheitsbestände und Notfallpläne anhand aktueller Zuverlässigkeitssignale der Lieferanten angepasst?"
+   ]
+  },
+  "sup-2": {
+   "title": "Reklamationen, Streitfälle und Wertrückgewinnung",
+   "cardText": "Macht aus Reklamationen und Streitfällen mit Lieferanten einen strukturierten Prozess, der zurückholt, was dem Unternehmen zusteht.",
+   "shortPain": "Reklamationen, Rechnungsdifferenzen, Unterlieferungen, Qualitätsablehnungen, vereinbarte Abzüge und ungeklärte Streitfälle binden erheblichen manuellen Aufwand. Beträge, die von Lieferanten zurückzuholen wären, bleiben wochen- oder monatelang offen. Ein Teil dieses Werts wird nie zurückgeholt, weil die Nachverfolgung zu langsam, zu manuell und zu sehr vom Gedächtnis Einzelner abhängig ist.",
+   "whatWeDo": "Wir strukturieren den Reklamations- und Streitfallprozess von der Erfassung über Nachweise, Nachverfolgung und Eskalation bis zur Rückholung. Wo möglich, werden Dokumentenauslesung und Abgleich automatisiert, sodass Reklamationen schneller und besser belegt eingereicht werden. Offene Fälle, deren Alter und der Stand der Rückholung werden für Finanz- und Einkaufsteams an einer Stelle sichtbar.",
+   "helpImprove": "Rückholquote bei Reklamationen, Geschwindigkeit der Streitbeilegung, weniger manuelles Nachfassen, Transparenz über offene lieferantenseitige Werte und Schutz der Marge vor lieferantenbedingtem Abfluss.",
+   "dataBehind": "Verbindet Bestellungen, Lieferscheine, Wareneingangsbelege, Rechnungen, Ergebnisse der Qualitätsprüfung, Lieferantenkonditionen, Gutschriften und den Schriftverkehr, um Differenzen zu erkennen und Nachweise für Reklamationen aufzubauen. Die Analytik verfolgt offene Fälle nach Lieferant, Alter, Wert und Status, markiert stockende Rückholungen und zeigt, wo wiederholte Reklamationen auf ein strukturelles Lieferantenproblem hindeuten.",
+   "diagnosticQuestions": [
+    "Haben Sie eine klare Sicht auf alle offenen Lieferantenreklamationen nach Lieferant, Alter, Wert und Status?",
+    "Wie viel Zeit in Finanzbereich und Einkauf fließt in manuelles Nachfassen und das Zusammenstellen von Nachweisen?",
+    "Gibt es Lieferanten oder Reklamationsarten, bei denen die Rückholung dauerhaft unter dem Vereinbarten liegt?"
+   ]
+  },
+  "sup-3": {
+   "title": "Lieferantenförderung und gemeinsame Planung",
+   "cardText": "Vereinbarte Lieferantenunterstützung nachhalten, Schlüsselbeziehungen segmentieren und gemeinsame Planung dort bündeln, wo sie wirklich Ertrag bringt.",
+   "shortPain": "Der Wert eines Lieferanten reicht über den Einstandspreis hinaus. Aktionsunterstützung, Rückvergütungen, Listungsgebühren, vereinbarte Abzüge, Servicezusagen und gemeinsame Investitionen gehören ebenso zur Beziehung. Dieser Wert wird jedoch oft uneinheitlich erfasst, unvollständig realisiert und nicht klar gegen das Vereinbarte gespiegelt. Auch die Managementzeit verteilt sich häufig über die gesamte Lieferantenbasis, statt dort zu wirken, wo der Ertrag am größten ist.",
+   "whatWeDo": "Wir bilden ab, was mit jedem Lieferanten vereinbart wurde, und vergleichen es mit dem, was tatsächlich erhalten, zurückgeholt oder geliefert wurde. Lieferanten werden nach kommerzieller Größe, Abhängigkeit, Substituierbarkeit, Servicerisiko und strategischem Potenzial segmentiert. Daraus ergibt sich, welche Lieferanten ein engeres Leistungsmanagement brauchen, welche gemeinsame Planung verdienen und welche sich effizient auf Distanz steuern lassen.",
+   "helpImprove": "Realisierung des kommerziellen Lieferantenwerts, Rückholung von Rückvergütungen und Werbekostenzuschüssen, Transparenz über die Vertragserfüllung, Priorisierung des Steuerungsaufwands, höhere Resilienz und produktivere gemeinsame Planung.",
+   "dataBehind": "Verbindet Lieferantenverträge, Förderkonditionen, Rückvergütungen, Aktionszusagen, erhaltene Zahlungen, Servicehistorie, Bedeutung der Warengruppe, Substituierbarkeit und kommerzielle Abhängigkeit. Die Analytik zeigt, wo der Lieferantenwert hinter der Vereinbarung zurückbleibt, wo das Konzentrationsrisiko am höchsten ist und welche Beziehungen eine tiefere gemeinsame Planung zu Aktionen, Saisons, Verfügbarkeit und Warengruppenentwicklung verdienen.",
+   "diagnosticQuestions": [
+    "Haben Sie eine vollständige Sicht auf vereinbarte Lieferantenförderung, Rückvergütungen und gemeinsame Investitionszusagen?",
+    "Richtet sich die Intensität der Lieferantensteuerung nach Wert, Risiko, Abhängigkeit und strategischem Potenzial oder vor allem nach Gewohnheit?",
+    "Wird das Resilienzrisiko dort, wo Lieferantenkonzentration besteht, quantifiziert und aktiv gesteuert?"
+   ]
+  },
+  "rep-1": {
+   "title": "Managementberichte und Leistungssichten",
+   "cardText": "Gibt jeder Führungsebene eine verlässliche KPI-Sicht, automatisierte Berichtspakete und vergleichbare Leistungsdiagnostik.",
+   "shortPain": "Montagsmeetings beginnen mit der Diskussion, welche Tabelle richtig ist. Verschiedene Teams kommen zu verschiedenen Antworten, weil Kennzahlen über Systeme und Berichtszyklen hinweg unterschiedlich berechnet werden. Managementpakete brauchen zu lange in der Erstellung, und Vergleiche zwischen Filialen oder Warengruppen sind schwer zu deuten, weil strukturelle Unterschiede mit echter Minderleistung vermischt sind.",
+   "whatWeDo": "Wir definieren die Kern-KPIs, die das Management tatsächlich nutzt, und bauen eine konsistente Berichtsschicht, in der diese Zahlen automatisch aktualisiert werden. Jede Führungsebene erhält die passende Detailtiefe: Zusammenfassung für die Geschäftsführung, Regions- und Warengruppensichten, Detailsichten für Filiale und Supply Chain. Eine Benchmarking-Logik ermöglicht es, ähnliche Filialen, Warengruppen und Regionen so zu vergleichen, dass echte Leistungslücken von strukturellen Unterschieden unterschieden werden.",
+   "helpImprove": "Vertrauen in die Zahlen, weniger Abstimmungsaufwand, schnellere Managementdiskussionen, automatisierte Berichtszyklen, gezieltere Lenkung der Managementaufmerksamkeit und klarere Leistungsgespräche.",
+   "dataBehind": "Verbindet Daten aus POS, ERP, Bestand, Finanzwesen, Kundenbindung, Lieferanten, Personal, Verderb und Filialausführung über vereinbarte KPI-Definitionen und automatisierte Berichtssichten. Die Analytik aktualisiert wiederkehrende Berichtspakete, normalisiert die Leistung nach Filialformat und Marktumfeld, erkennt, wo sich ähnliche Filialen deutlich unterscheiden, und zeigt, ob Lücken aus Personal, Marge, Verderb, Verfügbarkeit, Ausführung oder Warengruppenmix stammen.",
+   "diagnosticQuestions": [
+    "Kommen verschiedene Teams zu verschiedenen Antworten auf dieselbe Frage, etwa zu Marge, Verfügbarkeit oder Verderb?",
+    "Können Sie Filialleistung so vergleichen, dass echte Minderleistung von Unterschieden in Format, Lage oder Einzugsgebiet getrennt wird?",
+    "Wenn eine Filiale hinter vergleichbaren Standorten zurückbleibt: Gibt es einen diagnostischen Ausgangspunkt oder beginnt die Untersuchung bei null?"
+   ]
+  },
+  "rep-2": {
+   "title": "Warnmeldungen und Antworten in Klartext",
+   "cardText": "Bringt die Ausnahmen nach oben, die Handlung erfordern, und lässt Führungskräfte verlässliche Geschäftsfragen stellen, ohne auf einen Analysten zu warten.",
+   "shortPain": "Führungskräfte im Handel müssen nicht jeden Tag alles lesen, doch die meisten Berichte gewichten alles gleich. Wichtige Ausnahmen verschwinden in Dashboards oder werden zu spät entdeckt. Gleichzeitig stellen Führungskräfte immer wieder ähnliche Fragen zu Verderb, Bestand, Filialen, Aktionen, Lieferanten und Marge, müssen dafür aber auf Analysten warten oder Berichte durchsuchen.",
+   "whatWeDo": "Wir definieren die Ausnahmen, die über Umsatz, Bestand, Marge, Verderb, Lieferantenleistung, Personal und Filialausführung hinweg wirklich Aufmerksamkeit verdienen. Warnmeldungen gehen mit klarer Priorität und Kontext an die richtige verantwortliche Person. Self-Service- und dialogbasierte Zugänge zu verlässlichen Geschäftsdaten erlauben es Führungskräften, Routinefragen innerhalb des Entscheidungsfensters selbst zu klären. Wo sinnvoll, werden Betriebsdokumente und Prozesswissen angebunden, sodass derselbe Assistent auch praktische Fragen nach dem nächsten Schritt beantworten kann.",
+   "helpImprove": "Fokus des Managements, frühere Eingriffe, weniger Berichtsrauschen, weniger Engpässe bei Analysten, schnellere Reaktion auf Handelsprobleme und breitere Nutzung verlässlicher Daten im Unternehmen.",
+   "dataBehind": "Verbindet verlässliche KPI-Definitionen, operative Daten, Schwellenwerte für Warnmeldungen, Anomalieerkennung, Verantwortlichkeitsregeln und Self-Service-Abfragelogik. Die Analytik unterscheidet echte Ausnahmen von normaler Schwankung, priorisiert sie nach kommerzieller Wirkung und leitet sie an die richtige Person weiter. Der Zugang in natürlicher Sprache erlaubt es Führungskräften, Geschäftsfragen gegen geregelte Daten und dokumentierte Prozesse zu stellen, ohne widersprüchliche Tabellenantworten zu erzeugen.",
+   "diagnosticQuestions": [
+    "Zeigen Dashboards klar an, wo Aufmerksamkeit nötig ist, oder gewichten sie alles gleich?",
+    "Wie schnell erreicht eine wesentliche Ausnahme die Person, die handeln kann?",
+    "Wie lange braucht eine Führungskraft, um eine Antwort auf eine konkrete Frage zu erhalten, die nicht bereits in einem Standardbericht steht?"
+   ]
+  },
+  "lp-1": {
+   "title": "Kassenbetrug und Transaktionsmissbrauch",
+   "cardText": "Überwacht Retouren, Stornos, Rabatte, Kundenbindungsaktivität, Kassiererverhalten und Muster an Selbstbedienungskassen auf verdächtigen Missbrauch.",
+   "shortPain": "Verdächtige Vorgänge an der Kasse sehen oft wie normales Handelsrauschen aus: Retouren, Stornos, Rabatte, manuelle Übersteuerungen, Anpassungen bei der Kundenbindung, Nullbons und Ausnahmen an Selbstbedienungskassen. Manuelle Stichproben können wiederkehrende Muster mit kleinen Beträgen über Filialen, Schichten, Kassierer und Kundenkonten hinweg nicht erkennen. Wenn das Muster offensichtlich wird, ist der Wert bereits abgeflossen.",
+   "whatWeDo": "Wir überwachen Transaktionsmuster laufend nach Kassierer, Filiale, Schicht, Kundenkonto, Zahlart und Ausnahmetyp. Normale betriebliche Schwankung wird von Mustern getrennt, die eine Untersuchung verdienen. Fälle werden nach Wahrscheinlichkeit und Wert unter Risiko priorisiert, sodass Revision und Verlustkontrolle sich auf bedeutsame Muster konzentrieren statt große Mengen geringwertigen Rauschens zu prüfen.",
+   "helpImprove": "Geschwindigkeit bei der Erkennung von Betrug und Missbrauch, weniger Schwund, Produktivität der Kontrollteams, frühere Eingriffe und stärkerer Schutz der Marge vor internem und externem Abfluss.",
+   "dataBehind": "Verbindet POS-Transaktionszeilen, Retouren, Stornos, Rabatte, Übersteuerungen, Nullbons, Kundenbindungsereignisse, Ausnahmen an Selbstbedienungskassen, Kassierer-IDs, Filialkontext, Schichtmuster und Ergebnisse früherer Untersuchungen. Die Analytik vergleicht Verhalten mit normalen Referenzwerten, markiert ungewöhnliche Kombinationen, priorisiert Fälle nach Wert unter Risiko und bereitet Beweispakete für die Prüfung auf.",
+   "diagnosticQuestions": [
+    "Überwachen Sie Muster bei Retouren, Rabatten, Stornos, Übersteuerungen und Kundenbindung nach Kassierer, Filiale und Schicht?",
+    "Wie viel Untersuchungszeit fließt in Fälle, die sich als geringwertig oder als normale Schwankung erweisen?",
+    "Lassen sich verdächtige Vorgänge an Selbstbedienungskassen oder im Kundenbindungsprogramm auf Transaktions- und Kundenverhalten zurückführen?"
+   ]
+  },
+  "lp-2": {
+   "title": "Schwund und Verlustkontrolle im Bestand",
+   "cardText": "Erkennt ungewöhnliche Bestandskorrekturen, unerklärte Verluste und Schwundmuster nach Filiale, Warengruppe und Prozess.",
+   "shortPain": "Schwund wird oft erst als Gesamtabschreibung sichtbar, wenn sich die zugrunde liegenden Muster längst aufgebaut haben. Bestandskorrekturen, unerklärte Verluste, Inventurdifferenzen, Buchungsfehler, falsch zugeordneter Verderb und Prozessfehler auf Filialebene können alle in derselben Zahl stecken. Ohne Mustererkennung fällt es schwer, Diebstahl, Verderb, Prozessfehler, Lieferantenproblem und Erfassungsfehler auseinanderzuhalten.",
+   "whatWeDo": "Wir analysieren Muster bei Schwund und Bestandskorrekturen nach Filiale, Warengruppe, SKU, Zeitraum, Prozessschritt und im Vergleich zu ähnlichen Filialen. Ungewöhnliche Verlustmuster, die außerhalb der normalen Handelsrealität liegen, werden erkannt und zur Untersuchung oder operativen Korrektur weitergeleitet. Wahrscheinliche Ursachen werden getrennt, sodass Verlustkontrolle, Betrieb, Finanzwesen und Lieferantensteuerung wissen, welche Art von Maßnahme nötig ist.",
+   "helpImprove": "Transparenz über den Schwund, fokussierte Untersuchungen, Bestandskontrolle, Margenschutz, Prozessdisziplin und frühere Erkennung wiederkehrender Verlustmuster.",
+   "dataBehind": "Verbindet Bestandsdaten, Inventuren, Korrekturen, Verderbprotokolle, Verkaufsmuster, Wareneingänge, Umlagerungen, Abschreibungen, Filialkontext und Vergleiche mit ähnlichen Standorten, um zu zeigen, wo Bestandsverluste ungewöhnlich sind. Die Analytik trennt wahrscheinliche Ursachen, erkennt wiederkehrende Muster nach Filiale und Warengruppe und hilft, Fälle je nach Faktenlage an Verlustkontrolle, Filialbetrieb, Finanzwesen oder Lieferantensteuerung weiterzuleiten.",
+   "diagnosticQuestions": [
+    "Wird Schwund nach wahrscheinlicher Ursache analysiert oder erscheint er überwiegend als eine undifferenzierte Abschreibungszahl?",
+    "Können Sie Filialen oder Warengruppen erkennen, in denen Bestandsverluste außerhalb der normalen Handelsrealität liegen?",
+    "Werden Bestandskorrekturen und Inventurdifferenzen laufend überwacht oder überwiegend nach periodischen Zählungen geprüft?"
+   ]
+  },
+  "wai-1": {
+   "title": "KI-Assistenten für Büro, Meetings und CRM",
+   "cardText": "Meetings festhalten, Aufgaben ableiten, Updates entwerfen, CRM-Notizen vorbereiten und Routineverwaltung im Büro reduzieren.",
+   "shortPain": "Führungskräfte im Handel und Teams in der Zentrale verlieren Zeit an Meetingnotizen, Follow-up-Nachrichten, CRM-Pflege, Wochenberichte, Maßnahmenverfolgung und das Verfassen von Routinedokumenten. Wichtige Entscheidungen und Aufgaben bleiben oft in Calls, E-Mails, Chats und persönlichen Notizen vergraben. Das Problem ist nicht mangelnder Arbeitseinsatz, sondern dass zu viel Koordination weiterhin von manueller Erfassung und Erinnerung abhängt.",
+   "whatWeDo": "Wir richten praxistaugliche KI-Assistenten für die tägliche Führungsarbeit ein:\n- Transkription von Meetings, Zusammenfassungen, Entscheidungen, Aufgaben, Verantwortliche und Fristen;\n- CRM- und Kundenkontaktnotizen, Entwürfe für Follow-ups und Gesprächszusammenfassungen;\n- Entwürfe für Wochenberichte, Maßnahmenlisten und die Vorbereitung von Managementnotizen;\n- Routineentwürfe für E-Mails, Memos, Präsentationen und Berichte nach den Stilvorgaben des Unternehmens.",
+   "helpImprove": "Produktivität der Führung, Verbindlichkeit bei der Nachverfolgung, wirksamere Meetings, saubere CRM-Pflege, schnellere Kommunikation und weniger Aufwand für gering wertschöpfende Verwaltung.",
+   "dataBehind": "Verbindet Meeting-Transkripte, Kalender, E-Mails, CRM-Notizen, Dokumente, Aufgabenlisten und Unternehmensvorlagen. Die KI fasst Diskussionen zusammen, leitet strukturierte Maßnahmen ab, entwirft Follow-ups und bereitet Updates im vereinbarten Unternehmensstil auf. Die menschliche Prüfung behält die Kontrolle, doch der erste Entwurf und die Aufgabenerfassung beginnen nicht mehr auf einem leeren Blatt.",
+   "diagnosticQuestions": [
+    "Wie viel Führungszeit fließt in das Schreiben von Notizen, Follow-ups, Zusammenfassungen und CRM-Updates?",
+    "Werden Entscheidungen aus Meetings zuverlässig zu sichtbaren Aufgaben mit Verantwortlichen und Fristen?",
+    "Welche wiederkehrenden Büroaufgaben ließen sich sicher mit KI unterstützen, ohne die Kernsysteme zu verändern?"
+   ]
+  },
+  "wai-2": {
+   "title": "KI-Assistent für Recht, Verträge und Compliance",
+   "cardText": "Unterstützt Rechts-, Vertrags-, Richtlinien- und Compliance-Arbeit durch KI-gestützte Prüfung, Entwürfe, Vergleiche und das Erkennen kritischer Punkte.",
+   "shortPain": "Rechts- und Compliance-Arbeit erstreckt sich häufig über Lieferantenverträge, Mietverträge, Personalrichtlinien, Aktionsbedingungen, Lebensmittelsicherheitsvorschriften, Datenschutzanforderungen und interne Verfahren. Teams verbringen Zeit damit, lange Dokumente zu lesen, Klauseln zu vergleichen, Formulierungen gegen Unternehmensstandards zu prüfen und erste Entwürfe zu erstellen. Verzögerungen erzeugen Risiko, doch die Kapazität für eine vollständige juristische Prüfung ist meist begrenzt.",
+   "whatWeDo": "Wir schaffen einen kontrollierten Assistenten, der Rechts- und Compliance-Teams unterstützt, ohne fachliches Urteil zu ersetzen:\n- Prüfung und Zusammenfassung juristischer Dokumente;\n- Entwürfe für Standardklauseln, Schreiben, Richtlinienaktualisierungen und Vertragskommentare nach Unternehmensvorgaben;\n- Vergleich von Lieferantenkonditionen, Mietvertragsklauseln und Vertragsversionen;\n- Markieren fehlender Klauseln, ungewöhnlicher Bedingungen, Richtlinienkonflikte und zustimmungspflichtiger Punkte;\n- Unterstützung bei Compliance-Checklisten und Nachweispaketen.",
+   "helpImprove": "Produktivität des Rechtsteams, Tempo der Vertragsprüfung, Einheitlichkeit der Standardformulierungen, früheres Erkennen von Risiken und bessere Vorbereitung vor der fachjuristischen Prüfung.",
+   "dataBehind": "Verbindet Vertragsvorlagen, Unternehmensrichtlinien, freigegebene Klauselbibliotheken, Lieferantenkonditionen, regulatorische Vorgaben, frühere juristische Kommentare und Dokumentversionen. Die KI vergleicht Formulierungen, erkennt Abweichungen von Standards, entwirft kontrollierten Text und hebt Punkte für die menschliche Prüfung hervor. Der Assistent sollte mit klaren Freigabegrenzen konfiguriert werden, denn die rechtliche Verantwortung bleibt beim Unternehmen und bei qualifizierten Prüfern.",
+   "diagnosticQuestions": [
+    "Welche Rechts- oder Compliance-Dokumente werden wiederholt mit ähnlichen Prüfschritten bearbeitet?",
+    "Verfügen die Teams über freigegebene Vorlagen und Klauselstandards, denen eine KI folgen kann?",
+    "Wo erzeugen Verzögerungen bei Verträgen oder Richtlinien Geschäftsrisiken oder bremsen die kommerzielle Umsetzung?"
+   ]
+  }
+ }
+}

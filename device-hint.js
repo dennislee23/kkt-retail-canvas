@@ -79,6 +79,7 @@
       EN: { h:'Rotate your phone', p:'The map is built for a wide screen. Rotate your phone to landscape — or, better, open it on a computer or tablet.', go:'Continue anyway', b:'<strong>Better on a big screen.</strong> The map is built for a computer or tablet.' },
       RU: { h:'Поверните телефон', p:'Карта рассчитана на широкий экран. Поверните телефон горизонтально — или, лучше, откройте на компьютере или планшете.', go:'Всё равно продолжить', b:'<strong>Лучше на большом экране.</strong> Карта рассчитана на компьютер или планшет.' },
       TH: { h:'หมุนโทรศัพท์ของคุณ', p:'แผนผังนี้ออกแบบมาสำหรับหน้าจอกว้าง หมุนโทรศัพท์เป็นแนวนอน — หรือดีกว่านั้น เปิดบนคอมพิวเตอร์หรือแท็บเล็ต', go:'ดำเนินการต่อ', b:'<strong>ดูได้ดีกว่าบนจอใหญ่</strong> แผนผังนี้ออกแบบมาสำหรับคอมพิวเตอร์หรือแท็บเล็ต' },
+      DE: { h:'Drehen Sie Ihr Telefon', p:'Die Canvas ist für einen breiten Bildschirm gebaut. Drehen Sie Ihr Telefon ins Querformat — oder öffnen Sie sie besser auf einem Computer oder Tablet.', go:'Trotzdem fortfahren', b:'<strong>Besser auf einem großen Bildschirm.</strong> Die Canvas ist für Computer oder Tablet gebaut.' },
     };
     var t = T[_lang] || T.EN;
 

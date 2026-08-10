@@ -220,50 +220,58 @@ ol, ul { list-style-position:outside; }
 <script src="roadmap-data-th.js?v=1"></script>
 <script src="chrome-th.js?v=2"></script>
 <script src="kktechnologies-profile-data-th.js?v=1"></script>
+<!-- German (de) overlays — window.*_DE globals; app falls back to EN per-structure. Regenerate: node scripts/build-de-data.mjs -->
+<script src="canvas-data-de.js?v=1"></script>
+<script src="roadmap-data-de.js?v=1"></script>
+<script src="chrome-de.js?v=1"></script>
+<script src="kktechnologies-profile-data-de.js?v=1"></script>
 <script type="text/babel">
 const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
 /* ─── BRIDGE: pull canvas-data.js window globals into Babel scope ── */
-/* Language-aware bridge (EN base + optional TH overlay from canvas-data-th.js /
-   roadmap-data-th.js, which define window.*_TH). _resolve(lang) reassigns these
-   before render; App remounts its subtree on language change (key={lang}) so
-   every screen and every chrome string re-reads the active language. Per-
-   structure EN fallback keeps the app coherent even with only partial Thai. */
+/* Language-aware bridge (EN base + optional TH / DE overlays from
+   canvas-data-th.js / roadmap-data-th.js and canvas-data-de.js /
+   roadmap-data-de.js, which define window.*_TH / window.*_DE). _resolve(lang)
+   reassigns these before render; App remounts its subtree on language change
+   (key={lang}) so every screen and every chrome string re-reads the active
+   language. Per-structure EN fallback keeps the app coherent even with only
+   partial Thai or German. */
 let _STAGE_META, _PRESSURES, _BUSINESS_AREAS, _IMPROVEMENT_TYPES, _ALL_DOMAINS,
     _SPEED_OPTIONS, _REQ_OPTIONS, _IMPACT_OPTIONS, _TAG_TOOLTIPS,
     _ROADMAP_STEPS, _ROADMAP_PATHWAYS, _ROADMAP_OPTIONS, _ROADMAP_STATES, _KKTECH_PROFILE;
 const _EFFORT_OPTIONS    = window.EFFORT_OPTIONS;   // $ symbols — language-neutral
 const _COPILOT_SYSTEM    = window.COPILOT_SYSTEM;   // advisor backend prompt (EN)
 
+const _LANGS = ['EN', 'TH', 'DE'];
 let _LANG = 'EN';
 function _resolve(lang) {
-  _LANG = (lang === 'TH') ? 'TH' : 'EN';
-  const th = _LANG === 'TH';
-  const ov = (en, thv) => (th && thv) ? thv : en;   // per-structure EN fallback
-  _STAGE_META        = ov(window.STAGE_META,        window.STAGE_META_TH);
-  _PRESSURES         = ov(window.PRESSURES,         window.PRESSURES_TH);
-  _BUSINESS_AREAS    = ov(window.BUSINESS_AREAS,    window.BUSINESS_AREAS_TH);
-  _IMPROVEMENT_TYPES = ov(window.IMPROVEMENT_TYPES, window.IMPROVEMENT_TYPES_TH);
-  _ALL_DOMAINS       = ov(window.ALL_DOMAINS,       window.ALL_DOMAINS_TH);
-  _SPEED_OPTIONS     = ov(window.SPEED_OPTIONS,     window.SPEED_OPTIONS_TH);
-  _REQ_OPTIONS       = ov(window.REQ_OPTIONS,       window.REQ_OPTIONS_TH);
-  _IMPACT_OPTIONS    = ov(window.IMPACT_OPTIONS,    window.IMPACT_OPTIONS_TH);
-  _TAG_TOOLTIPS      = ov(window.TAG_TOOLTIPS,      window.TAG_TOOLTIPS_TH);
-  _ROADMAP_STEPS     = ov(window.ROADMAP_STEPS,     window.ROADMAP_STEPS_TH);
-  _ROADMAP_PATHWAYS  = ov(window.ROADMAP_PATHWAYS,  window.ROADMAP_PATHWAYS_TH);
-  _ROADMAP_OPTIONS   = ov(window.ROADMAP_READINESS_OPTIONS, window.ROADMAP_READINESS_OPTIONS_TH);
-  _ROADMAP_STATES    = ov(window.ROADMAP_BLOCK_STATES,      window.ROADMAP_BLOCK_STATES_TH);
-  _KKTECH_PROFILE    = ov(window.KKTECH_PROFILE || {},      window.KKTECH_PROFILE_TH);
+  _LANG = _LANGS.includes(lang) ? lang : 'EN';
+  // Per-structure fallback: active-language overlay when present, else EN.
+  const ov = (en, thv, dev) => (_LANG === 'TH' && thv) ? thv : (_LANG === 'DE' && dev) ? dev : en;
+  _STAGE_META        = ov(window.STAGE_META,        window.STAGE_META_TH,        window.STAGE_META_DE);
+  _PRESSURES         = ov(window.PRESSURES,         window.PRESSURES_TH,         window.PRESSURES_DE);
+  _BUSINESS_AREAS    = ov(window.BUSINESS_AREAS,    window.BUSINESS_AREAS_TH,    window.BUSINESS_AREAS_DE);
+  _IMPROVEMENT_TYPES = ov(window.IMPROVEMENT_TYPES, window.IMPROVEMENT_TYPES_TH, window.IMPROVEMENT_TYPES_DE);
+  _ALL_DOMAINS       = ov(window.ALL_DOMAINS,       window.ALL_DOMAINS_TH,       window.ALL_DOMAINS_DE);
+  _SPEED_OPTIONS     = ov(window.SPEED_OPTIONS,     window.SPEED_OPTIONS_TH,     window.SPEED_OPTIONS_DE);
+  _REQ_OPTIONS       = ov(window.REQ_OPTIONS,       window.REQ_OPTIONS_TH,       window.REQ_OPTIONS_DE);
+  _IMPACT_OPTIONS    = ov(window.IMPACT_OPTIONS,    window.IMPACT_OPTIONS_TH,    window.IMPACT_OPTIONS_DE);
+  _TAG_TOOLTIPS      = ov(window.TAG_TOOLTIPS,      window.TAG_TOOLTIPS_TH,      window.TAG_TOOLTIPS_DE);
+  _ROADMAP_STEPS     = ov(window.ROADMAP_STEPS,     window.ROADMAP_STEPS_TH,     window.ROADMAP_STEPS_DE);
+  _ROADMAP_PATHWAYS  = ov(window.ROADMAP_PATHWAYS,  window.ROADMAP_PATHWAYS_TH,  window.ROADMAP_PATHWAYS_DE);
+  _ROADMAP_OPTIONS   = ov(window.ROADMAP_READINESS_OPTIONS, window.ROADMAP_READINESS_OPTIONS_TH, window.ROADMAP_READINESS_OPTIONS_DE);
+  _ROADMAP_STATES    = ov(window.ROADMAP_BLOCK_STATES,      window.ROADMAP_BLOCK_STATES_TH,      window.ROADMAP_BLOCK_STATES_DE);
+  _KKTECH_PROFILE    = ov(window.KKTECH_PROFILE || {},      window.KKTECH_PROFILE_TH,            window.KKTECH_PROFILE_DE);
 }
 let _initLang = 'EN';
-try { if (localStorage.getItem('kkt-retail-lang') === 'TH') _initLang = 'TH'; } catch (e) {}
+try { const _s = localStorage.getItem('kkt-retail-lang'); if (_LANGS.includes(_s)) _initLang = _s; } catch (e) {}
 _resolve(_initLang);
 
 /* Language store: module-level pub/sub so the deeply-nested HeaderLang can
    switch language and the App root re-renders + remounts on change. */
 const _langSubs = new Set();
 function setRetailLang(lang) {
-  const next = (lang === 'TH') ? 'TH' : 'EN';
+  const next = _LANGS.includes(lang) ? lang : 'EN';
   if (next === _LANG) return;
   _resolve(next);
   try { localStorage.setItem('kkt-retail-lang', next); } catch (e) {}
@@ -278,22 +286,27 @@ function useLang() {
   }, []);
   return _LANG;
 }
-/* Chrome translation helper: T(en, th) — Thai when active (and provided), else EN. */
-const T = (en, th) => (_LANG === 'TH' && th != null) ? th : en;
-/* UI-label translation: tc('English') → Thai from window.RETAIL_CHROME_TH when
-   TH is active, else the English key. EN stays inline as the source of truth;
-   Thai lives in chrome-th.js (generated from scripts/chrome-th.json — easy to
-   review, safe on partial: any unmapped key falls back to English). */
-const tc = (en) => { const th = (window.RETAIL_CHROME_TH || {})[en]; return (_LANG === 'TH' && th) ? th : en; };
+/* Chrome translation helper: T(en, th, de) — active-language string when
+   provided, else EN. */
+const T = (en, th, de) => (_LANG === 'TH' && th != null) ? th : (_LANG === 'DE' && de != null) ? de : en;
+/* UI-label translation: tc('English') → the active-language label from
+   window.RETAIL_CHROME_TH / RETAIL_CHROME_DE, else the English key. EN stays
+   inline as the source of truth; the translations live in chrome-th.js /
+   chrome-de.js (generated from scripts/chrome-*.json — easy to review, safe on
+   partial: any unmapped key falls back to English). */
+const _chrome = () => (_LANG === 'TH' ? window.RETAIL_CHROME_TH : _LANG === 'DE' ? window.RETAIL_CHROME_DE : null) || {};
+const tc = (en) => (_LANG !== 'EN' && _chrome()[en]) || en;
 /* Tag/enum display translation for raw chips (not <Tag>): maps the EN tag value
-   to Thai via RETAIL_TAG_TH; EN value is the stable filter/tooltip key. */
-const tagT = (en) => (_LANG === 'TH' && (window.RETAIL_TAG_TH || {})[en]) || en;
+   to the active language via RETAIL_TAG_TH / RETAIL_TAG_DE; the EN value stays
+   the stable filter/tooltip key. */
+const _tagTable = () => (_LANG === 'TH' ? window.RETAIL_TAG_TH : _LANG === 'DE' ? window.RETAIL_TAG_DE : null) || {};
+const tagT = (en) => (_LANG !== 'EN' && _tagTable()[en]) || en;
 
 function _getRecommendedServices(answers) {
   const scored = window.getRecommendedServices(answers) || [];
-  if (_LANG !== 'TH') return scored;
+  if (_LANG === 'EN') return scored;
   // The recommender scores against EN data; remap each result to the active-
-  // language play (by id) so recommended cards render Thai, keeping the
+  // language play (by id) so recommended cards render translated, keeping the
   // recommender's _score/_reason and any fields it added.
   return scored.map(svc => {
     const found = findServiceAndDomainById(svc.id);
@@ -301,23 +314,24 @@ function _getRecommendedServices(answers) {
   });
 }
 function _getRecommendedDomains(answers)  { return window.getRecommendedDomains(answers); }
-// Roadmap helpers close over the EN data baked into roadmap-data.js. When Thai
-// is active we remap their returned objects to the Thai structures by id
-// (title/role/purpose/…), preserving the runtime fields the helper computed
-// (userState, hiddenByUser, assumedReady, suggestion order).
+// Roadmap helpers close over the EN data baked into roadmap-data.js. When a
+// translation is active we remap their returned objects to the translated
+// structures by id (title/role/purpose/…), preserving the runtime fields the
+// helper computed (userState, hiddenByUser, assumedReady, suggestion order).
 const _rmBy = (arr, id) => (arr || []).find(x => x && x.id === id);
-const _thPathway = (p) => { if (_LANG !== 'TH' || !p) return p; const t = _rmBy(_ROADMAP_PATHWAYS, p.id); return t ? { ...p, ...t } : p; };
-const _thStep    = (s) => { if (_LANG !== 'TH' || !s) return s; const t = _rmBy(_ROADMAP_STEPS, s.id);    return t ? { ...s, ...t } : s; };
-const _thNode    = (n) => { if (_LANG !== 'TH' || !n) return n; const t = _rmBy(window.ROADMAP_NODES_TH, n.id); return t ? { ...n, ...t } : n; };
-function _getRoadmapPathwaySuggestions(answers) { return (window.getRoadmapPathwaySuggestions(answers) || []).map(_thPathway); }
-function _getRoadmapPathwayById(id) { return _thPathway(window.getRoadmapPathwayById(id)); }
+const _locPathway = (p) => { if (_LANG === 'EN' || !p) return p; const t = _rmBy(_ROADMAP_PATHWAYS, p.id); return t ? { ...p, ...t } : p; };
+const _locStep    = (s) => { if (_LANG === 'EN' || !s) return s; const t = _rmBy(_ROADMAP_STEPS, s.id);    return t ? { ...s, ...t } : s; };
+const _locNodes   = () => (_LANG === 'TH' ? window.ROADMAP_NODES_TH : _LANG === 'DE' ? window.ROADMAP_NODES_DE : null);
+const _locNode    = (n) => { if (_LANG === 'EN' || !n) return n; const t = _rmBy(_locNodes(), n.id); return t ? { ...n, ...t } : n; };
+function _getRoadmapPathwaySuggestions(answers) { return (window.getRoadmapPathwaySuggestions(answers) || []).map(_locPathway); }
+function _getRoadmapPathwayById(id) { return _locPathway(window.getRoadmapPathwayById(id)); }
 function _buildRoadmapRoute(id, readinessAnswers, blockStates) {
   const route = window.buildRoadmapRoute(id, readinessAnswers, blockStates);
-  if (_LANG !== 'TH' || !route) return route;
+  if (_LANG === 'EN' || !route) return route;
   return {
     ...route,
-    pathway: _thPathway(route.pathway),
-    steps: (route.steps || []).map(sg => ({ ...sg, step: _thStep(sg.step), nodes: (sg.nodes || []).map(_thNode) })),
+    pathway: _locPathway(route.pathway),
+    steps: (route.steps || []).map(sg => ({ ...sg, step: _locStep(sg.step), nodes: (sg.nodes || []).map(_locNode) })),
   };
 }
 
@@ -406,9 +420,10 @@ const Tooltip = ({ text, children }) => {
 
 const Tag = ({ label, size='sm', tooltip }) => {
   const st = { bg:'#F5F5F7', color:'#515257' };
-  // Tooltip keyed by the EN label (stable key); display translated via RETAIL_TAG_TH.
+  // Tooltip keyed by the EN label (stable key); display translated via tagT()
+  // (RETAIL_TAG_TH / RETAIL_TAG_DE).
   const tip = tooltip !== undefined ? tooltip : ((_TAG_TOOLTIPS||{})[label] || '');
-  const disp = (_LANG === 'TH' && (window.RETAIL_TAG_TH||{})[label]) || label;
+  const disp = tagT(label);
   const chip = (
     <span className="tag" style={{ background:st.bg, color:st.color,
       fontSize: size==='sm' ? '11px' : '12px',
@@ -570,7 +585,11 @@ const FlagTH = () => (
   <svg width="18" height="13" viewBox="0 0 60 30" preserveAspectRatio="none" style={{ display:'block', borderRadius:'2px', border:'1px solid var(--border)' }}><rect width="60" height="30" fill="#A51931"/><rect y="5" width="60" height="20" fill="#F4F5F8"/><rect y="10" width="60" height="10" fill="#2D2A4A"/></svg>
 );
 
-// Language switcher — EN / TH (Thai), matching the fuel-canvas + kittykat.tech
+const FlagDE = () => (
+  <svg width="18" height="13" viewBox="0 0 9 6" preserveAspectRatio="none" style={{ display:'block', borderRadius:'2px', border:'1px solid var(--border)' }}><rect width="9" height="2" fill="#000"/><rect y="2" width="9" height="2" fill="#DD0000"/><rect y="4" width="9" height="2" fill="#FFCE00"/></svg>
+);
+
+// Language switcher — EN / TH (Thai) / DE (German), matching the fuel-canvas + kittykat.tech
 // header. Selecting a language calls setRetailLang(), which reassigns the
 // data layer and remounts the App subtree so every screen + chrome string
 // re-renders in the chosen language.
@@ -580,6 +599,7 @@ const HeaderLang = () => {
   const LANGS = [
     { code:'EN', label:'English', Flag:FlagEN },
     { code:'TH', label:'ไทย',      Flag:FlagTH },
+    { code:'DE', label:'Deutsch', Flag:FlagDE },
   ];
   const cur = LANGS.find(l => l.code === active) || LANGS[0];
   const CurFlag = cur.Flag;
@@ -695,6 +715,8 @@ const LandingScreen = ({ onStart, onBrowse, onStage, onCopilot }) => (
       <h1 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(32px,4.5vw,54px)', fontWeight:600, letterSpacing:'-.02em', lineHeight:1.14, color:'var(--text-primary)', marginBottom:'18px' }}>
         {_LANG==='TH' ? (
           <>ตอนนี้ธุรกิจของคุณ<br /><span style={{ background:'linear-gradient(118deg,#FF9D2E 0%,#FF6A00 52%,#F5481F 100%)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent', color:'transparent' }}>เจอแรงกดดันมากที่สุด</span> ตรงไหน?</>
+        ) : _LANG==='DE' ? (
+          <>Wo steht Ihr Geschäft<br />gerade <span style={{ background:'linear-gradient(118deg,#FF9D2E 0%,#FF6A00 52%,#F5481F 100%)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent', color:'transparent' }}>am stärksten unter Druck</span>?</>
         ) : (
           <>Where is your business<br /><span style={{ background:'linear-gradient(118deg,#FF9D2E 0%,#FF6A00 52%,#F5481F 100%)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent', color:'transparent' }}>under most pressure</span> right now?</>
         )}
@@ -850,7 +872,7 @@ const RecommendedScreen = ({ answers, onPlay, onDomain, onBrowse, onRoadmap, onB
         <h2 style={{ fontFamily:'DM Sans, system-ui, sans-serif', fontSize:'clamp(28px,4vw,44px)', fontWeight:600, letterSpacing:'-.02em', color:'var(--text-primary)', marginBottom:'12px', lineHeight:1.18 }}>{tc('Recommended services')}</h2>
         {pressureLabels.length > 0 && (
           <p style={{ fontSize:'15px', color:'var(--text-secondary)', lineHeight:1.72, fontWeight:300, maxWidth:'600px' }}>
-            {tc('Based on')} <strong style={{ fontWeight:500, color:'var(--text-primary)' }}>{pressureLabels.map(l => l.toLowerCase()).join(', ')}</strong> {tc('— these services are the most relevant practical starting points for your situation.')}
+            {tc('Based on')} <strong style={{ fontWeight:500, color:'var(--text-primary)' }}>{pressureLabels.map(l => (_LANG === 'DE' ? l : l.toLowerCase())).join(', ')}</strong> {tc('— these services are the most relevant practical starting points for your situation.')}
           </p>
         )}
       </div>
@@ -1064,7 +1086,7 @@ const RoadmapScreen = ({ answers, onBack, onPlay, onCopilot }) => {
                   {tc('Route starts at')} {routeStartStep.label}
                 </div>
               )}
-              <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.68, fontWeight:300 }}>{_LANG==='TH' ? null : route.explanation}</p>
+              <p style={{ fontSize:'13px', color:'var(--text-secondary)', lineHeight:1.68, fontWeight:300 }}>{_LANG==='TH' ? null : tc(route.explanation)}</p>
             </div>
             <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', alignSelf:'flex-start' }}>
               {hiddenBlockCount > 0 && (
@@ -1227,7 +1249,10 @@ const FilterBar = ({ filters, setFilters, searchInput, setSearchInput, impactOpt
         {activeCount > 0 && (
           <button onClick={() => { setFilters({}); setSearchInput && setSearchInput(''); }}
             style={{ fontSize:'12px', color:'var(--text-secondary)', background:'none', border:'1px solid var(--border)', borderRadius:'20px', padding:'5px 12px', cursor:'pointer' }}>
-            {tc('Clear')} {activeCount > 1 ? `${tc('filters')} (${activeCount})` : tc('search')}
+            {/* German puts the verb last: "Filter (2) zurücksetzen", not "Zurücksetzen Filter (2)". */}
+            {_LANG === 'DE'
+              ? <>{activeCount > 1 ? `${tc('filters')} (${activeCount})` : tc('search')} {tc('Clear').toLowerCase()}</>
+              : <>{tc('Clear')} {activeCount > 1 ? `${tc('filters')} (${activeCount})` : tc('search')}</>}
           </button>
         )}
       </div>
@@ -2855,7 +2880,7 @@ const App = () => {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
-<script src="/advisor.js?v=2" defer></script>
-<script src="/device-hint.js?v=4" defer></script>
+<script src="/advisor.js?v=3" defer></script>
+<script src="/device-hint.js?v=5" defer></script>
 </body>
 </html>

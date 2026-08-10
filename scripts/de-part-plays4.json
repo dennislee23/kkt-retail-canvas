@@ -1,0 +1,134 @@
+{
+ "plays": {
+  "wai-3": {
+   "title": "Assistent für HR, Recruiting und Onboarding",
+   "cardText": "Unterstützen Sie Recruiting, Onboarding, Fragen zu Richtlinien, Schulungsinhalte und Mitarbeiterkommunikation mit KI.",
+   "shortPain": "HR-Teams im Einzelhandel bewältigen Recruiting in hoher Stückzahl, Onboarding, Fragen zu Richtlinien, Schulungsunterlagen, Kommunikation zu Dienstplänen und Personalunterlagen. Filialleiter wiederholen dieselben Erklärungen immer wieder gegenüber neuen Mitarbeitern, während Bewerber und Beschäftigte auf einfache Auskünfte warten. Das bremst Einstellung, Onboarding und die tägliche Unterstützung der Belegschaft.",
+   "whatWeDo": "Wir richten HR-Assistenten für praktische Personalaufgaben ein:\n- Bewerbungen anhand vereinbarter Rollenkriterien vorprüfen und zusammenfassen;\n- Stellenbeschreibungen, Interviewfragen und Bewerberkommunikation entwerfen;\n- Mitarbeiterfragen aus freigegebenen Richtlinien und Onboarding-Unterlagen beantworten;\n- Schulungszusammenfassungen, Checklisten und filialtaugliche Lerninhalte erstellen;\n- die Kommunikation der Führungskräfte zu Abwesenheiten, Dienstplanänderungen und einfachen HR-Prozessen unterstützen.",
+   "helpImprove": "Geschwindigkeit im Recruiting, Konsistenz im Onboarding, Kapazität des HR-Teams, Produktivität der Führungskräfte, Self-Service für Mitarbeiter und Qualität der standardisierten Personalkommunikation.",
+   "dataBehind": "Verbindet Stellenbeschreibungen, Bewerberlebensläufe, HR-Richtlinien, Onboarding-Leitfäden, Schulungsinhalte, FAQs und Kommunikationsvorlagen. Die KI fasst Bewerbungen zusammen, entwirft Kommunikation, beantwortet Fragen zu Richtlinien aus freigegebenen Quellen und hebt Fälle hervor, die eine Beurteilung durch HR erfordern. Der Ablauf sollte für Recruiting und mitarbeiterbezogene Anwendungen Kontrollen zu Bias, Datenschutz und Freigaben enthalten.",
+   "diagnosticQuestions": [
+    "Welche HR-Fragen und Onboarding-Schritte wiederholen sich über die Filialen hinweg am häufigsten?",
+    "Wie viel Zeit im Einstellungs- oder Onboarding-Prozess entfällt auf Standardkommunikation und Dokumentenvorbereitung?",
+    "Sind HR-Richtlinien und Schulungsunterlagen so strukturiert, dass ein Assistent aus freigegebenen Quellen antworten kann?"
+   ]
+  },
+  "wai-4": {
+   "title": "Assistent für internes Wissen und Filialbetrieb",
+   "cardText": "Geben Sie Ihren Mitarbeitern schnelle Antworten aus SOPs, Richtlinien, Handbüchern, Produktvorgaben und Filialprozessen.",
+   "shortPain": "Operatives Wissen liegt häufig verstreut in gemeinsamen Ordnern, PDFs, Chatverläufen, gedruckten Handbüchern und in den Köpfen Einzelner. Filialteams brauchen während der Öffnungszeiten schnelle Antworten: wie eine Aktion umgesetzt wird, wie eine Rückerstattung abläuft, wie Frische geprüft wird, wie eine Störung eskaliert wird, wie ein Audit vorbereitet wird oder wie ein Sicherheitsprozess einzuhalten ist. Wenn Antworten schwer auffindbar sind, improvisieren die Filialen und die Umsetzung wird uneinheitlich.",
+   "whatWeDo": "Wir bauen einen internen Wissensassistenten auf, der mit freigegebenen Unternehmensinhalten verbunden ist:\n- Filial-SOPs, Betriebshandbücher, Richtlinien, Audit-Checklisten und Prozessleitfäden;\n- Anweisungen zu Warenhandling, Frische, Hygiene und Sicherheit;\n- Eskalationswege für Instandhaltung, Lieferanten, Kunden, HR und Compliance;\n- rollenspezifische Antworten für Filialteams, Gebietsleiter und Nutzer in der Zentrale.",
+   "helpImprove": "Einheitlichkeit in den Filialen, schnelleres Onboarding, weniger wiederkehrende interne Rückfragen, zügigere Störungsbearbeitung, bessere Nutzung des Unternehmenswissens und geringere Abhängigkeit von informellem Erfahrungswissen.",
+   "dataBehind": "Verbindet freigegebene Richtlinien, Handbücher, SOPs, Schulungsunterlagen, Produktleitfäden, Auditanforderungen und frühere Fragen und Antworten zu einer geregelten Wissensbasis. Die KI findet die passende Antwort, erklärt sie in praxisnaher Sprache und kann bei Bedarf das Quelldokument oder den zuständigen Eskalationspartner anzeigen. Die Nutzungsmuster zeigen zudem, wo Prozesse unklar oder gar nicht dokumentiert sind.",
+   "diagnosticQuestions": [
+    "Wo suchen Filialteams heute, wenn sie im laufenden Betrieb eine verlässliche Antwort brauchen?",
+    "Welche Fragen werden immer wieder gestellt, weil die dokumentierte Antwort schwer zu finden ist?",
+    "Sind Betriebshandbücher und Richtlinien aktuell genug, um als vertrauenswürdige Wissensquelle zu dienen?"
+   ]
+  },
+  "wai-5": {
+   "title": "Assistent für Kundenservice und Beschwerden",
+   "cardText": "Beantworten Sie Routinefragen, entwerfen Sie Beschwerdeantworten, klassifizieren Sie Anliegen und eskalieren Sie komplexe Fälle mit Kontext.",
+   "shortPain": "Kundenserviceteams bearbeiten immer wieder dieselben Fragen zu Öffnungszeiten, Bonuspunkten, Aktionen, Rückerstattungen, Produktverfügbarkeit, Lieferung, Filialthemen und Beschwerdestatus. Routinekontakte binden Kapazität, während komplexe Beschwerden oft ohne ausreichenden Kontext bei einem Mitarbeiter landen. Langsame oder uneinheitliche Antworten machen aus kleinen Anliegen echte Unzufriedenheit.",
+   "whatWeDo": "Wir setzen einen Serviceassistenten oder einen kontrollierten Service-Agenten in ausgewählten Kanälen ein:\n- Routinefragen aus freigegebenen Inhalten beantworten;\n- Beschwerdeantworten in der Tonalität des Unternehmens entwerfen;\n- Anliegen nach Filiale, Kategorie, Dringlichkeit und Thema klassifizieren;\n- vorhandenen Kontext zu Kunde, Kundenbindung, Bestellung oder Beschwerde abrufen;\n- Fälle, die menschliches Urteilsvermögen erfordern, mit fertiger Zusammenfassung und empfohlenem nächsten Schritt eskalieren.",
+   "helpImprove": "Antwortgeschwindigkeit, Lösungsquote beim Erstkontakt, Produktivität des Serviceteams, Konsistenz in der Beschwerdebearbeitung, Kundenzufriedenheit und Sichtbarkeit wiederkehrender Serviceprobleme.",
+   "dataBehind": "Verbindet Kundennachrichten, FAQs, Kundenbindungsdaten, Aktionsbedingungen, Bestell- oder Lieferstatus, Filialinformationen, Beschwerdehistorie und Eskalationsregeln. Die KI klassifiziert das Anliegen, ruft die relevanten Fakten ab, entwirft eine Antwort und leitet komplexe Fälle mit bereits zusammengestelltem Kontext weiter. Der Assistent sollte mit kontrollierten Themen starten, bevor er auf risikoreichere Fälle ausgeweitet wird.",
+   "diagnosticQuestions": [
+    "Welche Kundenfragen sind so routiniert, dass sie aus freigegebenen Inhalten beantwortet werden können?",
+    "Wie viel Zeit verwenden Serviceteams darauf, Kontext zusammenzutragen, bevor sie eine Beschwerde lösen?",
+    "Welche Kanäle sollten zuerst automatisiert werden: App, WhatsApp, E-Mail, Web-Chat oder Callcenter?"
+   ]
+  },
+  "wai-6": {
+   "title": "Agent für Lieferantenkommunikation und Nachverfolgung von Ansprüchen",
+   "cardText": "Entwerfen Sie Lieferantenanschreiben, verfolgen Sie offene Ansprüche, fordern Sie Gutschriften an und eskalieren Sie Streitfälle, bevor Werte verloren gehen.",
+   "shortPain": "Einkaufs- und Finanzteams verbringen viel Zeit damit, bei Lieferanten Lieferbestätigungen, fehlende Dokumente, Antworten auf Ansprüche, Gutschriften, Nachweise zu Rückvergütungen und Updates zu Streitfällen nachzufassen. Diese Arbeit ist wichtig, folgt aber weitgehend vorhersehbaren Fristen und Formulierungen. Wenn zu spät nachgefasst wird, altern berechtigte Ansprüche, vereinbarte Werte verfallen und Teams verlieren Zeit mit manuellen Erinnerungen.",
+   "whatWeDo": "Wir bauen einen Assistenten oder kontrollierten Agenten auf, der die routinemäßige Lieferantenkommunikation unterstützt:\n- Standardanschreiben zu offenen Ansprüchen, fehlenden Dokumenten, Lieferproblemen und Gutschriften entwerfen und versenden;\n- überfällige Vorgänge verfolgen und Lieferanten nach vereinbarten Regeln erinnern;\n- Lieferantenantworten zusammenfassen und den Fallstatus aktualisieren;\n- strittige, hochwertige oder ungewöhnliche Fälle mit bereits aufbereiteten Nachweisen an Einkauf oder Finanzen eskalieren.",
+   "helpImprove": "Geschwindigkeit bei der Durchsetzung von Ansprüchen, Antwortdisziplin der Lieferanten, Produktivität in Einkauf und Finanzen, weniger entgangene Abzüge und bessere Kontrolle über Wertverluste auf Lieferantenseite.",
+   "dataBehind": "Verbindet offene Ansprüche, Bestellungen, Lieferbelege, Rechnungen, Gutschriftstatus, Lieferantenkontakte, Vertragsbedingungen, frühere Korrespondenz und Eskalationsregeln. Die KI entwirft eine versandfertige Lieferantenkommunikation auf Basis der tatsächlichen Falldaten, verfolgt Antworten, aktualisiert den Status und markiert, wo menschliche Beurteilung oder Verhandlung nötig ist.",
+   "diagnosticQuestions": [
+    "Wie viele Nachfassaktionen bei Lieferanten sind so routiniert, dass sie einer Standardregel und Vorlage folgen können?",
+    "Wo gehen Werte auf Lieferantenseite verloren, weil Ansprüche oder Gutschriften zu langsam verfolgt werden?",
+    "Welche Lieferantenkommunikation erfordert menschliches Urteilsvermögen und welche könnte die KI sicher entwerfen oder auslösen?"
+   ]
+  },
+  "em-1": {
+   "title": "Retail Media und lieferantenfinanzierte Aktivierung",
+   "cardText": "Machen Sie aus Lieferantenbudgets, Kundenbindungszielgruppen, App-Reichweite und Kampagnenmessung kontrollierte Retail-Media-Pilotprojekte.",
+   "shortPain": "Lieferanten geben bereits Geld aus, um Sichtbarkeit zu gewinnen, Aktionen zu unterstützen und Kategorien auszubauen. Ein Großteil dieser Mittel fließt jedoch weiterhin in breite Handelsunterstützung oder generische Rabatte. Der Händler verfügt über wertvolle Kundenaufmerksamkeit über Kundenbindungsprogramm, App, Web, Kassenbons, digitale Prospekte, Screens, Kasse und Filialfrequenz, hat aber keine strukturierte Möglichkeit, diese Aufmerksamkeit zu bündeln, zu verkaufen, zu steuern und zu messen.",
+   "whatWeDo": "Wir entwerfen ein praxistaugliches Modell für Retail Media und lieferantenfinanzierte Aktivierung rund um die Kanäle, die der Händler bereits besitzt. Beginnen Sie mit wenigen Lieferanten, Kategorien, Zielgruppen und Kontaktpunkten. Definieren Sie Kampagnenpakete, Targeting-Regeln, Leitplanken für die Kundenerfahrung, kommerzielle Konditionen und Messung, bevor Sie skalieren. Nutzen Sie Partnerplattformen oder Managed-Service-Modelle, wo der Aufbau eines vollständigen eigenen Media-Stacks unrealistisch ist.",
+   "helpImprove": "Neue lieferantenfinanzierte Erlöse, belastbarere Kampagnenmessung, bessere Lieferantenaktivierung, geringere Abhängigkeit von pauschalen Aktionen und ein professionelleres kommerzielles Angebot gegenüber Markenpartnern.",
+   "dataBehind": "Verbindet Kundenbindungszielgruppen, Warenkorbverhalten, Warengruppen, Lieferantenbudgets, Kampagnenkontakte, Einlösungen, POS-Umsätze, Marge und Wiederkäufe, um zu zeigen, ob lieferantenfinanzierte Aktivitäten echten kommerziellen Wert schaffen. Die Analytik unterstützt Zielgruppenauswahl, Kampagnenmessung, Closed-Loop-Reporting und Leistungsübersichten für Lieferanten, ohne den Händler in ein unfokussiertes Werbenetzwerk zu verwandeln.",
+   "diagnosticQuestions": [
+    "Welche Lieferanten fragen heute schon nach besserem Targeting, Shopper-Insights oder Kampagnenmessung?",
+    "Welche Kanäle haben heute genügend Reichweite: App, Website, E-Mail, Kassenbons, digitale Prospekte, Screens, Kasse oder Zweitplatzierungen?",
+    "Lässt sich die Kampagnenleistung glaubwürdig genug messen, um Lieferanten zu zeigen, was ihr Budget bewirkt hat?"
+   ]
+  },
+  "em-2": {
+   "title": "Insight-Produkte für Lieferanten",
+   "cardText": "Bündeln Sie Erkenntnisse zu Kategorie, Warenkorb, Aktionen, Launches und Shoppern zu Produkten für Lieferanten oder Premium-Werkzeugen für die Zusammenarbeit.",
+   "shortPain": "Lieferantengespräche drehen sich meist um Preis, Volumen, Rückvergütungen und Aktionsbudgets, während tiefere Leistungserkenntnisse verborgen bleiben oder manuell aufbereitet werden. Viele Lieferanten möchten verstehen, wie ihre Produkte abschneiden, wer sie kauft, was sonst im Warenkorb liegt, wo Aktionen wirken, wo fehlende Verfügbarkeit den Absatz kostet und wie sich Kategorien verschieben. Der Händler besitzt diese Erkenntnisse bereits, bündelt sie aber selten zu einem wiederholbaren kommerziellen Produkt.",
+   "whatWeDo": "Wir entwickeln Insight-Produkte für prioritäre Kategorien und Lieferanten. Beginnen Sie mit wiederkehrenden Reports, solange Dashboards noch nicht gerechtfertigt sind, und gehen Sie dann zu kontrollierten Lieferanten-Dashboards oder Portalen über, wenn die Nachfrage belegt ist. Bündeln Sie Leistungsansichten zu Kategorietrends, SKU-Performance, Filial-Clustern, Warenkorbaffinität, Aktionsresonanz, Launch-Performance, Wiederkäufen und Verfügbarkeitsproblemen.",
+   "helpImprove": "Monetarisierung gegenüber Lieferanten, gemeinsame Kategorieplanung, bessere Gespräche über Lieferantenbudgets, schnelleres Lernen aus Kampagnen und eine klarere Rolle des Händlers als Quelle kommerzieller Erkenntnisse statt nur als Regalzugang.",
+   "dataBehind": "Verbindet POS-, Warenkorb- und Kundenbindungsdaten, Produkthierarchie, Lieferantenzuordnung, Aktionshistorie, Filial-Cluster, Launch-Kohorten, Wiederkäufe und Verfügbarkeitsdaten zu lieferantentauglichen Ansichten. Die Analytik macht aus internen Handelsdaten sichere, aggregierte und kommerziell nutzbare Insight-Produkte, die verkauft, in strategische Vereinbarungen eingebettet oder für bessere Lieferantenunterstützung genutzt werden können.",
+   "diagnosticQuestions": [
+    "Welche Lieferanten hätten einen echten Nutzen von besserer Transparenz zu Kategorie-, Warenkorb- oder Aktionsleistung?",
+    "Lassen sich Produkt-, Lieferanten-, Kategorie-, Filial- und Aktionsdaten verlässlich genug verknüpfen, um Lieferanten zu berichten?",
+    "Würden Insights direkt verkauft, in Lieferantenvereinbarungen eingebettet oder zur Stärkung der Zusammenarbeit genutzt?"
+   ]
+  },
+  "em-3": {
+   "title": "Monetarisierung von Filial- und Digitalkanälen",
+   "cardText": "Monetarisieren Sie frequenzstarke Filialen, Screens, Kassenbons, Kasse, Prospekte und digitale Kontaktpunkte, ohne das Kundenvertrauen zu beschädigen.",
+   "shortPain": "Lebensmittelhändler verfügen in Filialen und digitalen Kanälen über wertvolle Kundenaufmerksamkeit, doch ein Großteil davon wird nicht gesteuert oder nicht als messbares Asset monetarisiert. Kunden passieren Eingänge, Frischetheken, Warteschlangen, Zweitplatzierungen, Kasse, Kassenbons, App-Banner, Bestellseiten und digitale Prospekte. Das Risiko ist Überfrachtung: Wer jeden Kontaktpunkt ohne Relevanz monetarisiert, beschädigt die Kundenerfahrung und schwächt das Vertrauen.",
+   "whatWeDo": "Wir kartieren die physischen und digitalen Aufmerksamkeitspunkte des Händlers und definieren, wo lieferanten- oder partnerfinanzierte Botschaften verantwortungsvoll platziert werden können. Wir entwickeln Pakete für frequenzstarke Zonen, Screens in der Filiale, Zweitplatzierungen, App-Platzierungen, digitale Prospekte, Kassenbons, Kasse und Bestellbestätigungen. Pilotieren Sie mit ausgewählten Filialen, Kategorien und Lieferanten und messen Sie Absatzwirkung, Kundenreaktion, operativen Aufwand und Markenpassung, bevor Sie skalieren.",
+   "helpImprove": "Neue Erlöse aus vorhandener Frequenz, stärkere Lieferantenaktivierung, bessere Nutzung physischer und digitaler Assets, besser messbare Kampagnen in der Filiale und eine disziplinierte Steuerung der Kundenerfahrung.",
+   "dataBehind": "Verbindet Kundenfrequenz, Verweilzonen, Screen- und Platzierungspläne, Kampagnenkontakte, POS-Uplift, Warenkorbverhalten, Filial-Cluster, Kundensegmente und Kampagnenresonanz. Die Analytik hilft zu bestimmen, wo Monetarisierung kommerziell attraktiv ist, zu prüfen, ob Botschaften den Absatz verändert haben, und Frequenz sowie Relevanz so zu steuern, dass der Kanal nicht zu visuellem oder werblichem Rauschen wird.",
+   "diagnosticQuestions": [
+    "Welche physischen oder digitalen Kontaktpunkte haben genügend Frequenz, um kommerziell interessant zu sein?",
+    "Lassen sich diese Kanäle monetarisieren, ohne dass Filiale, App oder Kassenbereich überladen wirken?",
+    "Lassen sich Absatzwirkung und Kundenreaktion nach Filiale, Kategorie, Lieferant oder Kampagne messen?"
+   ]
+  },
+  "em-4": {
+   "title": "Kostenpflichtige Kundenbindung und Mitgliedervorteile",
+   "cardText": "Entwickeln Sie Kundenbindung von der Rabattverteilung zu bezahlten Vorteilen, lieferantenfinanzierten Privilegien und stärkerer Kundenbindung.",
+   "shortPain": "Viele Kundenbindungsprogramme identifizieren Kunden, erzeugen aber zu wenig Verbindlichkeit, Frequenz und Anteil am Warenkorbbudget. Vorteile werden häufig aus der eigenen Marge des Händlers finanziert, obwohl Lieferanten gezielten Zugang zu wertvollen Kunden schätzen würden. Kunden sind durchaus bereit, für fokussierte Vorteile zu zahlen, aber nur wenn der Nutzen klar, relevant und operativ verlässlich ist.",
+   "whatWeDo": "Wir testen kostenpflichtige Kundenbindungs- oder Mitgliedschaftskonzepte rund um konkreten Kundennutzen: Lieferung oder Abholung, Familienbedarf, Eigenmarke, Frische, Getränke, Partnervorteile, früher Zugang, exklusive Bundles oder lieferantenfinanzierte Privilegien. Beginnen Sie mit einem kontrollierten Segment und einem fokussierten Vorteilspaket statt mit einem breiten, generischen Abo. Messen Sie Adoption, Frequenz, Warenkorb, Bindung, Marge, Lieferantenbeitrag und Kundenzufriedenheit, bevor Sie ausweiten.",
+   "helpImprove": "Kundenverbindlichkeit, Ökonomie des Kundenbindungsprogramms, wiederkehrende oder lieferantenfinanzierte Erlöse, Bindung wertvoller Kundengruppen und geringere Abhängigkeit von händlerfinanzierten Rabatten.",
+   "dataBehind": "Verbindet Kundenprofile, RFM- und CLV-Analytik, Nutzung von Vorteilen, lieferantenfinanzierte Angebote, Abo- oder Mitgliedsstatus, Kauffrequenz, Warenkorbwert, Abwanderung und Marge. Die Analytik zeigt, welche Kunden bezahlte oder exklusive Vorteile voraussichtlich schätzen, verfolgt, ob sich das Verhalten nach dem Beitritt ändert, und vergleicht die Mitgliederökonomie mit einer Kontrollgruppe.",
+   "diagnosticQuestions": [
+    "Welche Kundengruppen würden einen bezahlten oder exklusiven Vorteil so hoch bewerten, dass sie ihr Verhalten ändern?",
+    "Werden die heutigen Vorteile überwiegend aus der Händlermarge finanziert oder auch von Lieferanten und Partnern?",
+    "Kann der Händler den versprochenen Vorteil verlässlich liefern, ohne Service- oder Margenprobleme zu erzeugen?"
+   ]
+  },
+  "em-5": {
+   "title": "Partnerökosystem und Lifecycle-Angebote",
+   "cardText": "Nutzen Sie lokales Vertrauen und den Zugang über das Kundenbindungsprogramm, um Kunden mit passenden Partnerleistungen und Lifecycle-Angeboten zu verbinden.",
+   "shortPain": "Lebensmittelhändler haben häufigen Kundenkontakt und lokales Vertrauen, doch die Kundenbeziehung endet oft beim Lebensmitteleinkauf. Kunden geben auch in angrenzenden Bereichen Geld aus: Kraftstoff, Apotheke, Telekommunikation, Banking, Versicherung, Gesundheit, Lieferdienste, Haushaltsservices und Familienbedarf. Sind Partnerangebote relevant, kann der Händler zum vertrauenswürdigen Zugangspunkt werden. Sind sie beliebig oder aufdringlich, wird die App zur Coupon-Wand und das Kundenvertrauen sinkt.",
+   "whatWeDo": "Wir identifizieren Partnerkategorien, die zur Marke und zur Kundenerlaubnis des Händlers passen. Wir bauen Cross-Loyalty-Pilotprojekte, partnerfinanzierte Angebote, Earn-and-Burn-Mechaniken, Vorteilspakete oder Lifecycle-Angebote rund um Momente, in denen der Händler glaubwürdig helfen kann: Familie, Baby, Haustiere, Gesundheit, Haushaltsgründung, lokale Dienstleistungen oder Convenience. Definieren Sie Einwilligung, Datenaustausch, kommerzielle Abrechnung, Angebotsqualität, Relevanz und Frequenzregeln, bevor Sie zu einem breiteren Partnerökosystem skalieren.",
+   "helpImprove": "Kundenbindung, partnerfinanzierter Mehrwert, Relevanz des Programms über Lebensmittel hinaus, App-Nutzung, Rolle im lokalen Ökosystem und selektive neue Erlöse, ohne jede angrenzende Leistung selbst betreiben zu müssen.",
+   "dataBehind": "Verbindet Kundenbindungsverhalten, Kundensegmente, Warenkorbsignale, Lifecycle-Indikatoren, Angebotskataloge der Partner, Einlösungen, Einwilligungen, Attribution und Kundenfeedback. Die Analytik zeigt, welche Partnerangebote für welche Kunden relevant sind, misst Annahme und Wiederholungsverhalten und verhindert, dass die Erfahrung generisch oder übersteuert wirkt.",
+   "diagnosticQuestions": [
+    "Welche angrenzenden Partner würden Kunden über die Kundenbindungs- oder App-Beziehung des Händlers selbstverständlich akzeptieren?",
+    "Hat der Händler genügend Vertrauen und Reichweite, um für Partner wertvoll zu sein?",
+    "Welche Partnerangebote würden das Kerngeschäft mit Lebensmitteln stärken statt davon abzulenken?"
+   ]
+  },
+  "em-6": {
+   "title": "Selektive Plattform- und Partnerschaftsmodelle",
+   "cardText": "Prüfen Sie Marktplatz, eingebettete Finanzdienste, Monetarisierung der Logistik und Datenkooperationen nur dort, wo Reifegrad und Nachfrage es rechtfertigen.",
+   "shortPain": "Marktplatz, eingebettete Finanzdienste, Monetarisierung der Logistik und datenschutzkonforme Datenkooperationen wirken strategisch attraktiv, erhöhen aber die Komplexität in Betrieb, Regulatorik, Kundenerfahrung und Technologie. Für die meisten mittelständischen Lebensmittelhändler sind das keine ersten Schritte. Sie sollten selektiv dort geprüft werden, wo klare Kundenerlaubnis, Partnernachfrage, operative Kapazität und ein starker Grund für eine Erweiterung über das Kerngeschäft hinaus vorliegen.",
+   "whatWeDo": "Wir bewerten, welche fortgeschrittenen Modelle realistisch sind und welche man besser lässt. Beim Marktplatz testen Sie kuratierte angrenzende Kategorien über Partner statt eines breiten offenen Sortiments. Bei eingebetteten Finanzdiensten arbeiten Sie mit lizenzierten Partnern, statt regulierte Aktivitäten selbst zu betreiben. Bei der Monetarisierung der Logistik testen Sie nur dort, wo freie Kapazität und Wirtschaftlichkeit real sind. Bei Datenkooperationen definieren Sie Datenschutz-, Einwilligungs-, Aggregations- und Zugriffsregeln vor jeder Partnernutzung.",
+   "helpImprove": "Klarheit über strategische Optionen, Vermeidung ablenkender Plattformwetten, bessere Partnerauswahl, kontrollierte Expansion über Lebensmittel hinaus und mehr Führungsdisziplin dabei, was man bewusst nicht verfolgt.",
+   "dataBehind": "Verbindet Nachfragesignale der Kunden, Partnerökonomie, Kategoriepassung für den Marktplatz, Zahlungs- und Kundenbindungsverhalten, Logistikkapazität, Routendichte, Servicelevel, Datenschutzregeln sowie Nachfrage von Lieferanten oder Partnern. Die Analytik modelliert, ob eine fortgeschrittene Option genügend kommerzielles Potenzial, operative Kapazität und Kundenpassung für ein Pilotprojekt hat, und macht Risiken und Voraussetzungen vor der Investition sichtbar.",
+   "diagnosticQuestions": [
+    "Gibt es eine klare Kundenerlaubnis und Partnernachfrage für das erwogene fortgeschrittene Modell?",
+    "Würde das Modell das Kerngeschäft stärken oder Management und Betrieb davon ablenken?",
+    "Kann der Händler die Chance über ein eng gefasstes, partnergeführtes Pilotprojekt testen, bevor er in eine Plattform investiert?"
+   ]
+  }
+ }
+}
