@@ -413,7 +413,7 @@ window.KKTECH_PROFILE = {
             line: '10+ years in Oil & Gas, process consulting and digitalisation',
             chips: ['EY', 'Gazprom Oil'],
             initials: 'YK',
-            photo: 'team/yana-kujrikhina.jpg',
+            photo: 'team/yana-kujrikhina-v2.jpg',
           },
           {
             name: 'Nikolay Terentyev',
